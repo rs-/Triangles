@@ -2,6 +2,9 @@ Require Import Category.Types.
 Require Import Category.Setoids.
 Require Import Theory.Category.
 Require Import Theory.Functor.
+Require Import Theory.Product.
+Require Import Theory.Isomorphism.
+Require Import Theory.CartesianStrongMonoidal.
 
 (*------------------------------------------------------------------------------
   -- ＦＵＮＣＴＯＲ  ＥＱ
@@ -27,3 +30,21 @@ Proof.
 Qed.
 
 Definition 𝑬𝑸 : Functor 𝑻𝒚𝒑𝒆 𝑺𝒆𝒕𝒐𝒊𝒅 := mkFunctor id map_compose.
+
+
+(*------------------------------------------------------------------------------
+  -- ＥＱ  ＩＳ  ＳＴＲＯＮＧ  ＭＯＮＯＩＤＡＬ
+  ----------------------------------------------------------------------------*)
+
+Program Instance 𝑬𝑸_SM : CartesianStrongMonoidal 𝑬𝑸 :=
+  CartesianStrongMonoidal.make (λ A B ∙ Setoids.Morphism.make (λ x ∙ x)).
+Next Obligation.
+  now f_equal.
+Qed.
+Next Obligation.
+  constructor.
+  - (* iso_left *)
+    intros f g eq_fg. exact eq_fg.
+  - (* iso_right *)
+    intros f g eq_fg. simpl in *. destruct f. auto.
+Qed.
