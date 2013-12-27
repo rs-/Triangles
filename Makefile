@@ -13,7 +13,8 @@ FILES=\
 	  InfiniteTriangles/redecInfiniteTriangles8_4.v   \
 	  Misc/Unicode.v                                  \
 	  Theory/Notations.v                              \
-	  Theory/SetoidType.v
+	  Theory/SetoidType.v                             \
+	  Theory/Category.v
 
 ALL= $(FILES)
 
