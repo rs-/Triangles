@@ -1,4 +1,5 @@
 Require Import Theory.Category.
+Require Import Theory.Product.
 
 (*------------------------------------------------------------------------------
   -- ＣＡＴＥＧＯＲＹ  ＯＦ  ＳＥＴＯＩＤＳ
@@ -44,7 +45,7 @@ Module Setoids.
 
 End Setoids.
 
-Import Setoids.
+Export Setoids.
 
 Local Infix "⇒" := Hom.
 
@@ -78,3 +79,50 @@ Qed.
 
 Canonical Structure 𝑺𝒆𝒕𝒐𝒊𝒅 : Category :=
   mkCategory left_id right_id compose_assoc.
+
+
+
+(*------------------------------------------------------------------------------
+  -- ＳＥＴＯＩＤＳ  ＨＡＶＥ  ＢＩＮＡＲＹ  ＰＲＯＤＵＣＴ
+  ----------------------------------------------------------------------------*)
+
+Section Product_construction.
+
+  Infix "∼" := SEquiv (at level 70).
+
+  Program Definition product (A B : 𝑺𝒆𝒕𝒐𝒊𝒅) : 𝑺𝒆𝒕𝒐𝒊𝒅 :=
+    Setoids.make (A ⟨×⟩ B) (λ S₁ S₂ ∙ fst S₁ ∼ fst S₂ ∧ snd S₁ ∼ snd S₂).
+  Next Obligation.
+    constructor; hnf.
+    - intros [a  b]; split; reflexivity.
+    - intros [x y] [x' y'] [eq_xx' eq_yy']; split; now symmetry.
+    - intros [x y] [x' y'] [x'' y''] [eq_xx' eq_yy'] [eq_x'x'' eq_y'y''];
+      split; etransitivity; eauto.
+  Qed.
+
+  Program Definition product_mor (A B C : 𝑺𝒆𝒕𝒐𝒊𝒅) (f : C ⇒ A) (g : C ⇒ B) : C ⇒ product A B :=
+    Setoids.Morphism.make (λ c ∙ (f c , g c)).
+  Next Obligation.
+    split; now apply cong.
+  Qed.
+
+  Program Definition proj_l {A B} : product A B ⇒ A := Setoids.Morphism.make fst.
+
+  Program Definition proj_r {A B} : product A B ⇒ B := Setoids.Morphism.make snd.
+
+End Product_construction.
+
+
+Program Instance 𝑺𝒆𝒕𝒐𝒊𝒅_BinaryProduct : BinaryProduct 𝑺𝒆𝒕𝒐𝒊𝒅 :=
+  BinaryProduct.make 𝑺𝒆𝒕𝒐𝒊𝒅 product (@product_mor _ _) proj_l proj_r.
+Next Obligation. (* Pmor_cong₂ *)
+  intros f₁ f₂ eq_f₁f₂ g₁ g₂ eq_g₁g₂ x y eq_xy; simpl; split.
+  - now apply eq_f₁f₂.
+  - now apply eq_g₁g₂.
+Qed.
+Next Obligation.
+  now apply cong.
+Qed.
+Next Obligation.
+  now apply cong.
+Qed.
