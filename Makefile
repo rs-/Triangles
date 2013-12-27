@@ -19,7 +19,8 @@ FILES=\
 	  Theory/RelativeComonad.v                        \
 	  Category/Types.v                                \
 	  Category/Setoids.v                              \
-	  Category/Types_Setoids.v
+	  Category/Types_Setoids.v                        \
+	  Category/RComonad.v
 
 ALL= $(FILES)
 
