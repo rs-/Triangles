@@ -12,7 +12,8 @@ COQDEP=$(COQBIN)coqdep $(LIBS)
 FILES=\
 	  InfiniteTriangles/redecInfiniteTriangles8_4.v   \
 	  Misc/Unicode.v                                  \
-	  Theory/Notations.v
+	  Theory/Notations.v                              \
+	  Theory/SetoidType.v
 
 ALL= $(FILES)
 
