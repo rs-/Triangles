@@ -24,4 +24,4 @@ End StrongMonoidal.
 Arguments mkCartesianStrongMonoidal {_ _ _ _ _ _} _.
 Arguments φ {_ _ _ _ _ _ _}.
 
-Notation make φ := (@mkCartesianStrongMonoidal _ _ _ _ φ _) (only parsing).
+Notation make φ := (@mkCartesianStrongMonoidal _ _ _ _ _ φ _) (only parsing).
