@@ -15,7 +15,8 @@ FILES=\
 	  Theory/Notations.v                              \
 	  Theory/SetoidType.v                             \
 	  Theory/Category.v                               \
-	  Theory/Functor.v
+	  Theory/Functor.v                                \
+	  Theory/RelativeComonad.v
 
 ALL= $(FILES)
 
