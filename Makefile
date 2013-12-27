@@ -29,7 +29,8 @@ FILES=\
 	  Theory/RelativeComonadWithCut.v                 \
 	  Category/RComonadWithCut.v                      \
 	  Theory/ProductInContext.v                       \
-	  Theory/PushforwardComodule.v
+	  Theory/PushforwardComodule.v                    \
+	  Category/Triangles.v
 
 ALL= $(FILES)
 
