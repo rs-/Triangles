@@ -23,7 +23,8 @@ FILES=\
 	  Category/RComonad.v                             \
 	  Theory/Comodule.v                               \
 	  Category/RComod.v                               \
-	  Theory/Product.v
+	  Theory/Product.v                                \
+	  Theory/Isomorphism.v
 
 ALL= $(FILES)
 
