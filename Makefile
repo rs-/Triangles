@@ -10,7 +10,8 @@ COQDEP=$(COQBIN)coqdep $(LIBS)
 # FILES
 
 FILES=\
-	  InfiniteTriangles/redecInfiniteTriangles8_4.v
+	  InfiniteTriangles/redecInfiniteTriangles8_4.v   \
+	  Misc/Unicode.v
 
 ALL= $(FILES)
 
