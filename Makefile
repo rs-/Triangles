@@ -14,7 +14,8 @@ FILES=\
 	  Misc/Unicode.v                                  \
 	  Theory/Notations.v                              \
 	  Theory/SetoidType.v                             \
-	  Theory/Category.v
+	  Theory/Category.v                               \
+	  Theory/Functor.v
 
 ALL= $(FILES)
 
