@@ -17,11 +17,17 @@ Module Setoids.
 
   Notation make c eq := (@mkObj c eq _) (only parsing).
 
-  Local Existing Instance is_SEquiv.
+  Existing Instance is_SEquiv.
 
   Structure Morphism (A B : Obj) := mkMorphism
   { map  :> A → B
   ; cong : ∀ {x y}, SEquiv x y → SEquiv (map x) (map y) }.
+
+  Instance map_Proper : ∀ A B (f : Morphism A B), Proper (SEquiv ==> SEquiv) (map A B f).
+  Proof.
+    intros A B f x y eq_xy.
+    now apply cong.
+  Qed.
 
   Arguments mkMorphism {_ _ _} _.
 
