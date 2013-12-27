@@ -46,10 +46,13 @@ Arguments RelativeComonadWithCut   {_ _ _ _} _ _ {_}.
 Arguments mkRelativeComonadWithCut {_ _ _ _ _ _ _ _ _} _ _.
 Arguments T                        {_ _ _ _ _ _ _} _.
 Arguments cut                      {_ _ _ _ _ _ _} _ {_}.
+Arguments extend                   {_ _ _ _ _ _ _} _ {_ _}.
 
 Notation "'cut[' X ]" := (cut _ (A := X)) (only parsing).
 Notation "T '⋅cut'" := (cut T) (at level 0).
 Notation "T '⋅cut[' X ]" := (cut T (A := X)) (at level 0, only parsing).
+
+Notation "T '⋅extend'" := (extend T) (at level 0).
 
 Notation make T cut :=
   (@mkRelativeComonadWithCut _ _ _ _ _ _ _ T cut _ _) (only parsing).
