@@ -25,7 +25,8 @@ FILES=\
 	  Category/RComod.v                               \
 	  Theory/Product.v                                \
 	  Theory/Isomorphism.v                            \
-	  Theory/CartesianStrongMonoidal.v
+	  Theory/CartesianStrongMonoidal.v                \
+	  Theory/RelativeComonadWithCut.v
 
 ALL= $(FILES)
 
