@@ -21,7 +21,8 @@ FILES=\
 	  Category/Setoids.v                              \
 	  Category/Types_Setoids.v                        \
 	  Category/RComonad.v                             \
-	  Theory/Comodule.v
+	  Theory/Comodule.v                               \
+	  Category/RComod.v
 
 ALL= $(FILES)
 
