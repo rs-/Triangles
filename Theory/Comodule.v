@@ -15,9 +15,11 @@ Structure Comodule `{F : Functor 𝒞 𝒟} (T : RelativeComonad F) (ℰ : Categ
 ; mcobind_compose : ∀ {C D E} {f : T C ⇒ F D} {g : T D ⇒ F E},
                       mcobind(g) ∘ mcobind(f) ≈ mcobind(g ∘ T⋅cobind(f)) }.
 
-Arguments mkComodule {_ _ _ _ _ _ _} _ _.
-Arguments M          {_ _ _ _ _} _ _.
-Arguments mcobind    {_ _ _ _ _} _ {_ _}.
+Arguments mkComodule      {_ _ _ _ _ _ _} _ _.
+Arguments M               {_ _ _ _ _} _ _.
+Arguments mcobind         {_ _ _ _ _} _ {_ _}.
+Arguments mcobind_counit  {_ _ _ _ _} _ {_}.
+Arguments mcobind_compose {_ _ _ _ _} _ {_ _ _ _ _}.
 
 Notation "M '⋅mcobind'" := (mcobind M) (at level 0).
 
@@ -69,6 +71,7 @@ Structure Morphism `{F : Functor 𝒞 𝒟} {T : RelativeComonad F} {ℰ} (M N :
 
 Arguments mkMorphism {_ _ _ _ _ _ _ _} _.
 Arguments α          {_ _ _ _ _ _ _} _ _.
+Arguments α_commutes {_ _ _ _ _ _ _} _ {_ _ _}.
 
 Module Morphism.
 

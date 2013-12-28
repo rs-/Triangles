@@ -21,12 +21,13 @@ Module Triangles.
 
   Structure Obj (E : 𝑻𝒚𝒑𝒆) : Type := mkObj
   { T        :> 𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅𝑾𝒊𝒕𝒉𝑪𝒖𝒕 𝑬𝑸 E
-  ; α        :> [T] ⇒ T[E×─]
-  ; α_cut    : ∀ A, α(A) ∘ T⋅cut ≈ T⋅cut ∘ α(E × A) }.
+  ; α        :> [T] ⇒ [T][E×─]
+  ; α_cut    : ∀ {A}, α(A) ∘ T⋅cut ≈ T⋅cut ∘ α(E × A) }.
 
   Arguments mkObj {_ _ _} _.
   Arguments T     {_} _.
   Arguments α     {_} _.
+  Arguments α_cut {_} _ {_ _ _ _}.
 
   Notation make T α := (@mkObj _ T α _) (only parsing).
 
@@ -36,6 +37,7 @@ Module Triangles.
 
   Arguments mkMorphism {_ _ _ _} _.
   Arguments τ          {_ _ _} _.
+  Arguments τ_commutes {_ _ _} _ {_ _ _ _}.
 
   Module Morphism.
 
@@ -121,5 +123,4 @@ Section Defs.
     mkCategory left_id right_id compose_assoc.
 
 End Defs.
-
 
