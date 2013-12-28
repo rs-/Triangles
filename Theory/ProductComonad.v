@@ -33,16 +33,39 @@ Section ProductInContext.
     rewrite left_id. rewrite cobind_counit. reflexivity.
   Qed.
   Next Obligation.
-    apply Π.cong. repeat rewrite compose_assoc.
-    rewrite ∘-×. rewrite cut_cobind. unfold Extend. simpl.
+    (*apply Π.cong.*) 
+    repeat rewrite compose_assoc.
+    (* rewrite ∘-×. rewrite cut_cobind. 
+        unfold Extend.*)  
+    simpl.
     repeat rewrite compose_assoc. rewrite counit_cobind.
+(*     
     assert (eq_π₁ : ∀ A B : 𝒞, F ⋅ π₁[A , B] ∘ φ⁻¹ ≈ π₁).
     {
       intros A B. assert (eq_F : F ⋅ π₁[A , B] ≈ π₁ ∘ φ). unfold φ. now rewrite π₁_compose.
       rewrite eq_F. rewrite compose_assoc. rewrite iso_left. now rewrite right_id.
     }
-    repeat rewrite <- compose_assoc. rewrite eq_π₁. rewrite π₁_compose. reflexivity.
+ *)    
+  repeat rewrite <- compose_assoc. 
+  assert (eq_π₂ : ∀ A B : 𝒞, F ⋅ π₂[A , B] ∘ φ⁻¹ ≈ π₂).
+    {
+      intros A B. assert (eq_F : F ⋅ π₂[A , B] ≈ π₂ ∘ φ). unfold φ. now rewrite π₂_compose.
+      rewrite eq_F. rewrite compose_assoc. rewrite iso_left. now rewrite right_id.
+    }
+  repeat rewrite <- compose_assoc. 
+  rewrite eq_π₂. rewrite π₂_compose. reflexivity.
   Qed.
+  Next Obligation.
+  rewrite cobind_compose.
+  repeat rewrite compose_assoc.
+  rewrite ∘-×.
+  repeat rewrite compose_assoc.
+  rewrite counit_cobind.
+  
+  rewrite ×-∘.
+  
+  apply cobind_cong.
+
 
 
  
