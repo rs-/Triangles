@@ -1,0 +1,25 @@
+-R . Cat
+
+./Misc/Unicode.v
+./Theory/ProductInContext.v
+./Theory/InitialTerminal.v
+./Theory/SetoidType.v
+./Theory/Comodule.v
+./Theory/Isomorphism.v
+./Theory/Functor.v
+./Theory/Product.v
+./Theory/RelativeComonadWithCut.v
+./Theory/CartesianStrongMonoidal.v
+./Theory/Category.v
+./Theory/Notations.v
+./Theory/RelativeComonad.v
+./Theory/PushforwardComodule.v
+./InfiniteTriangles/redecInfiniteTriangles8_4.v
+./Category/Types.v
+./Category/RComonad.v
+./Category/Coinitiality.v
+./Category/Setoids.v
+./Category/Types_Setoids.v
+./Category/RComod.v
+./Category/Triangles.v
+./Category/RComonadWithCut.v
