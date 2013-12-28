@@ -88,7 +88,7 @@ Section tautological_comodule.
 
 End tautological_comodule.
 
-Coercion tcomod : RelativeComonad >-> Comodule.
+Local Coercion tcomod : RelativeComonad >-> Comodule.
 Notation "[ T ]" := (tcomod T) (only parsing).
 
 Section induced_morphism.

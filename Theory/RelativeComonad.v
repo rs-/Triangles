@@ -18,6 +18,9 @@ Structure RelativeComonad `(F : Functor 𝒞 𝒟) : Type := mkRelativeComonad
 Arguments mkRelativeComonad {_ _ _ _ _ _} _ _ _.
 Arguments counit            {_ _ _} _ {_}.
 Arguments cobind            {_ _ _} _ {_ _}.
+Arguments cobind_counit     {_ _ _} _ {_}.
+Arguments counit_cobind     {_ _ _} _ {_ _ _}.
+Arguments cobind_compose    {_ _ _} _ {_ _ _ _ _}.
 
 Notation "'counit[' X ]" := (counit _ (X := X)) (only parsing).
 Notation "T '⋅counit'" := (counit T) (at level 0, only parsing).
@@ -75,6 +78,8 @@ Structure Morphism `{F : Functor 𝒞 𝒟} (T S : RelativeComonad F) : Type := 
 
 Arguments mkMorphism {_ _ _ _ _ _} _ _.
 Arguments τ          {_ _ _ _ _ _} _.
+Arguments τ_counit   {_ _ _ _ _} _ {_}.
+Arguments τ_commutes {_ _ _ _ _} _ {_ _ _}.
 
 Module Morphism.
 

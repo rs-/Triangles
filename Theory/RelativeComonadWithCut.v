@@ -46,6 +46,8 @@ Arguments RelativeComonadWithCut   {_ _ _ _} _ _ {_}.
 Arguments mkRelativeComonadWithCut {_ _ _ _ _ _ _ _ _} _ _.
 Arguments T                        {_ _ _ _ _ _ _} _.
 Arguments cut                      {_ _ _ _ _ _ _} _ {_}.
+Arguments cut_counit               {_ _ _ _ _ _ _} _ {_}.
+Arguments cut_cobind               {_ _ _ _ _ _ _} _ {_ _ _}.
 Arguments extend                   {_ _ _ _ _ _ _} _ {_ _}.
 
 Notation "'cut[' X ]" := (cut _ (A := X)) (only parsing).
@@ -75,6 +77,8 @@ Section MDefs.
 End MDefs.
 
 Arguments mkMorphism {_ _ _ _ _ _ _ _ _ _} _.
+Arguments τ          {_ _ _ _ _ _ _ _ _} _.
+Arguments τ_cut      {_ _ _ _ _ _ _ _ _} _ {_}.
 
 Module Morphism.
 
