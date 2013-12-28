@@ -30,7 +30,8 @@ FILES=\
 	  Category/RComonadWithCut.v                      \
 	  Theory/ProductInContext.v                       \
 	  Theory/PushforwardComodule.v                    \
-	  Category/Triangles.v
+	  Category/Triangles.v                            \
+	  Theory/InitialTerminal.v
 
 ALL= $(FILES)
 
