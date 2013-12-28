@@ -28,7 +28,7 @@ Notation "T '⋅counit[' X ]" := (counit T (X := X)) (at level 0, only parsing).
 
 Notation "T '⋅cobind'" := (cobind T) (at level 0, only parsing).
 
-Notation make T counit cobind := (@mkRelativeComonad _ _ _ T counit cobind _ _ _).
+Notation make T counit cobind := (@mkRelativeComonad _ _ _ T counit cobind _ _ _) (only parsing).
 
 (*------------------------------------------------------------------------------
   -- ＦＵＮＣＴＯＲＩＡＬＩＴＹ
@@ -83,7 +83,7 @@ Arguments τ_commutes {_ _ _ _ _} _ {_ _ _}.
 
 Module Morphism.
 
-  Notation make τ := (@mkMorphism _ _ _ _ _ τ _ _).
+  Notation make τ := (@mkMorphism _ _ _ _ _ τ _ _) (only parsing).
 
   (* -- Ｉｄｅｎｔｉｔｙ  /  Ｃｏｍｐｏｓｉｔｉｏｎ                      -- *)
   Section id_composition.

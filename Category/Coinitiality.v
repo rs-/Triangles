@@ -41,11 +41,10 @@ Module Tri_Terminal (Import TE : Elt).
   Obligation Tactic := idtac.
   Program Definition 𝑻𝒓𝒊 : RelativeComonadWithCut 𝑬𝑸 E :=
     RelativeComonadWithCut.make
-      (RelativeComonad.make
-         (λ A ∙ Setoids.make (Tri A) (@bisimilar _))         (* T *)
-         (λ A ∙ Setoids.Morphism.make (@top A))              (* counit *)
-         (λ A B ∙ λ f ↦ Setoids.Morphism.make (redec f)))    (* cobind *)
-      (λ A ∙ Setoids.Morphism.make (@cut A)).                (* cut *)
+      (λ A ∙ Setoids.make (Tri A) (@bisimilar _))      (* T *)
+      (λ A ∙ Setoids.Morphism.make (@top A))           (* counit *)
+      (λ A B ∙ λ f ↦ Setoids.Morphism.make (redec f))  (* cobind *)
+      (λ A ∙ Setoids.Morphism.make (@cut A)).          (* cut *)
   Next Obligation. (* Equivalence *)
     eauto with typeclass_instances.
   Qed.
@@ -216,8 +215,7 @@ Module Tri_Terminal (Import TE : Elt).
   (** τ is a morphism of triangles **)
   Program Definition τ (T : 𝑻𝒓𝒊𝒂𝒏𝒈𝒍𝒆 E) : T ⇒ 𝑻𝑹𝑰 :=
     Triangles.Morphism.make
-      (RelativeComonadWithCut.Morphism.make
-         (RelativeComonad.Morphism.make (λ A ∙ Tau T))).
+      (RelativeComonadWithCut.Morphism.make (λ A ∙ Tau T)).
   Next Obligation. (* τ_counit *)
     repeat intro. now apply tau_counit.
   Qed.

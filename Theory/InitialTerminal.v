@@ -17,7 +17,7 @@ Notation "⊥-unique" := bottom_unique.
 
 Module Initial.
 
-  Notation make empty bottom := (@mkInitial _ empty bottom _).
+  Notation make empty bottom := (@mkInitial _ empty bottom _) (only parsing).
 
 End Initial.
 
@@ -38,6 +38,6 @@ Notation "⊤-unique" := top_unique.
 
 Module Terminal.
 
-  Notation make one top := (@mkTerminal _ one top _).
+  Notation make one top := (@mkTerminal _ one top _) (only parsing).
 
 End Terminal.

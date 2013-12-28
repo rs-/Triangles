@@ -15,4 +15,4 @@ Arguments map       {_ _} _ {_ _}.
 
 Notation "F ⋅ f" := (map F f) (at level 35, no associativity).
 
-Notation make F map := (@mkFunctor _ _ F map _ _).
+Notation make F map := (@mkFunctor _ _ F map _ _) (only parsing).

@@ -32,4 +32,4 @@ Notation "'id[' X ]" := (id (A := X)) (only parsing).
 Notation "T '-id'" := (id (c := T)) (at level 0, only parsing).
 Notation "T '-id[' X ]" := (id (c := T) (A := X)) (at level 0, only parsing).
 
-Notation make Hom id compose := (@mkCategory _ Hom id compose _ _ _).
+Notation make Hom id compose := (@mkCategory _ Hom id compose _ _ _) (only parsing).

@@ -39,7 +39,7 @@ Infix "×" := product (at level 20).
 
 Module BinaryProduct.
   Notation make 𝒞 pr prm pr1 pr2 :=
-    (λ (A B : 𝒞) ∙ @mkProduct _ A B (pr A B) (λ C ∙ Π₂.make (prm C)) pr1 pr2 _ _ _).
+    (λ (A B : 𝒞) ∙ @mkProduct _ A B (pr A B) (λ C ∙ Π₂.make (prm C)) pr1 pr2 _ _ _) (only parsing).
 End BinaryProduct.
 
 
