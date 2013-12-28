@@ -40,7 +40,7 @@ Module Tri_Terminal (Import TE : Elt).
     **)
   Obligation Tactic := idtac.
   Program Definition 𝑻𝒓𝒊 : RelativeComonadWithCut 𝑬𝑸 E :=
-    RelativeComonadWithCut.make
+    RelativeComonadWithCut.Make
       (λ A ∙ Setoids.make (Tri A) (@bisimilar _))      (* T *)
       (λ A ∙ Setoids.Morphism.make (@top A))           (* counit *)
       (λ A B ∙ λ f ↦ Setoids.Morphism.make (redec f))  (* cobind *)
@@ -215,7 +215,7 @@ Module Tri_Terminal (Import TE : Elt).
   (** τ is a morphism of triangles **)
   Program Definition τ (T : 𝑻𝒓𝒊𝒂𝒏𝒈𝒍𝒆 E) : T ⇒ 𝑻𝑹𝑰 :=
     Triangles.Morphism.make
-      (RelativeComonadWithCut.Morphism.make (λ A ∙ Tau T)).
+      (RelativeComonadWithCut.Morphism.Make (λ A ∙ Tau T)).
   Next Obligation. (* τ_counit *)
     repeat intro. now apply tau_counit.
   Qed.
