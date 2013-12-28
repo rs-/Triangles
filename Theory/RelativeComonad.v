@@ -18,6 +18,9 @@ Structure RelativeComonad `(F : Functor 𝒞 𝒟) : Type := mkRelativeComonad
 Arguments mkRelativeComonad {_ _ _ _ _ _} _ _ _.
 Arguments counit            {_ _ _} _ {_}.
 Arguments cobind            {_ _ _} _ {_ _}.
+Arguments cobind_counit     {_ _ _} _ {_}.
+Arguments counit_cobind     {_ _ _} _ {_ _ _}.
+Arguments cobind_compose    {_ _ _} _ {_ _ _ _ _}.
 
 Notation "'counit[' X ]" := (counit _ (X := X)) (only parsing).
 Notation "T '⋅counit'" := (counit T) (at level 0, only parsing).
@@ -25,7 +28,7 @@ Notation "T '⋅counit[' X ]" := (counit T (X := X)) (at level 0, only parsing).
 
 Notation "T '⋅cobind'" := (cobind T) (at level 0, only parsing).
 
-Notation make T counit cobind := (@mkRelativeComonad _ _ _ T counit cobind _ _ _).
+Notation make T counit cobind := (@mkRelativeComonad _ _ _ T counit cobind _ _ _) (only parsing).
 
 (*------------------------------------------------------------------------------
   -- ＦＵＮＣＴＯＲＩＡＬＩＴＹ
@@ -75,10 +78,12 @@ Structure Morphism `{F : Functor 𝒞 𝒟} (T S : RelativeComonad F) : Type := 
 
 Arguments mkMorphism {_ _ _ _ _ _} _ _.
 Arguments τ          {_ _ _ _ _ _} _.
+Arguments τ_counit   {_ _ _ _ _} _ {_}.
+Arguments τ_commutes {_ _ _ _ _} _ {_ _ _}.
 
 Module Morphism.
 
-  Notation make τ := (@mkMorphism _ _ _ _ _ τ _ _).
+  Notation make τ := (@mkMorphism _ _ _ _ _ τ _ _) (only parsing).
 
   (* -- Ｉｄｅｎｔｉｔｙ  /  Ｃｏｍｐｏｓｉｔｉｏｎ                      -- *)
   Section id_composition.

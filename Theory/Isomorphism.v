@@ -34,7 +34,7 @@ Infix "≅" := Iso (at level 70).
 Notation "I '⋅≅-left'":= (iso_left I) (at level 0, only parsing).
 Notation "I '⋅≅-right'":= (iso_left I) (at level 0, only parsing).
 
-Notation make from to := (@mkIso _ _ _ from to (mkInverse _ _)).
+Notation make from to := (@mkIso _ _ _ from to (mkInverse _ _)) (only parsing).
 
 Section Iso_Equivalence.
 

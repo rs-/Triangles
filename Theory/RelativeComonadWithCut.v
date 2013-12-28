@@ -46,6 +46,8 @@ Arguments RelativeComonadWithCut   {_ _ _ _} _ _ {_}.
 Arguments mkRelativeComonadWithCut {_ _ _ _ _ _ _ _ _} _ _.
 Arguments T                        {_ _ _ _ _ _ _} _.
 Arguments cut                      {_ _ _ _ _ _ _} _ {_}.
+Arguments cut_counit               {_ _ _ _ _ _ _} _ {_}.
+Arguments cut_cobind               {_ _ _ _ _ _ _} _ {_ _ _}.
 Arguments extend                   {_ _ _ _ _ _ _} _ {_ _}.
 
 Notation "'cut[' X ]" := (cut _ (A := X)) (only parsing).
@@ -54,8 +56,8 @@ Notation "T '⋅cut[' X ]" := (cut T (A := X)) (at level 0, only parsing).
 
 Notation "T '⋅extend'" := (extend T) (at level 0).
 
-Notation make T cut :=
-  (@mkRelativeComonadWithCut _ _ _ _ _ _ _ T cut _ _) (only parsing).
+Notation make T counit cobind cut :=
+  (@mkRelativeComonadWithCut _ _ _ _ _ _ _ (RelativeComonad.make T counit cobind) cut _ _) (only parsing).
 
 (*------------------------------------------------------------------------------
   -- ＭＯＲＰＨＩＳＭ
@@ -75,10 +77,12 @@ Section MDefs.
 End MDefs.
 
 Arguments mkMorphism {_ _ _ _ _ _ _ _ _ _} _.
+Arguments τ          {_ _ _ _ _ _ _ _ _} _.
+Arguments τ_cut      {_ _ _ _ _ _ _ _ _} _ {_}.
 
 Module Morphism.
 
-  Notation make τ := (@mkMorphism _ _ _ _ _ _ _ _ _ τ _) (only parsing).
+  Notation make τ := (@mkMorphism _ _ _ _ _ _ _ _ _ (RelativeComonad.Morphism.make τ) _) (only parsing).
 
   (* -- Ｉｄｅｎｔｉｔｙ  /  Ｃｏｍｐｏｓｉｔｉｏｎ                      -- *)
   Section id_composition.
@@ -100,13 +104,13 @@ Module Morphism.
     Local Infix "⇒" := Hom.
 
     Program Definition id {S} : S ⇒ S :=
-      make id.
+      mkMorphism (τ := id) _.
     Next Obligation.
       now rewrite left_id, right_id.
     Qed.
 
     Program Definition compose {S T U} : [ T ⇒ U ⟶ S ⇒ T ⟶ S ⇒ U ] :=
-      λ g f ↦₂ make (g ∘ f).
+      λ g f ↦₂ mkMorphism (τ := g ∘ f) _.
     Next Obligation.
       rewrite compose_assoc. rewrite <- τ_cut. repeat rewrite <- compose_assoc.
       now rewrite τ_cut.
