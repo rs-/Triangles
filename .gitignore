@@ -19,4 +19,5 @@ tex/*.pdf
 *.glob
 .depend
 **/*.d
+Makefile
 
