@@ -13,14 +13,14 @@ Structure RelativeComonad `(F : Functor 𝒞 𝒟) : Type := mkRelativeComonad
 ; cobind         : ∀ {X Y}, [ T X ⇒ F Y ⟶ T X ⇒ T Y ]
 ; cobind_counit  : ∀ {X}, cobind counit ≈ id[ T X ]
 ; counit_cobind  : ∀ {X Y} {f : T X ⇒ F Y}, counit ∘ cobind(f) ≈ f
-; cobind_compose : ∀ {X Y Z} {f : T X ⇒ F Y} {g : T Y ⇒ F Z}, cobind(g) ∘ cobind(f) ≈ cobind(g ∘ cobind(f)) }.
+; cobind_cobind : ∀ {X Y Z} {f : T X ⇒ F Y} {g : T Y ⇒ F Z}, cobind(g) ∘ cobind(f) ≈ cobind(g ∘ cobind(f)) }.
 
 Arguments mkRelativeComonad {_ _ _ _ _ _} _ _ _.
 Arguments counit            {_ _ _} _ {_}.
 Arguments cobind            {_ _ _} _ {_ _}.
 Arguments cobind_counit     {_ _ _} _ {_}.
 Arguments counit_cobind     {_ _ _} _ {_ _ _}.
-Arguments cobind_compose    {_ _ _} _ {_ _ _ _ _}.
+Arguments cobind_cobind    {_ _ _} _ {_ _ _ _ _}.
 
 Notation "'counit[' X ]" := (counit _ (X := X)) (only parsing).
 Notation "T '⋅counit'" := (counit T) (at level 0, only parsing).
@@ -54,7 +54,7 @@ Section Functoriality.
   Lemma lift_compose : ∀ A B C (f : A ⇒ B) (g : B ⇒ C), lift (g ∘ f) ≈ (lift g) ∘ (lift f).
   Proof.
     intros A B C g f; simpl; unfold lift.
-    rewrite cobind_compose,
+    rewrite cobind_cobind,
             compose_assoc,
             counit_cobind,
             <- compose_assoc,

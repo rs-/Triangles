@@ -12,14 +12,14 @@ Structure Comodule `{F : Functor 𝒞 𝒟} (T : RelativeComonad F) (ℰ : Categ
 { M               :> 𝒞 → ℰ
 ; mcobind         : ∀ {C D}, [ T C ⇒ F D ⟶ M C ⇒ M D ]
 ; mcobind_counit  : ∀ {C}, mcobind counit[ C ] ≈ id[ M C ]
-; mcobind_compose : ∀ {C D E} {f : T C ⇒ F D} {g : T D ⇒ F E},
+; mcobind_mcobind : ∀ {C D E} {f : T C ⇒ F D} {g : T D ⇒ F E},
                       mcobind(g) ∘ mcobind(f) ≈ mcobind(g ∘ T⋅cobind(f)) }.
 
 Arguments mkComodule      {_ _ _ _ _ _ _} _ _.
 Arguments M               {_ _ _ _ _} _ _.
 Arguments mcobind         {_ _ _ _ _} _ {_ _}.
 Arguments mcobind_counit  {_ _ _ _ _} _ {_}.
-Arguments mcobind_compose {_ _ _ _ _} _ {_ _ _ _ _}.
+Arguments mcobind_mcobind {_ _ _ _ _} _ {_ _ _ _ _}.
 
 Notation "M '⋅mcobind'" := (mcobind M) (at level 0).
 
@@ -48,7 +48,7 @@ Section Functoriality.
   Lemma mlift_compose A B C (f : A ⇒ B) (g : B ⇒ C) : mlift (g ∘ f) ≈ (mlift g) ∘ (mlift f).
   Proof.
     simpl.
-    rewrite mcobind_compose,
+    rewrite mcobind_mcobind,
             compose_assoc,
             counit_cobind,
             <- compose_assoc,

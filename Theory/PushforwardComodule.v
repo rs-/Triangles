@@ -30,10 +30,10 @@ Section Pushforward_construction.
   Next Obligation. (* mcobind_counit *)
     rewrite <- τ_counit. now rewrite mcobind_counit.
   Qed.
-  Next Obligation. (* mcobind_compose *)
+  Next Obligation. (* mcobind_mcobind *)
     now rewrite compose_assoc,
                 <- τ_commutes,
-                mcobind_compose,
+                mcobind_mcobind,
                 <- compose_assoc.
   Qed.
 
@@ -82,8 +82,8 @@ Section tautological_comodule.
   Next Obligation. (* mcobind_counit *)
     now rewrite cobind_counit.
   Qed.
-  Next Obligation. (* mcobind_compose *)
-    now rewrite cobind_compose.
+  Next Obligation. (* mcobind_mcobind *)
+    now rewrite cobind_cobind.
   Qed.
 
 End tautological_comodule.

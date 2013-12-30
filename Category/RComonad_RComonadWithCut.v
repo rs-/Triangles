@@ -26,7 +26,7 @@ Section Defs.
     now rewrite counit_cobind.
   Qed.
   Next Obligation.
-    do 2 rewrite cobind_compose. apply Π.cong.
+    do 2 rewrite cobind_cobind. apply Π.cong.
     now rewrite compose_assoc, counit_cobind,
                 <- compose_assoc, Fπ₂_φ_inv, π₂_compose.
   Qed.

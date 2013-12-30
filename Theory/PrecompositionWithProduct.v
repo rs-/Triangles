@@ -30,7 +30,7 @@ Section PrecompositionWithProduct.
     rewrite left_id. rewrite mcobind_counit. reflexivity.
   Qed.
   Next Obligation.
-    rewrite mcobind_compose. apply Π.cong. repeat rewrite compose_assoc.
+    rewrite mcobind_mcobind. apply Π.cong. repeat rewrite compose_assoc.
     rewrite ∘-×. rewrite cut_cobind. unfold Extend. simpl.
     repeat rewrite compose_assoc. rewrite counit_cobind.
     repeat rewrite <- compose_assoc. rewrite Fπ₁_φ_inv. rewrite π₁_compose. reflexivity.

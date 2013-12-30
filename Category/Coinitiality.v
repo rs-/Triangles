@@ -71,7 +71,7 @@ Module Tri_Terminal (Import TE : Elt).
     intros A B f x y eq_xy.
     now rewrite eq_xy.
   Qed.
-  Next Obligation. (* cobind_compose *)
+  Next Obligation. (* cobind_cobind *)
     intros A B C f g x y eq_xy; simpl.
     symmetry. etransitivity. apply comonad3.
     - repeat intro; now apply (Setoids.cong g).
