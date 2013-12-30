@@ -24,3 +24,4 @@
 ./Theory/RelativeComonad.v
 ./Theory/RelativeComonadWithCut.v
 ./Theory/SetoidType.v
+./Theory/NaturalTransformation.v
