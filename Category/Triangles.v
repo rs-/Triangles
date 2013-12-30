@@ -8,7 +8,7 @@ Require Import Theory.Functor.
 Require Import Theory.RelativeComonadWithCut.
 Require Import Theory.Comodule.
 Require Import Theory.Product.
-Require Import Theory.ProductInContext.
+Require Import Theory.PrecompositionWithProduct.
 Require Import Theory.PushforwardComodule.
 
 Generalizable All Variables.

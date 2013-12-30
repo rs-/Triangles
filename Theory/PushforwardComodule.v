@@ -9,7 +9,7 @@ Require Import Theory.RelativeComonadWithCut.
 Require Import Theory.Comodule.
 Require Import Theory.Product.
 Require Import Theory.CartesianStrongMonoidal.
-Require Import Theory.ProductInContext.
+Require Import Theory.PrecompositionWithProduct.
 
 Generalizable All Variables.
 

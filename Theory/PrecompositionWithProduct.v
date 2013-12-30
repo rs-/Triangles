@@ -11,16 +11,16 @@ Require Import Theory.CartesianStrongMonoidal.
 Generalizable All Variables.
 
 (*------------------------------------------------------------------------------
-  -- ＰＲＯＤＵＣＴ  ＩＮ  ＣＯＮＴＥＸＴ
+  -- ＰＲＥＣＯＭＰＯＳＩＴＩＯＮ  ＷＩＴＨ  ＰＲＯＤＵＣＴ
   ----------------------------------------------------------------------------*)
 
-Section ProductInContext.
+Section PrecompositionWithProduct.
 
   Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟} {F : Functor 𝒞  𝒟}
           {E : 𝒞} `{!CartesianStrongMonoidal F} {T : RelativeComonadWithCut F E}
           {ℰ : Category} (M : Comodule T ℰ).
 
-  Program Definition product_in_context : Comodule T ℰ :=
+  Program Definition precomposition_with_product : Comodule T ℰ :=
     Comodule.make (λ C ∙ M (E × C)) ( λ A B ∙ λ f ↦ M⋅mcobind (T⋅extend(f))).
   Next Obligation.
     intros f g eq_fg. now rewrite eq_fg.
@@ -36,11 +36,11 @@ Section ProductInContext.
     repeat rewrite <- compose_assoc. rewrite Fπ₁_φ_inv. rewrite π₁_compose. reflexivity.
   Qed.
 
-End ProductInContext.
+End PrecompositionWithProduct.
 
-Arguments product_in_context {_ _ _ _ _} _ {_ _ _} _.
+Arguments precomposition_with_product {_ _ _ _ _} _ {_ _ _} _.
 
-Notation "M [ E '×─' ] " := (product_in_context E M) (at level 0).
+Notation "M [ E '×─' ] " := (precomposition_with_product E M) (at level 0).
 
 Section Morphisms.
 
@@ -48,7 +48,7 @@ Section Morphisms.
           (E : 𝒞) `{!CartesianStrongMonoidal F} (T : RelativeComonadWithCut F E)
           (ℰ : Category) (M : Comodule T ℰ) (N : Comodule T ℰ) (α : M ⇒ N).
 
-  Program Definition product_in_context_mor : M[E×─] ⇒ N[E×─] :=
+  Program Definition precomposition_with_product_mor : M[E×─] ⇒ N[E×─] :=
     Comodule.Morphism.make (λ A ∙ α (E × A)).
   Next Obligation.
     now rewrite α_commutes.
@@ -56,6 +56,6 @@ Section Morphisms.
 
 End Morphisms.
 
-Arguments product_in_context_mor {_ _ _ _ _} _ {_ _ _ _ _} _.
+Arguments precomposition_with_product_mor {_ _ _ _ _} _ {_ _ _ _ _} _.
 
-Notation "α ［ E '×─' ］" := (product_in_context_mor E α) (at level 0).
+Notation "α ［ E '×─' ］" := (precomposition_with_product_mor E α) (at level 0).

@@ -13,7 +13,7 @@ Require Import Theory.RelativeComonad.
 Require Import Theory.RelativeComonadWithCut.
 Require Import Theory.Comodule.
 Require Import Theory.Product.
-Require Import Theory.ProductInContext.
+Require Import Theory.PrecompositionWithProduct.
 Require Import Theory.PushforwardComodule.
 
 Generalizable All Variables.
@@ -97,7 +97,7 @@ Module Tri_Terminal (Import TE : Elt).
   (**
     * 2nd step: MP.rest is a morphism of comodule 𝑻𝒓𝒊 ⇒ 𝑻𝒓𝒊(E × ─)
     **)
-  Program Definition 𝑹𝒆𝒔𝒕 : [𝑻𝒓𝒊] ⇒ product_in_context (F := 𝑬𝑸) E (tcomod 𝑻𝒓𝒊) :=
+  Program Definition 𝑹𝒆𝒔𝒕 : [𝑻𝒓𝒊] ⇒ precomposition_with_product (F := 𝑬𝑸) E (tcomod 𝑻𝒓𝒊) :=
     Comodule.Morphism.make
       (λ A ∙ Setoids.Morphism.make (@rest A)).
   Next Obligation. (* rest-cong *)

@@ -19,7 +19,7 @@
 ./Theory/Isomorphism.v
 ./Theory/Notations.v
 ./Theory/Product.v
-./Theory/ProductInContext.v
+./Theory/PrecompositionWithProduct.v
 ./Theory/PushforwardComodule.v
 ./Theory/RelativeComonad.v
 ./Theory/RelativeComonadWithCut.v
