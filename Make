@@ -6,7 +6,7 @@
 ./Category/RComonadWithCut.v
 ./Category/RComonad_RComonadWithCut.v
 ./Category/Setoids.v
-./Category/Triangles.v
+./Category/TriMat.v
 ./Category/Types.v
 ./Category/Types_Setoids.v
 ./InfiniteTriangles/redecInfiniteTriangles8_4.v

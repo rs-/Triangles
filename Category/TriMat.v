@@ -17,7 +17,7 @@ Generalizable All Variables.
   -- ＣＡＴＥＧＯＲＹ  ＯＦ  ＴＲＩＡＮＧＬＥＳ
   ----------------------------------------------------------------------------*)
 
-Module Triangles.
+Module TriMat.
 
   Structure Obj (E : 𝑻𝒚𝒑𝒆) : Type := mkObj
   { T        :> 𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅𝑾𝒊𝒕𝒉𝑪𝒖𝒕 𝑬𝑸 E
@@ -54,9 +54,9 @@ Module Triangles.
     - repeat intro; etransitivity; eauto. now apply H0.
   Qed.
 
-End Triangles.
+End TriMat.
 
-Export Triangles.
+Export TriMat.
 
 Section Defs.
 
@@ -68,14 +68,14 @@ Section Defs.
   Infix "⇒" := Hom.
 
   Program Definition id {T} : T ⇒ T :=
-    Triangles.Morphism.make (id[T]).
+    TriMat.Morphism.make (id[T]).
   Next Obligation.
     now rewrite H.
   Qed.
 
   Obligation Tactic := idtac.
   Program Definition compose {T S R} : [ S ⇒ R ⟶ T ⇒ S ⟶ T ⇒ R ] :=
-    λ g f ↦₂ Triangles.Morphism.make (g ∘ f).
+    λ g f ↦₂ TriMat.Morphism.make (g ∘ f).
   Next Obligation.
     intros T S R g f.
     destruct g as [g g_commutes]. simpl in g_commutes.
@@ -119,8 +119,7 @@ Section Defs.
     simpl. now rewrite H.
   Qed.
 
-  Canonical Structure 𝑻𝒓𝒊𝒂𝒏𝒈𝒍𝒆 : Category :=
+  Canonical Structure 𝑻𝒓𝒊𝑴𝒂𝒕 : Category :=
     mkCategory left_id right_id compose_assoc.
 
 End Defs.
-

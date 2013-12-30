@@ -5,7 +5,7 @@ Require Import Category.Types_Setoids.
 Require Import Category.RComod.
 Require Import Category.RComonad.
 Require Import Category.RComonadWithCut.
-Require Import Category.Triangles.
+Require Import Category.TriMat.
 Require Import Theory.Category.
 Require Import Theory.InitialTerminal.
 Require Import Theory.Functor.
@@ -113,8 +113,8 @@ Module Tri_Terminal (Import TE : Elt).
   (**
     * 3nd step: Tri is an object in the category of Triangles
     **)
-  Program Definition 𝑻𝑹𝑰 : ‵ 𝑻𝒓𝒊𝒂𝒏𝒈𝒍𝒆 E ′ :=
-    Triangles.make 𝑻𝒓𝒊 𝑹𝒆𝒔𝒕.
+  Program Definition 𝑻𝑹𝑰 : ‵ 𝑻𝒓𝒊𝑴𝒂𝒕 E ′ :=
+    TriMat.make 𝑻𝒓𝒊 𝑹𝒆𝒔𝒕.
   Next Obligation. (* α_cut *)
     intros A; repeat intro. rewrite H.
     simpl. change (rest (cut y) ~~ cut (rest y)).
@@ -126,14 +126,14 @@ Module Tri_Terminal (Import TE : Elt).
     **)
   Section Defs.
 
-    Variable (Tr : 𝑻𝒓𝒊𝒂𝒏𝒈𝒍𝒆 E).
+    Variable (Tr : 𝑻𝒓𝒊𝑴𝒂𝒕 E).
 
-    Notation T                 := (Triangles.T Tr).
-    Notation "'T⋅rest'"        := (Triangles.α Tr _).
-    Notation "'T⋅rest[' A ]"   := (Triangles.α Tr A) (only parsing).
-    Notation TRI               := (Triangles.T 𝑻𝑹𝑰).
-    Notation "'TRI⋅rest'"      := (Triangles.α 𝑻𝑹𝑰 _).
-    Notation "'TRI⋅rest[' A ]" := (Triangles.α 𝑻𝑹𝑰 A) (only parsing).
+    Notation T                 := (TriMat.T Tr).
+    Notation "'T⋅rest'"        := (TriMat.α Tr _).
+    Notation "'T⋅rest[' A ]"   := (TriMat.α Tr A) (only parsing).
+    Notation TRI               := (TriMat.T 𝑻𝑹𝑰).
+    Notation "'TRI⋅rest'"      := (TriMat.α 𝑻𝑹𝑰 _).
+    Notation "'TRI⋅rest[' A ]" := (TriMat.α 𝑻𝑹𝑰 A) (only parsing).
 
     CoFixpoint tau {A} (t : T A) : TRI A :=
       constr (T⋅counit t) (tau (T⋅rest t)).
@@ -196,7 +196,7 @@ Module Tri_Terminal (Import TE : Elt).
         reflexivity.
       - apply Hc with (f := TRI⋅extend f) (x := T⋅rest x);
         [ rewrite eq_t₁ | rewrite <- eq_t₂]; clear eq_t₁ eq_t₂.
-        + apply tau_cong. etransitivity.  apply (α_commutes (Triangles.α Tr)); reflexivity.
+        + apply tau_cong. etransitivity.  apply (α_commutes (TriMat.α Tr)); reflexivity.
           apply (Π.cong _ _ (T⋅cobind)); [| reflexivity ].
           intros u v eq_uv. simpl.
           f_equal. now rewrite eq_uv.
@@ -213,8 +213,8 @@ Module Tri_Terminal (Import TE : Elt).
   End Defs.
 
   (** τ is a morphism of triangles **)
-  Program Definition τ (T : 𝑻𝒓𝒊𝒂𝒏𝒈𝒍𝒆 E) : T ⇒ 𝑻𝑹𝑰 :=
-    Triangles.Morphism.make
+  Program Definition τ (T : 𝑻𝒓𝒊𝑴𝒂𝒕 E) : T ⇒ 𝑻𝑹𝑰 :=
+    TriMat.Morphism.make
       (RelativeComonadWithCut.Morphism.Make (λ A ∙ Tau T)).
   Next Obligation. (* τ_counit *)
     repeat intro. now apply tau_counit.
@@ -229,13 +229,13 @@ Module Tri_Terminal (Import TE : Elt).
     repeat intro. apply tau_cong. now rewrite H.
   Qed.
 
-  Local Notation "⟨ f ⟩" := (RelativeComonadWithCut.τ (Triangles.τ f)) (only parsing).
+  Local Notation "⟨ f ⟩" := (RelativeComonadWithCut.τ (TriMat.τ f)) (only parsing).
 
   (** 𝑻𝑹𝑰 is a terminal object **)
-  Program Definition Coinitiality : Terminal (𝑻𝒓𝒊𝒂𝒏𝒈𝒍𝒆 E) :=
+  Program Definition Coinitiality : Terminal (𝑻𝒓𝒊𝑴𝒂𝒕 E) :=
     Terminal.make 𝑻𝑹𝑰 τ.
   Next Obligation.
-    cut (∀ (T : 𝑻𝒓𝒊𝒂𝒏𝒈𝒍𝒆 E) (f g : T ⇒ 𝑻𝑹𝑰) (A : 𝑻𝒚𝒑𝒆) (t : Triangles.T T A) t₁ t₂,
+    cut (∀ (T : 𝑻𝒓𝒊𝑴𝒂𝒕 E) (f g : T ⇒ 𝑻𝑹𝑰) (A : 𝑻𝒚𝒑𝒆) (t : TriMat.T T A) t₁ t₂,
            t₁ ∼ ⟨f⟩ A t → ⟨g⟩ A t ∼ t₂ → t₁ ∼ t₂); [repeat intro |].
     - rewrite H0. apply H with (f := f) (g := τ _) (t := y); reflexivity.
     - cofix Hc; intros T f g A t t₁ t₂ eq_t₁ eq_t₂; constructor.
@@ -246,8 +246,8 @@ Module Tri_Terminal (Import TE : Elt).
         etransitivity. symmetry. apply (τ_counit ⟨g⟩); reflexivity.
         reflexivity.
       + eapply Hc; [ rewrite eq_t₁ | rewrite <- eq_t₂ ]; clear eq_t₁ eq_t₂.
-        * symmetry. eapply (Triangles.τ_commutes f); reflexivity.
-        * eapply (Triangles.τ_commutes g); reflexivity.
+        * symmetry. eapply (TriMat.τ_commutes f); reflexivity.
+        * eapply (TriMat.τ_commutes g); reflexivity.
   Qed.
 
 End Tri_Terminal.
