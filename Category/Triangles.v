@@ -33,7 +33,7 @@ Module Triangles.
 
   Structure Morphism {E} (T S : Obj E) : Type := mkMorphism
   { τ :> T ⇒ S
-  ; τ_commutes : [τ]⁎［E×─］ ∘ Φ ∘ τ⁎⋅T ≈ S ∘ [τ]⁎ }.
+  ; τ_commutes : ⟨τ⟩［E×─］ ∘ Φ ∘ τ⁎⋅T ≈ S ∘ ⟨τ⟩ }.
 
   Arguments mkMorphism {_ _ _ _} _.
   Arguments τ          {_ _ _} _.

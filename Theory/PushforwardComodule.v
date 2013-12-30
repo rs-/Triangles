@@ -104,7 +104,7 @@ Section induced_morphism.
 
 End induced_morphism.
 
-Notation "[ τ ']⁎'" := (induced_morphism τ) (at level 0).
+Notation "⟨ τ ⟩" := (induced_morphism τ) (at level 0).
 
 Section Commutes.
 
