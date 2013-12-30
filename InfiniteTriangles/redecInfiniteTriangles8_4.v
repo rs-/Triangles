@@ -160,7 +160,7 @@ Module TriangleMP (Import TE : Elt).
   Proof.
     intros H.
     refine (match H in (t ~~ t')  return (rest t ~~ rest t') with
-              constrB t t' Hyp1 Hyp2  => _ end).
+              @constrB _ t t' Hyp1 Hyp2  => _ end).
     assumption.
   Qed.
 
@@ -169,7 +169,7 @@ Module TriangleMP (Import TE : Elt).
   Proof.
     intros H.
     refine (match H in (t ~~ t') return (top t = top t') with
-              constrB t t' Hyp1 Hyp2  => _ end).
+              @constrB _ t t' Hyp1 Hyp2  => _ end).
     assumption.
   Qed.
 

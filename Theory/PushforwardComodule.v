@@ -50,7 +50,7 @@ Section Functoriality.
 
   Infix "⁎" := pushforward (at level 0).
 
-  Program Definition pushforward_mor : τ⁎M ⇒ τ⁎N :=
+  Program Definition pushforward_mor : ‵ τ⁎M ⇒ τ⁎N ′ :=
     Comodule.Morphism.make α.
   Next Obligation. (* α_commutes *)
     now rewrite α_commutes.
@@ -96,7 +96,7 @@ Section induced_morphism.
   Context `{F : Functor 𝒞 𝒟} {T S : RelativeComonad F}
           (τ : T ⇒ S).
 
-  Program Definition induced_morphism : τ⁎T ⇒ S :=
+  Program Definition induced_morphism : ‵ τ⁎T ⇒ S ′ :=
     Comodule.Morphism.make (λ C ∙ τ(C)).
   Next Obligation. (* α_commutes *)
     now rewrite τ_commutes.
@@ -112,7 +112,7 @@ Section Commutes.
           {E : 𝒞} `{!CartesianStrongMonoidal F} {T S : RelativeComonadWithCut F E}
           {τ : T ⇒ S} `{M : Comodule T ℰ}.
 
-  Program Definition Φ : τ⁎(M[E×─]) ⇒ (τ⁎M)[E×─] :=
+  Program Definition Φ : ‵ τ⁎(M[E×─]) ⇒ (τ⁎M)[E×─] ′ :=
     Comodule.Morphism.make (λ X ∙ id[M (E × X)]).
   Next Obligation.
     rewrite left_id, right_id.

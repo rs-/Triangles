@@ -97,7 +97,7 @@ Module Tri_Terminal (Import TE : Elt).
   (**
     * 2nd step: MP.rest is a morphism of comodule 𝑻𝒓𝒊 ⇒ 𝑻𝒓𝒊(E × ─)
     **)
-  Program Definition 𝑹𝒆𝒔𝒕 : [𝑻𝒓𝒊] ⇒ precomposition_with_product (F := 𝑬𝑸) E (tcomod 𝑻𝒓𝒊) :=
+  Program Definition 𝑹𝒆𝒔𝒕 : ‵ [𝑻𝒓𝒊] ⇒ precomposition_with_product (F := 𝑬𝑸) E (tcomod 𝑻𝒓𝒊) ′ :=
     Comodule.Morphism.make
       (λ A ∙ Setoids.Morphism.make (@rest A)).
   Next Obligation. (* rest-cong *)
@@ -113,7 +113,7 @@ Module Tri_Terminal (Import TE : Elt).
   (**
     * 3nd step: Tri is an object in the category of Triangles
     **)
-  Program Definition 𝑻𝑹𝑰 : 𝑻𝒓𝒊𝒂𝒏𝒈𝒍𝒆 E :=
+  Program Definition 𝑻𝑹𝑰 : ‵ 𝑻𝒓𝒊𝒂𝒏𝒈𝒍𝒆 E ′ :=
     Triangles.make 𝑻𝒓𝒊 𝑹𝒆𝒔𝒕.
   Next Obligation. (* α_cut *)
     intros A; repeat intro. rewrite H.

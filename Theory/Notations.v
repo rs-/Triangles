@@ -10,6 +10,8 @@ Notation "_⟨⊎⟩_" := sum (only parsing).
 Infix "⟨⊎⟩" := sum (at level 25, left associativity).
 Infix "⟨×⟩" := prod (at level 20, left associativity).
 Notation "_⟨×⟩_" := prod (only parsing).
+(** Force coercion to Type (used with program) **)
+Notation "‵ T ′" := (T : Type) (only parsing).
 (*----------------------------------------------------------------------------*)
 
 

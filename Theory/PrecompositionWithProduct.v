@@ -48,7 +48,7 @@ Section Morphisms.
           (E : 𝒞) `{!CartesianStrongMonoidal F} (T : RelativeComonadWithCut F E)
           (ℰ : Category) (M : Comodule T ℰ) (N : Comodule T ℰ) (α : M ⇒ N).
 
-  Program Definition precomposition_with_product_mor : M[E×─] ⇒ N[E×─] :=
+  Program Definition precomposition_with_product_mor : ‵ M[E×─] ⇒ N[E×─] ′ :=
     Comodule.Morphism.make (λ A ∙ α (E × A)).
   Next Obligation.
     now rewrite α_commutes.
