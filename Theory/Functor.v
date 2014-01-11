@@ -1,3 +1,13 @@
+(**
+
+   Benedikt Ahrens and Régis Spadotti
+   
+   Coinitial semantics for redecoration of triangular matrices
+   
+   http://arxiv.org/abs/1401.1053
+
+*)
+
 Require Import Theory.Category.
 
 (*------------------------------------------------------------------------------
