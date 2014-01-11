@@ -8,6 +8,16 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  - definition of pushforward of comodules along a comonad morphism
+  - definition of comodule morphism induced by a comonad morphism
+  - commutativity of pushforward with precomposition w. product
+
+*)
+
 Require Import Category.RComonad.
 Require Import Category.RComod.
 Require Import Category.RComonadWithCut.

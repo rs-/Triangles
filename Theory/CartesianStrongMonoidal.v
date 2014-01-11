@@ -8,6 +8,14 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  definition of strong monoidal functor between cartesian monoidal categories
+
+*)
+
 Require Import Theory.Category.
 Require Import Theory.Isomorphism.
 Require Import Theory.Functor.

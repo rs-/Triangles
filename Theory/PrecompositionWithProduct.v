@@ -8,6 +8,15 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  - definition of comodule obtained by precomposing with product
+  - corresponding action on morphisms of comodules
+
+*)
+
 Require Import Category.RComod.
 Require Import Theory.Category.
 Require Import Theory.Functor.

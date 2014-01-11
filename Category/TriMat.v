@@ -8,6 +8,14 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  definition of the category of coalgebras for the signature of infinite tri. matrices
+
+*)
+
 Require Import Category.Types.
 Require Import Category.Setoids.
 Require Import Category.Types_Setoids.

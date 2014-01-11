@@ -8,6 +8,15 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  - definition of isomorphism in a category
+  - somme lemmas about composition and symmetry of isos
+
+*)
+
 Require Import Theory.Category.
 
 Generalizable All Variables.

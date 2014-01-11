@@ -8,6 +8,14 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  definition of functor from rel. comonads to rel. comonads with cut
+
+*)
+
 Require Import Category.RComonad.
 Require Import Category.RComonadWithCut.
 Require Import Theory.Category.

@@ -8,6 +8,15 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  - definition of universal property of product
+  - some lemmas about interplay of product morphism with composition
+
+*)
+
 Require Import Theory.Category.
 
 Generalizable All Variables.

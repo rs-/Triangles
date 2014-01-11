@@ -8,6 +8,14 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  definition of the category of relative comonads over a fixed functor
+
+*)
+
 Require Import Theory.Category.
 Require Import Theory.Functor.
 Require Import Theory.RelativeComonad.

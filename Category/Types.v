@@ -8,6 +8,14 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  definition of the category of sets, proof that it has products
+
+*)
+
 Require Import Theory.Category.
 Require Import Theory.Product.
 

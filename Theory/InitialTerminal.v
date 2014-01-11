@@ -8,6 +8,14 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  definition of initial and terminal object
+
+*)
+
 Require Import Theory.Category.
 
 Generalizable All Variables.

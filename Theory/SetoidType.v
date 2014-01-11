@@ -8,6 +8,15 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  - definition of type of setoids and type of setoid morphisms
+  - identity and composition of setoid morphisms
+
+*)
+
 Require Import Misc.Unicode.
 Require Import Morphisms.
 Require Export SetoidClass.

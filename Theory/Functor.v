@@ -8,6 +8,14 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  definition of functor
+
+*)
+
 Require Import Theory.Category.
 
 (*------------------------------------------------------------------------------

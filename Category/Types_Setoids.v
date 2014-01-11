@@ -8,6 +8,14 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  definition of the functor [EQ] from sets to setoids, proof that it is strong monoidal
+
+*)
+
 Require Import Category.Types.
 Require Import Category.Setoids.
 Require Import Theory.Category.

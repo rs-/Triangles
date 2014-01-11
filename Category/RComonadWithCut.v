@@ -8,6 +8,14 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  definition of the category of relative comonads with cut
+
+*)
+
 Require Import Theory.Category.
 Require Import Theory.Functor.
 Require Import Theory.RelativeComonadWithCut.

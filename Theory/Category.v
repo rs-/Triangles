@@ -8,6 +8,14 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  definition of category
+
+*)
+
 Require Export Misc.Unicode.
 Require Export Theory.Notations.
 Require Export Theory.SetoidType.

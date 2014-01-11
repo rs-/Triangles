@@ -8,6 +8,15 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  - definition of comonad with cut
+  - definition of morphisms of comonads with cut, identity, composition
+
+*)
+
 Require Import Category.RComonad.
 Require Import Theory.Category.
 Require Import Theory.Isomorphism.

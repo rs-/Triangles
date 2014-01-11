@@ -8,6 +8,16 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  - definition of relative comonad
+  - relative comonads are functors
+  - definition of morphisms of comonads, identity, composition
+
+*)
+
 Require Import Theory.Category.
 Require Import Theory.Functor.
 

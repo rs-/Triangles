@@ -8,6 +8,14 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  definition of the category of comodules over a fixed comonad towards a fixed category
+
+*)
+
 Require Import Theory.Category.
 Require Import Theory.Functor.
 Require Import Theory.RelativeComonad.

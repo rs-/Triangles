@@ -8,6 +8,15 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  - definition of comodule over relative comonad
+  - definition of morphisms of comodules, identity and composition
+
+*)
+
 Require Import Theory.Category.
 Require Import Theory.Functor.
 Require Import Theory.RelativeComonad.

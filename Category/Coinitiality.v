@@ -8,6 +8,14 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  proof of the main theorem: the category of coalgebras has a terminal object
+
+*)
+
 Require Import InfiniteTriangles.redecInfiniteTriangles8_4.
 Require Import Category.Setoids.
 Require Import Category.Types.

@@ -8,6 +8,14 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  a cut operation is a natural transformation
+
+*)
+
 Require Import Category.RComonad.
 Require Import Category.RComonadWithCut.
 Require Import Theory.Category.

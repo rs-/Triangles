@@ -8,6 +8,14 @@
 
 *)
 
+(** 
+
+  Content of this file:
+  
+  definition of natural transformations
+
+*)
+
 Require Import Theory.Category.
 Require Import Theory.Functor.
 
