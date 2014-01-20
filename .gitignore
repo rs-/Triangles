@@ -19,5 +19,6 @@ tex/*.pdf
 *.glob
 .depend
 **/*.d
-Makefile
+Makefile.coq
+html/
 

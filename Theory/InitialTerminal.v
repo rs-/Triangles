@@ -1,17 +1,17 @@
-(**
+(*
 
    Benedikt Ahrens and Régis Spadotti
-   
+
    Coinitial semantics for redecoration of triangular matrices
-   
+
    http://arxiv.org/abs/1401.1053
 
 *)
 
-(** 
+(*
 
   Content of this file:
-  
+
   definition of initial and terminal object
 
 *)
@@ -19,6 +19,8 @@
 Require Import Theory.Category.
 
 Generalizable All Variables.
+
+(** ** Initial object definition **)
 
 (*------------------------------------------------------------------------------
   -- ＩＮＩＴＩＡＬ  ＯＢＪＥＣＴ
@@ -33,17 +35,13 @@ Notation "⟨⊥⟩"      := empty.
 Notation "!-⊥"      := bottom.
 Notation "⊥-unique" := bottom_unique.
 
-Module Initial.
-
-  Notation make empty bottom := (@mkInitial _ empty bottom _) (only parsing).
-
-End Initial.
-
-
+Notation "'Initial.make' ⦃ 'empty' ≔ empty ; 'bottom' ≔ bottom ⦄" :=
+  (@mkInitial _ empty bottom _) (only parsing).
 
 (*------------------------------------------------------------------------------
   -- ＴＥＲＭＩＮＡＬ  ＯＢＪＥＣＴ
   ----------------------------------------------------------------------------*)
+(** ** Terminal object definition **)
 
 Structure Terminal (𝒞 : Category) := mkTerminal
 { one :> 𝒞
@@ -54,8 +52,4 @@ Notation "⟨⊤⟩"      := one.
 Notation "!-⊤"      := top.
 Notation "⊤-unique" := top_unique.
 
-Module Terminal.
-
-  Notation make one top := (@mkTerminal _ one top _) (only parsing).
-
-End Terminal.
+Notation "'Terminal.make' ⦃ 'one' ≔ one ; 'top' ≔ top ⦄" := (@mkTerminal _ one top _) (only parsing).

@@ -1,4 +1,4 @@
-(**
+(*
 
    Benedikt Ahrens and Régis Spadotti
    
@@ -8,7 +8,7 @@
 
 *)
 
-(** 
+(*
 
   Content of this file:
   
@@ -26,6 +26,9 @@ Generalizable All Variables.
 (*------------------------------------------------------------------------------
   -- ＣＡＲＴＥＳＩＡＮ  ＳＴＲＯＮＧ  ＭＯＮＯＩＤＡＬ  ＦＵＮＣＴＯＲ  ＤＥＦＩＮＩＴＩＯＮ
   ----------------------------------------------------------------------------*)
+(** * Cartesian strong monoidal functor **)
+
+(** ** Definition **)
 
 Section StrongMonoidal.
 
@@ -43,9 +46,15 @@ End StrongMonoidal.
 Arguments mkCartesianStrongMonoidal {_ _ _ _ _ _} _.
 Arguments φ {_ _ _ _ _ _ _}.
 
-Notation make φ := (@mkCartesianStrongMonoidal _ _ _ _ _ φ _) (only parsing).
+Notation "'CartesianStrongMonoidal.make' ⦃ 'φ' ≔ φ ⦄" :=
+  (@mkCartesianStrongMonoidal _ _ _ _ _ φ _) (only parsing).
 
+
+(** ** Equations **)
+
+(* begin hide *)
 Section equations.
+(* end hide *)
 
   Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟} {F : Functor 𝒞 𝒟} `{!CartesianStrongMonoidal F}.
 
@@ -67,5 +76,7 @@ Section equations.
     now rewrite compose_assoc, iso_left, right_id.
   Qed.
 
+(* begin hide *)
 End equations.
+(* end hide *)
 

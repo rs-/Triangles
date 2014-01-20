@@ -1,24 +1,24 @@
-(**
+(*
 
    Benedikt Ahrens and Régis Spadotti
-   
+
    Coinitial semantics for redecoration of triangular matrices
-   
+
    http://arxiv.org/abs/1401.1053
 
 *)
 
-(** 
+(*
 
   Content of this file:
-  
+
   definition of the category of coalgebras for the signature of infinite tri. matrices
 
 *)
 
-Require Import Category.Types.
+Require Import Category.Sets.
 Require Import Category.Setoids.
-Require Import Category.Types_Setoids.
+Require Import Category.Sets_Setoids.
 Require Import Category.RComod.
 Require Import Category.RComonadWithCut.
 Require Import Theory.Category.
@@ -34,20 +34,23 @@ Generalizable All Variables.
 (*------------------------------------------------------------------------------
   -- ＣＡＴＥＧＯＲＹ  ＯＦ  ＴＲＩＡＮＧＬＥＳ
   ----------------------------------------------------------------------------*)
+(** * Category of triangular matrices **)
 
+(** ** Object and morphism definitions **)
 Module TriMat.
 
-  Structure Obj (E : 𝑻𝒚𝒑𝒆) : Type := mkObj
+  Structure Obj (E : 𝑺𝒆𝒕) : Type := mkObj
   { T        :> 𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅𝑾𝒊𝒕𝒉𝑪𝒖𝒕 𝑬𝑸 E
-  ; α        :> [T] ⇒ [T][E×─]
-  ; α_cut    : ∀ {A}, α(A) ∘ T⋅cut ≈ T⋅cut ∘ α(E × A) }.
+  ; rest     :> [T] ⇒ [T][E×─]
+  ; rest_cut : ∀ {A}, rest(A) ∘ T⋅cut ≈ T⋅cut ∘ rest(E × A) }.
 
-  Arguments mkObj {_ _ _} _.
-  Arguments T     {_} _.
-  Arguments α     {_} _.
-  Arguments α_cut {_} _ {_ _ _ _}.
+  Arguments mkObj    {_ _ _} _.
+  Arguments T        {_} _.
+  Arguments rest     {_} _.
+  Arguments rest_cut {_} _ {_ _ _ _}.
 
-  Notation make T α := (@mkObj _ T α _) (only parsing).
+  Notation "'TriMat.make' ⦃ 'T' ≔ T ; 'rest' ≔ rest ⦄" :=
+           (@mkObj _ T rest _) (only parsing).
 
   Structure Morphism {E} (T S : Obj E) : Type := mkMorphism
   { τ :> T ⇒ S
@@ -57,14 +60,11 @@ Module TriMat.
   Arguments τ          {_ _ _} _.
   Arguments τ_commutes {_ _ _} _ {_ _ _ _}.
 
-  Module Morphism.
-
-    Notation make τ := (@mkMorphism _ _ _ τ _) (only parsing).
-
-  End Morphism.
+  Notation "'TriMat.make' ⦃ 'τ' ≔ τ ⦄" := (@mkMorphism _ _ _ τ _) (only parsing).
 
   Program Definition Hom {E} (T S : Obj E) : Setoid :=
-    Setoid.make (Morphism T S) (λ g f ∙ g ≈ f).
+    Setoid.make ⦃ Carrier ≔ Morphism T S
+                ; Equiv ≔ (λ g f ∙ g ≈ f) ⦄.
   Next Obligation.
     constructor.
     - repeat intro. now rewrite H.
@@ -76,24 +76,26 @@ End TriMat.
 
 Export TriMat.
 
+(** ** Identity and compositon definitions **)
+
 Section Defs.
 
 
-  Variable (E : 𝑻𝒚𝒑𝒆).
+  Variable (E : 𝑺𝒆𝒕).
 
   Implicit Types (T S R U : Obj E).
 
   Infix "⇒" := Hom.
 
   Program Definition id {T} : T ⇒ T :=
-    TriMat.Morphism.make (id[T]).
+    TriMat.make ⦃ τ ≔ id[T] ⦄.
   Next Obligation.
     now rewrite H.
   Qed.
 
   Obligation Tactic := idtac.
   Program Definition compose {T S R} : [ S ⇒ R ⟶ T ⇒ S ⟶ T ⇒ R ] :=
-    λ g f ↦₂ TriMat.Morphism.make (g ∘ f).
+    λ g f ↦₂ TriMat.make ⦃ τ ≔ g ∘ f ⦄.
   Next Obligation.
     intros T S R g f.
     destruct g as [g g_commutes]. simpl in g_commutes.

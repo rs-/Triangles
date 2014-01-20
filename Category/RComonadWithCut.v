@@ -1,17 +1,17 @@
-(**
+(*
 
    Benedikt Ahrens and Régis Spadotti
-   
+
    Coinitial semantics for redecoration of triangular matrices
-   
+
    http://arxiv.org/abs/1401.1053
 
 *)
 
-(** 
+(*
 
   Content of this file:
-  
+
   definition of the category of relative comonads with cut
 
 *)
@@ -27,6 +27,9 @@ Generalizable All Variables.
 (*------------------------------------------------------------------------------
   -- ＣＡＴＥＧＯＲＹ  ＯＦ  ＲＥＬＡＴＩＶＥ  ＣＯＭＯＮＡＤＳ  ＷＩＴＨ  ＣＵＴ
   ----------------------------------------------------------------------------*)
+(** * Category of Relative comonads with cut **)
+
+(** ** Category definition **)
 
 Section Definitions.
 
@@ -37,7 +40,7 @@ Section Definitions.
 
   Import RelativeComonadWithCut.Morphism.
 
-  Infix "⇒" := Hom.
+ Infix "⇒" := Hom.
   Infix "∘" := compose.
 
   Lemma left_id A B  (f : A ⇒ B) : id ∘ f ≈ f.

@@ -1,17 +1,17 @@
-(**
+(*
 
    Benedikt Ahrens and Régis Spadotti
-   
+
    Coinitial semantics for redecoration of triangular matrices
-   
+
    http://arxiv.org/abs/1401.1053
 
 *)
 
-(** 
+(*
 
   Content of this file:
-  
+
   - definition of pushforward of comodules along a comonad morphism
   - definition of comodule morphism induced by a comonad morphism
   - commutativity of pushforward with precomposition w. product
@@ -36,14 +36,17 @@ Generalizable All Variables.
 (*------------------------------------------------------------------------------
   -- ＰＵＳＨＦＯＲＷＡＲＤ  ＣＯＭＯＤＵＬＥ
   ----------------------------------------------------------------------------*)
+(** * Pushforward comodule **)
 
+(** ** Definition **)
 Section Pushforward_construction.
 
   Context `{F : Functor 𝒞 𝒟} {T S : RelativeComonad F}
            (τ : T ⇒ S) `(M : Comodule T ℰ).
 
   Program Definition pushforward : Comodule S ℰ :=
-    Comodule.make M (λ C D ∙ λ f ↦ M⋅mcobind (f ∘ τ(C))).
+    Comodule.make ⦃ M       ≔ M
+                  ; mcobind ≔ λ C D ∙ λ f ↦ M⋅mcobind (f ∘ τ(C)) ⦄.
   Next Obligation. (* mcobind_cong *)
     solve_proper.
   Qed.
@@ -62,6 +65,7 @@ End Pushforward_construction.
 (*------------------------------------------------------------------------------
   -- ＦＵNＣＴＯＲＩＡＬＩＴＹ
   ----------------------------------------------------------------------------*)
+(** ** Functoriality of pushforward **)
 
 Section Functoriality.
 
@@ -71,7 +75,7 @@ Section Functoriality.
   Infix "⁎" := pushforward (at level 0).
 
   Program Definition pushforward_mor : ‵ τ⁎M ⇒ τ⁎N ′ :=
-    Comodule.Morphism.make α.
+    Comodule.make ⦃ α ≔ α ⦄.
   Next Obligation. (* α_commutes *)
     now rewrite α_commutes.
   Qed.
@@ -80,7 +84,8 @@ End Functoriality.
 
 Program Definition Pushforward
              `{F : Functor 𝒞 𝒟} {T S : RelativeComonad F} (τ : T ⇒ S) {ℰ} : Functor (𝑹𝑪𝒐𝒎𝒐𝒅 T ℰ) (𝑹𝑪𝒐𝒎𝒐𝒅 S ℰ) :=
-  Functor.make (pushforward τ) (λ A B ∙ λ f ↦ pushforward_mor τ f).
+  Functor.make ⦃ F   ≔ pushforward τ
+               ; map ≔ λ A B ∙ λ f ↦ pushforward_mor τ f ⦄.
 Next Obligation.
   intros f g eq_fg x. simpl. now apply eq_fg.
 Qed.
@@ -93,12 +98,14 @@ Qed.
 
 Notation "τ ⁎" := (Pushforward τ) (at level 0).
 
+(** ** Tautological comodule **)
 Section tautological_comodule.
 
   Context `{F : Functor 𝒞 𝒟} (T : RelativeComonad F).
 
   Program Definition tcomod : Comodule T 𝒟 :=
-    Comodule.make T (λ C D ∙ T⋅cobind).
+    Comodule.make ⦃ M ≔ T
+                  ; mcobind ≔ λ C D ∙ T⋅cobind ⦄.
   Next Obligation. (* mcobind_counit *)
     now rewrite cobind_counit.
   Qed.
@@ -111,13 +118,15 @@ End tautological_comodule.
 Local Coercion tcomod : RelativeComonad >-> Comodule.
 Notation "[ T ]" := (tcomod T) (only parsing).
 
+(** ** Induced morphism **)
+
 Section induced_morphism.
 
   Context `{F : Functor 𝒞 𝒟} {T S : RelativeComonad F}
           (τ : T ⇒ S).
 
   Program Definition induced_morphism : ‵ τ⁎T ⇒ S ′ :=
-    Comodule.Morphism.make (λ C ∙ τ(C)).
+    Comodule.make ⦃ α ≔ λ C ∙ τ(C) ⦄.
   Next Obligation. (* α_commutes *)
     now rewrite τ_commutes.
   Qed.
@@ -133,7 +142,7 @@ Section Commutes.
           {τ : T ⇒ S} `{M : Comodule T ℰ}.
 
   Program Definition Φ : ‵ τ⁎(M[E×─]) ⇒ (τ⁎M)[E×─] ′ :=
-    Comodule.Morphism.make (λ X ∙ id[M (E × X)]).
+    Comodule.make ⦃ α ≔ λ X ∙ id[M (E × X)] ⦄.
   Next Obligation.
     rewrite left_id, right_id.
     apply Π.cong.

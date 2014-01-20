@@ -1,17 +1,17 @@
-(**
+(*
 
    Benedikt Ahrens and Régis Spadotti
-   
+
    Coinitial semantics for redecoration of triangular matrices
-   
+
    http://arxiv.org/abs/1401.1053
 
 *)
 
-(** 
+(*
 
   Content of this file:
-  
+
   - definition of comodule over relative comonad
   - definition of morphisms of comodules, identity and composition
 
@@ -26,6 +26,7 @@ Generalizable All Variables.
 (*------------------------------------------------------------------------------
   -- ＣＯＭＯＤＵＬＥ  ＯＶＥＲ  ＲＥＬＡＴＩＶＥ  ＣＯＭＯＮＡＤ  ＤＥＦＩＮＩＴＩＯＮ
   ----------------------------------------------------------------------------*)
+(** ** Comodule over relative comonad definition **)
 
 Structure Comodule `{F : Functor 𝒞 𝒟} (T : RelativeComonad F) (ℰ : Category) : Type := mkComodule
 { M               :> 𝒞 → ℰ
@@ -42,13 +43,17 @@ Arguments mcobind_mcobind {_ _ _ _ _} _ {_ _ _ _ _}.
 
 Notation "M '⋅mcobind'" := (mcobind M) (at level 0).
 
-Notation make M mcobind := (@mkComodule _ _ _ _ _ M mcobind _ _) (only parsing).
+Notation "'Comodule.make' ⦃ 'M' ≔ M ; 'mcobind' ≔ mcobind ⦄" :=
+  (@mkComodule _ _ _ _ _ M mcobind _ _) (only parsing).
 
 (*------------------------------------------------------------------------------
   -- ＦＵＮＣＴＯＲＩＡＬＩＴＹ
   ----------------------------------------------------------------------------*)
+(** ** Functoriality of comodule **)
 
+(* begin hide *)
 Section Functoriality.
+(* end hide *)
 
   Context `{F : Functor 𝒞 𝒟} {T : RelativeComonad F} {ℰ} (M : Comodule T ℰ).
 
@@ -77,12 +82,15 @@ Section Functoriality.
 
   Definition MLift : Functor 𝒞 ℰ := mkFunctor mlift_id mlift_compose.
 
+(* begin hide *)
 End Functoriality.
+(* end hide *)
 
 
 (*------------------------------------------------------------------------------
   -- ＭＯＲＰＨＩＳＭ
   ----------------------------------------------------------------------------*)
+(** ** Morphism of comodules **)
 
 Structure Morphism `{F : Functor 𝒞 𝒟} {T : RelativeComonad F} {ℰ} (M N : Comodule T ℰ) : Type := mkMorphism
 { α          :> ∀ C, M C ⇒ N C
@@ -92,9 +100,10 @@ Arguments mkMorphism {_ _ _ _ _ _ _ _} _.
 Arguments α          {_ _ _ _ _ _ _} _ _.
 Arguments α_commutes {_ _ _ _ _ _ _} _ {_ _ _}.
 
-Module Morphism.
+Notation "'Comodule.make' ⦃ 'α' ≔ α ⦄" :=
+         (@mkMorphism _ _ _ _ _ _ _ α _) (only parsing).
 
-  Notation make α := (@mkMorphism _ _ _ _ _ _ _ α _) (only parsing).
+Module Morphism.
 
   (* -- Ｉｄｅｎｔｉｔｙ  /  Ｃｏｍｐｏｓｉｔｉｏｎ                      -- *)
   Section id_composition.
@@ -102,7 +111,8 @@ Module Morphism.
     Context `{F : Functor 𝒞 𝒟} {T : RelativeComonad F} {ℰ : Category}.
 
     Program Definition Hom (M N : Comodule T ℰ) : Setoid :=
-      Setoid.make (Morphism M N) (λ f g ∙ ∀ x, f x ≈ g x).
+      Setoid.make ⦃ Carrier ≔ Morphism M N
+                  ; Equiv   ≔ λ f g ∙ ∀ x, f x ≈ g x ⦄.
     Next Obligation.
       constructor.
       - intros f x; reflexivity.
@@ -113,13 +123,13 @@ Module Morphism.
     Local Infix "⇒" := Hom.
 
     Program Definition id {M : Comodule T ℰ} : M ⇒ M :=
-      make (λ C ∙ id[ M C ]).
+      Comodule.make ⦃ α ≔ λ C ∙ id[ M C ] ⦄.
     Next Obligation.
       now rewrite left_id, right_id.
     Qed.
 
     Program Definition compose {M N P : Comodule T ℰ} : [ N ⇒ P ⟶ M ⇒ N ⟶ M ⇒ P ] :=
-      λ g f ↦₂ make (λ C ∙ g(C) ∘ f(C)).
+      λ g f ↦₂ Comodule.make ⦃ α ≔ λ C ∙ g(C) ∘ f(C) ⦄.
     Next Obligation.
       rewrite <- compose_assoc; rewrite <- α_commutes.
       rewrite compose_assoc; rewrite α_commutes; rewrite compose_assoc.

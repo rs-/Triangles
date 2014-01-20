@@ -1,4 +1,4 @@
-(**
+(*
 
    Benedikt Ahrens and Régis Spadotti
    
@@ -8,7 +8,7 @@
 
 *)
 
-(** 
+(*
 
   Content of this file:
   
@@ -26,6 +26,9 @@ Generalizable All Variables.
 (*------------------------------------------------------------------------------
   -- ＣＡＴＥＧＯＲＹ  ＯＦ  ＣＯＭＯＤＵＬＥＳ
   ----------------------------------------------------------------------------*)
+(** * Category of Comodules **)
+
+(** ** Category definition **)
 
 Section Definitions.
 

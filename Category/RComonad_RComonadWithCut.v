@@ -1,17 +1,17 @@
-(**
+(*
 
    Benedikt Ahrens and Régis Spadotti
-   
+
    Coinitial semantics for redecoration of triangular matrices
-   
+
    http://arxiv.org/abs/1401.1053
 
 *)
 
-(** 
+(*
 
   Content of this file:
-  
+
   definition of functor from rel. comonads to rel. comonads with cut
 
 *)
@@ -28,18 +28,20 @@ Require Import Theory.CartesianStrongMonoidal.
 
 Generalizable All Variables.
 
+(** * Canonical cut **)
+
 (*------------------------------------------------------------------------------
   -- ＣＡＮＯＮＩＣＡＬ  ＣＵＴ
   ----------------------------------------------------------------------------*)
+(** ** Definition **)
 
 Section Defs.
 
   Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟} (F : Functor 𝒞 𝒟) (E : 𝒞) `{!CartesianStrongMonoidal F}.
 
   Program Definition 𝑪𝒖𝒕 : Functor (𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅 F) (𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅𝑾𝒊𝒕𝒉𝑪𝒖𝒕 F E) :=
-    Functor.make
-      (λ T ∙ RelativeComonadWithCut.make T (λ A ∙ Lift(T) ⋅ π₂))
-      (λ T S ∙ λ τ ↦ RelativeComonadWithCut.Morphism.make τ).
+    Functor.make ⦃ F   ≔ λ T ∙ RelativeComonadWithCut.make ⦃ RelativeComonad ≔ T ; cut ≔ λ A ∙ Lift(T) ⋅ π₂ ⦄
+                 ; map ≔ λ T S ∙ λ τ ↦ RelativeComonadWithCut.make ⦃ RelativeComonad-τ ≔ τ ⦄ ⦄.
   Next Obligation.
     now rewrite counit_cobind.
   Qed.
@@ -62,7 +64,7 @@ Section Defs.
   Qed.
 
   Program Definition 𝑼 : Functor (𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅𝑾𝒊𝒕𝒉𝑪𝒖𝒕 F E) (𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅 F) :=
-    Functor.make (λ T ∙ T) (λ A B ∙ λ τ ↦ τ).
+    Functor.make ⦃ F ≔ λ T ∙ T ; map ≔ λ A B ∙ λ τ ↦ τ ⦄.
   Next Obligation.
     repeat intro; auto.
   Qed.

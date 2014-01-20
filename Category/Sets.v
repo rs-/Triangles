@@ -1,17 +1,17 @@
-(**
+(*
 
    Benedikt Ahrens and Régis Spadotti
-   
+
    Coinitial semantics for redecoration of triangular matrices
-   
+
    http://arxiv.org/abs/1401.1053
 
 *)
 
-(** 
+(*
 
   Content of this file:
-  
+
   definition of the category of sets, proof that it has products
 
 *)
@@ -20,12 +20,16 @@ Require Import Theory.Category.
 Require Import Theory.Product.
 
 (*------------------------------------------------------------------------------
-  -- ＣＡＴＥＧＯＲＹ  ＯＦ  ＴＹＰＥＳ
+  -- ＣＡＴＥＧＯＲＹ  ＯＦ  ＳＥＴＳ
   ----------------------------------------------------------------------------*)
+(** * Category of Sets **)
+
+(** ** Type category definition **)
 
 Definition Obj := Type.
 
-Program Definition Hom (A B : Obj) : Setoid := Setoid.make (A → B) (λ f g ∙ ∀ x, f x = g x).
+Program Definition Hom (A B : Obj) : Setoid := Setoid.make ⦃ Carrier ≔ A → B
+                                                           ; Equiv   ≔ λ f g ∙ ∀ x, f x = g x ⦄.
 Next Obligation.
   constructor; hnf; simpl; [ reflexivity | now symmetry | etransitivity ; eauto ].
 Qed.
@@ -58,15 +62,21 @@ Proof.
   hnf ; intuition.
 Qed.
 
-Canonical Structure 𝑻𝒚𝒑𝒆 : Category :=
+Canonical Structure 𝑺𝒆𝒕 : Category :=
   mkCategory left_id right_id compose_assoc.
 
-(*------------------------------------------------------------------------------
-  -- ＴＹＰＥＳ  ＨＡＶＥ  ＢＩＮＡＲＹ  ＰＲＯＤＵＣＴ
-  ----------------------------------------------------------------------------*)
 
-Program Instance 𝑻𝒚𝒑𝒆_BinaryProduct : BinaryProduct 𝑻𝒚𝒑𝒆 :=
-  BinaryProduct.make 𝑻𝒚𝒑𝒆 _⟨×⟩_ (λ C f g (c : C) ∙ (f c , g c)) fst snd.
+(*------------------------------------------------------------------------------
+  -- ＳＥＴＳ  ＨＡＶＥ  ＢＩＮＡＲＹ  ＰＲＯＤＵＣＴ
+  ----------------------------------------------------------------------------*)
+(** ** Sets have binary product **)
+
+Program Instance 𝑺𝒆𝒕_BinaryProduct : BinaryProduct 𝑺𝒆𝒕 :=
+  BinaryProduct.make ⦃ Category ≔ 𝑺𝒆𝒕
+                     ; _×_      ≔  _⟨×⟩_
+                     ; ⟨_,_⟩    ≔ λ C f g (c : C) ∙ (f c , g c)
+                     ; π₁       ≔ fst
+                     ; π₂       ≔ snd ⦄.
 Next Obligation. (* Pmor_cong₂ *)
   intros f₁ f₂ eq_f₁f₂ g₁ g₂ eq_g₁g₂ x. now f_equal.
 Qed.

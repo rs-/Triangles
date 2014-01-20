@@ -1,17 +1,17 @@
-(**
+(*
 
    Benedikt Ahrens and Régis Spadotti
-   
+
    Coinitial semantics for redecoration of triangular matrices
-   
+
    http://arxiv.org/abs/1401.1053
 
 *)
 
-(** 
+(*
 
   Content of this file:
-  
+
   - definition of type of setoids and type of setoid morphisms
   - identity and composition of setoid morphisms
 
@@ -22,10 +22,12 @@ Require Import Morphisms.
 Require Export SetoidClass.
 
 Generalizable All Variables.
+(** * Setoid **)
 
 (*------------------------------------------------------------------------------
   -- ＳＥＴＯＩＤ  ＤＥＦＩＮＩＴＩＯＮ
   ----------------------------------------------------------------------------*)
+(** ** Setoid definiton **)
 
 Module Setoid.
 
@@ -38,9 +40,11 @@ Module Setoid.
 
   Arguments Equiv {_} _ _.
 
-  Notation make c eq := (mkSetoid c eq _) (only parsing).
+  Notation "'Setoid.make' ⦃ 'Carrier' ≔ c ; 'Equiv' ≔ eq ⦄" :=
+    (mkSetoid c eq _) (only parsing).
 
-  Program Definition eq_setoid (T : Type) : Setoid := make T eq.
+  Program Definition eq_setoid (T : Type) : Setoid := Setoid.make ⦃ Carrier ≔ T
+                                                                 ; Equiv ≔ eq ⦄.
 
   Notation "_≈_" := Equiv                    (only parsing).
   Notation "x ≈ y :> T" := (Equiv (s := T) x y) (at level 70, y at next level, no associativity).
@@ -53,6 +57,7 @@ End Setoid.
 (*------------------------------------------------------------------------------
   -- ＳＥＴＯＩＤ  ＭＯＲＰＨＩＳＭ
   ----------------------------------------------------------------------------*)
+(** ** Morphism between setoids **)
 
 Module Π.
 
@@ -70,7 +75,8 @@ Module Π.
   Qed.
 
   Program Definition setoid (From To : Setoid) : Setoid :=
-    Setoid.make (Π From To) (λ f g ∙ ∀ x y, x ≈ y → f x ≈ g y).
+    Setoid.make ⦃ Carrier ≔ Π From To
+                ; Equiv   ≔ λ f g ∙ ∀ x y, x ≈ y → f x ≈ g y ⦄.
   Next Obligation.
     constructor.
     - (* Reflexivity *)

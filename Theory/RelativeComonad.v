@@ -1,17 +1,17 @@
-(**
+(*
 
    Benedikt Ahrens and Régis Spadotti
-   
+
    Coinitial semantics for redecoration of triangular matrices
-   
+
    http://arxiv.org/abs/1401.1053
 
 *)
 
-(** 
+(*
 
   Content of this file:
-  
+
   - definition of relative comonad
   - relative comonads are functors
   - definition of morphisms of comonads, identity, composition
@@ -26,6 +26,9 @@ Generalizable All Variables.
 (*------------------------------------------------------------------------------
   -- ＲＥＬＡＴＩＶＥ  ＣＯＭＯＮＡＤ  ＤＥＦＩＮＩＴＩＯＮ
   ----------------------------------------------------------------------------*)
+(** * Relative comonad **)
+
+(** ** Definition **)
 
 Structure RelativeComonad `(F : Functor 𝒞 𝒟) : Type := mkRelativeComonad
 { T              :> 𝒞 → 𝒟
@@ -48,13 +51,17 @@ Notation "T '⋅counit[' X ]" := (counit T (X := X)) (at level 0, only parsing).
 
 Notation "T '⋅cobind'" := (cobind T) (at level 0, only parsing).
 
-Notation make T counit cobind := (@mkRelativeComonad _ _ _ T counit cobind _ _ _) (only parsing).
+Notation "'RelativeComonad.make' ⦃ 'T' ≔ T ; 'counit' ≔ counit ; 'cobind' ≔ cobind ⦄" :=
+  (@mkRelativeComonad _ _ _ T counit cobind _ _ _) (only parsing).
 
 (*------------------------------------------------------------------------------
   -- ＦＵＮＣＴＯＲＩＡＬＩＴＹ
   ----------------------------------------------------------------------------*)
+(** ** Functoriality of relative comonads **)
 
+(* begin hide *)
 Section Functoriality.
+(* end hide *)
 
   Context `{F : Functor 𝒞 𝒟} (T : RelativeComonad F).
 
@@ -84,12 +91,15 @@ Section Functoriality.
 
   Definition Lift : Functor 𝒞 𝒟 := mkFunctor lift_id lift_compose.
 
+(* begin hide *)
 End Functoriality.
+(* end hide *)
 
 
 (*------------------------------------------------------------------------------
   -- ＭＯＲＰＨＩＳＭ
   ----------------------------------------------------------------------------*)
+(** ** Morphism of relative comonads **)
 
 Structure Morphism `{F : Functor 𝒞 𝒟} (T S : RelativeComonad F) : Type := mkMorphism
 { τ          :> ∀ C, T C ⇒ S C
@@ -101,9 +111,9 @@ Arguments τ          {_ _ _ _ _ _} _.
 Arguments τ_counit   {_ _ _ _ _} _ {_}.
 Arguments τ_commutes {_ _ _ _ _} _ {_ _ _}.
 
-Module Morphism.
+Notation "'RelativeComonad.make' ⦃ 'τ' ≔ τ ⦄" := (@mkMorphism _ _ _ _ _ τ _ _) (only parsing).
 
-  Notation make τ := (@mkMorphism _ _ _ _ _ τ _ _) (only parsing).
+Module Morphism.
 
   (* -- Ｉｄｅｎｔｉｔｙ  /  Ｃｏｍｐｏｓｉｔｉｏｎ                      -- *)
   Section id_composition.
@@ -113,7 +123,7 @@ Module Morphism.
     Implicit Types (T S U : RelativeComonad F).
 
     Program Definition Hom T S : Setoid :=
-      Setoid.make (Morphism T S) (λ f g ∙ ∀ x, f x ≈ g x).
+      Setoid.make ⦃ Carrier ≔ Morphism T S ; Equiv ≔ λ f g ∙ ∀ x, f x ≈ g x ⦄.
     Next Obligation.
       constructor.
       - intros f x; reflexivity.
@@ -124,7 +134,7 @@ Module Morphism.
     Local Infix "⇒" := Hom.
 
     Program Definition id {S} : S ⇒ S :=
-      make (λ C ∙ id[ S C ]).
+      RelativeComonad.make ⦃ τ ≔ λ C ∙ id[ S C ] ⦄.
     Next Obligation.
       now rewrite right_id.
     Qed.
@@ -133,7 +143,7 @@ Module Morphism.
     Qed.
 
     Program Definition compose {S T U} : [ T ⇒ U ⟶ S ⇒ T ⟶ S ⇒ U ] :=
-      λ g f ↦₂ make (λ C ∙ g(C) ∘ f(C)).
+      λ g f ↦₂ RelativeComonad.make ⦃ τ ≔ λ C ∙ g(C) ∘ f(C) ⦄.
     Next Obligation.
       rewrite <- compose_assoc; now do 2 rewrite <- τ_counit.
     Qed.

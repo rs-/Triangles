@@ -1,4 +1,4 @@
-(**
+(*
 
    Benedikt Ahrens and Régis Spadotti
    
@@ -8,7 +8,7 @@
 
 *)
 
-(** 
+(* 
 
   Content of this file:
   
@@ -16,7 +16,7 @@
 
 *)
 
-Require Import Category.Types.
+Require Import Category.Sets.
 Require Import Category.Setoids.
 Require Import Theory.Category.
 Require Import Theory.Functor.
@@ -27,8 +27,12 @@ Require Import Theory.CartesianStrongMonoidal.
 (*------------------------------------------------------------------------------
   -- ＦＵＮＣＴＯＲ  ＥＱ
   ----------------------------------------------------------------------------*)
+(** * Functor 𝑬𝑸 : 𝑺𝒆𝒕 → 𝑺𝒆𝒕𝒐𝒊𝒅 **)
 
-Program Definition F : 𝑻𝒚𝒑𝒆 → 𝑺𝒆𝒕𝒐𝒊𝒅 := λ T ∙ Setoids.make T eq.
+(** ** Definition **)
+
+Program Definition F : 𝑺𝒆𝒕 → 𝑺𝒆𝒕𝒐𝒊𝒅 := λ T ∙ Setoids.make ⦃ Carrier ≔ T
+                                                         ; Equiv   ≔ eq ⦄.
 
 Program Definition map {A B} : [ A ⇒ B ⟶ F A ⇒ F B ] :=
   λ f ↦ Setoids.Morphism.make f.
@@ -47,15 +51,16 @@ Proof.
   intros x y eq_xy. now rewrite eq_xy.
 Qed.
 
-Definition 𝑬𝑸 : Functor 𝑻𝒚𝒑𝒆 𝑺𝒆𝒕𝒐𝒊𝒅 := mkFunctor id map_compose.
+Definition 𝑬𝑸 : Functor 𝑺𝒆𝒕 𝑺𝒆𝒕𝒐𝒊𝒅 := mkFunctor id map_compose.
 
 
 (*------------------------------------------------------------------------------
   -- ＥＱ  ＩＳ  ＳＴＲＯＮＧ  ＭＯＮＯＩＤＡＬ
   ----------------------------------------------------------------------------*)
+(** ** 𝑬𝑸 is strong monoidal **)
 
 Program Instance 𝑬𝑸_SM : CartesianStrongMonoidal 𝑬𝑸 :=
-  CartesianStrongMonoidal.make (λ A B ∙ Setoids.Morphism.make (λ x ∙ x)).
+  CartesianStrongMonoidal.make ⦃ φ ≔ λ A B ∙ Setoids.Morphism.make (λ x ∙ x) ⦄.
 Next Obligation.
   now f_equal.
 Qed.

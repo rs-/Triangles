@@ -1,17 +1,17 @@
-(**
+(*
 
    Benedikt Ahrens and Régis Spadotti
-   
+
    Coinitial semantics for redecoration of triangular matrices
-   
+
    http://arxiv.org/abs/1401.1053
 
 *)
 
-(** 
+(*
 
   Content of this file:
-  
+
   definition of the category of relative comonads over a fixed functor
 
 *)
@@ -25,6 +25,9 @@ Generalizable All Variables.
 (*------------------------------------------------------------------------------
   -- ＣＡＴＥＧＯＲＹ  ＯＦ  ＲＥＬＡＴＩＶＥ  ＣＯＭＯＮＡＤＳ
   ----------------------------------------------------------------------------*)
+(** * Category of Relative comonads **)
+
+(** ** Category definition **)
 
 Section Definitions.
 

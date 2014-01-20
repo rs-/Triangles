@@ -1,17 +1,17 @@
-(**
+(*
 
    Benedikt Ahrens and Régis Spadotti
-   
+
    Coinitial semantics for redecoration of triangular matrices
-   
+
    http://arxiv.org/abs/1401.1053
 
 *)
 
-(** 
+(*
 
   Content of this file:
-  
+
   - definition of universal property of product
   - some lemmas about interplay of product morphism with composition
 
@@ -24,6 +24,9 @@ Generalizable All Variables.
 (*------------------------------------------------------------------------------
   -- ＰＲＯＤＵＣＴ  ＯＦ  ＯＢＪＥＣＴＳ
   ----------------------------------------------------------------------------*)
+(** * Product of object **)
+
+(** ** Definition of universal property of product **)
 
 Structure Product {𝒞 : Category} (A B : 𝒞) : Type := mkProduct
 { AxB            :> 𝒞
@@ -50,21 +53,22 @@ Notation "'π₂[' A , B ]" := (π₂ (A := A) (B := B)) (only parsing).
 (*------------------------------------------------------------------------------
   -- ＨＡＳ  ＢＩＮＡＲＹ  ＰＲＯＤＵＣＴ
   ----------------------------------------------------------------------------*)
+(** ** Category has binary product **)
 
 Class BinaryProduct (𝒞 : Category) :=
   product : ∀ (A B : 𝒞), Product A B.
 
 Infix "×" := product (at level 20).
 
-Module BinaryProduct.
-  Notation make 𝒞 pr prm pr1 pr2 :=
-    (λ (A B : 𝒞) ∙ @mkProduct _ A B (pr A B) (λ C ∙ Π₂.make (prm C)) pr1 pr2 _ _ _) (only parsing).
-End BinaryProduct.
+Notation "'BinaryProduct.make' ⦃ 'Category' ≔ 𝒞 ; '_×_' ≔ pr ; '⟨_,_⟩' ≔ prm ; 'π₁' ≔ pr1 ; 'π₂' ≔ pr2 ⦄" :=
+  (λ (A B : 𝒞) ∙ @mkProduct _ A B (pr A B) (λ C ∙ Π₂.make (prm C)) pr1 pr2 _ _ _) (only parsing).
 
 
 (*------------------------------------------------------------------------------
   -- ＰＲＯＤＵＣＴ  ＬＡＷＳ
   ----------------------------------------------------------------------------*)
+
+(** ** Laws on product **)
 
 Program Definition prod_on_arrow
         `{BinaryProduct 𝒞} {A A' B B'} : [ A ⇒ A' ⟶ B ⇒ B' ⟶ A × B ⇒ A' × B' ] :=

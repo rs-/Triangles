@@ -1,17 +1,17 @@
-(**
+(*
 
    Benedikt Ahrens and Régis Spadotti
-   
+
    Coinitial semantics for redecoration of triangular matrices
-   
+
    http://arxiv.org/abs/1401.1053
 
 *)
 
-(** 
+(*
 
   Content of this file:
-  
+
   - definition of comonad with cut
   - definition of morphisms of comonads with cut, identity, composition
 
@@ -31,6 +31,10 @@ Generalizable All Variables.
 (*------------------------------------------------------------------------------
   -- ＲＥＬＡＴＩＶＥ  ＣＯＭＯＮＡＤ  ＤＥＦＩＮＩＴＩＯＮ  ＷＩＴＨ  ＣＵＴ
   ----------------------------------------------------------------------------*)
+(** ** Relative comonad with cut **)
+
+
+(** ** Definition **)
 
 Section Defs.
 
@@ -75,14 +79,17 @@ Notation "T '⋅cut[' X ]" := (cut T (A := X)) (at level 0, only parsing).
 
 Notation "T '⋅extend'" := (extend T) (at level 0).
 
-Notation make T cut :=
-  (@mkRelativeComonadWithCut _ _ _ _ _ _ _ T cut _ _) (only parsing).
-Notation Make T counit cobind cut :=
-  (@mkRelativeComonadWithCut _ _ _ _ _ _ _ (RelativeComonad.make T counit cobind) cut _ _) (only parsing).
+Notation "'RelativeComonadWithCut.make' ⦃ 'RelativeComonad' ≔ RelativeComonad ; 'cut' ≔ cut ⦄" :=
+  (@mkRelativeComonadWithCut _ _ _ _ _ _ _ RelativeComonad cut _ _) (only parsing).
+Notation "'RelativeComonadWithCut.make' ⦃ 'T' ≔ T ; 'counit' ≔ counit ; 'cobind' ≔ cobind ; 'cut' ≔ cut ⦄" :=
+  (@mkRelativeComonadWithCut _ _ _ _ _ _ _
+      (RelativeComonad.make ⦃ T ≔ T ;  counit ≔ counit ; cobind ≔ cobind ⦄ ) cut _ _) (only parsing).
 
 (*------------------------------------------------------------------------------
   -- ＭＯＲＰＨＩＳＭ
   ----------------------------------------------------------------------------*)
+
+(** ** Morphism **)
 
 Section MDefs.
 
@@ -101,10 +108,12 @@ Arguments mkMorphism {_ _ _ _ _ _ _ _ _ _} _.
 Arguments τ          {_ _ _ _ _ _ _ _ _} _.
 Arguments τ_cut      {_ _ _ _ _ _ _ _ _} _ {_}.
 
-Module Morphism.
+Notation "'RelativeComonadWithCut.make' ⦃ 'RelativeComonad-τ' ≔ τ ⦄" :=
+  (@mkMorphism _ _ _ _ _ _ _ _ _ τ _) (only parsing).
+Notation "'RelativeComonadWithCut.make' ⦃ 'τ' ≔ τ ⦄" :=
+  (@mkMorphism _ _ _ _ _ _ _ _ _ (RelativeComonad.make ⦃ τ ≔ τ ⦄) _) (only parsing).
 
-  Notation make τ := (@mkMorphism _ _ _ _ _ _ _ _ _ τ _) (only parsing).
-  Notation Make τ := (@mkMorphism _ _ _ _ _ _ _ _ _ (RelativeComonad.Morphism.make τ) _) (only parsing).
+Module Morphism.
 
   (* -- Ｉｄｅｎｔｉｔｙ  /  Ｃｏｍｐｏｓｉｔｉｏｎ                      -- *)
   Section id_composition.
@@ -115,7 +124,8 @@ Module Morphism.
     Implicit Types (T S U : RelativeComonadWithCut F E).
 
     Program Definition Hom T S : Setoid :=
-      Setoid.make (Morphism T S) _≈_.
+      Setoid.make ⦃ Carrier ≔ Morphism T S
+                  ; Equiv   ≔ _≈_ ⦄.
     Next Obligation.
       constructor.
       - intros f x; reflexivity.
@@ -126,13 +136,13 @@ Module Morphism.
     Local Infix "⇒" := Hom.
 
     Program Definition id {S} : S ⇒ S :=
-      make id.
+      RelativeComonadWithCut.make ⦃ RelativeComonad-τ ≔ id ⦄.
     Next Obligation.
       now rewrite left_id, right_id.
     Qed.
 
     Program Definition compose {S T U} : [ T ⇒ U ⟶ S ⇒ T ⟶ S ⇒ U ] :=
-      λ g f ↦₂ make (g ∘ f).
+      λ g f ↦₂ RelativeComonadWithCut.make ⦃ RelativeComonad-τ ≔ g ∘ f ⦄.
     Next Obligation.
       rewrite compose_assoc. rewrite <- τ_cut. repeat rewrite <- compose_assoc.
       now rewrite τ_cut.

@@ -7,8 +7,8 @@
 ./Category/RComonad_RComonadWithCut.v
 ./Category/Setoids.v
 ./Category/TriMat.v
-./Category/Types.v
-./Category/Types_Setoids.v
+./Category/Sets.v
+./Category/Sets_Setoids.v
 ./InfiniteTriangles/redecInfiniteTriangles8_4.v
 ./Misc/Unicode.v
 ./Theory/CartesianStrongMonoidal.v

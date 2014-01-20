@@ -1,17 +1,17 @@
-(**
+(*
 
    Benedikt Ahrens and Régis Spadotti
-   
+
    Coinitial semantics for redecoration of triangular matrices
-   
+
    http://arxiv.org/abs/1401.1053
 
 *)
 
-(** 
+(*
 
   Content of this file:
-  
+
   definition of the category of setoids
 
 *)
@@ -22,6 +22,14 @@ Require Import Theory.Product.
 (*------------------------------------------------------------------------------
   -- ＣＡＴＥＧＯＲＹ  ＯＦ  ＳＥＴＯＩＤＳ
   ----------------------------------------------------------------------------*)
+(** * Category of Setoids **)
+
+(** In this file, we define the category of Setoids and show that this category has binary product.
+
+    Note that to avoid universe inconsistancies we duplicate the definition of Setoid used to define
+    the type of categories. **)
+
+(** ** Setoid category definition **)
 
 Module Setoids.
 
@@ -33,7 +41,8 @@ Module Setoids.
   Arguments mkObj  {_ _} _.
   Arguments SEquiv {_} _ _.
 
-  Notation make c eq := (@mkObj c eq _) (only parsing).
+  Notation "'Setoids.make' ⦃ 'Carrier' ≔ c ; 'Equiv' ≔ eq ⦄" :=
+    (@mkObj c eq _) (only parsing).
 
   Existing Instance is_SEquiv.
 
@@ -58,7 +67,8 @@ Module Setoids.
   End Morphism.
 
   Program Definition Hom (A B : Obj) : Setoid :=
-    Setoid.make (Morphism A B) (λ f g ∙ ∀ x y, SEquiv x y → SEquiv (f x) (g y)).
+    Setoid.make ⦃ Carrier ≔ Morphism A B
+                ; Equiv   ≔ λ f g ∙ ∀ x y, SEquiv x y → SEquiv (f x) (g y) ⦄.
   Next Obligation.
     constructor.
     - intros f x y eq_xy. now apply cong.
@@ -107,17 +117,18 @@ Canonical Structure 𝑺𝒆𝒕𝒐𝒊𝒅 : Category :=
   mkCategory left_id right_id compose_assoc.
 
 
-
 (*------------------------------------------------------------------------------
   -- ＳＥＴＯＩＤＳ  ＨＡＶＥ  ＢＩＮＡＲＹ  ＰＲＯＤＵＣＴ
   ----------------------------------------------------------------------------*)
+(** ** Setoids have binary product **)
 
 Section Product_construction.
 
   Infix "∼" := SEquiv (at level 70).
 
   Program Definition product (A B : 𝑺𝒆𝒕𝒐𝒊𝒅) : 𝑺𝒆𝒕𝒐𝒊𝒅 :=
-    Setoids.make (A ⟨×⟩ B) (λ S₁ S₂ ∙ fst S₁ ∼ fst S₂ ∧ snd S₁ ∼ snd S₂).
+    Setoids.make ⦃ Carrier ≔ A ⟨×⟩ B
+                 ; Equiv   ≔ λ S₁ S₂ ∙ fst S₁ ∼ fst S₂ ∧ snd S₁ ∼ snd S₂ ⦄.
   Next Obligation.
     constructor; hnf.
     - intros [a  b]; split; reflexivity.
@@ -140,7 +151,11 @@ End Product_construction.
 
 
 Program Instance 𝑺𝒆𝒕𝒐𝒊𝒅_BinaryProduct : BinaryProduct 𝑺𝒆𝒕𝒐𝒊𝒅 :=
-  BinaryProduct.make 𝑺𝒆𝒕𝒐𝒊𝒅 product (@product_mor _ _) proj_l proj_r.
+  BinaryProduct.make ⦃ Category ≔ 𝑺𝒆𝒕𝒐𝒊𝒅
+                     ; _×_      ≔ product
+                     ; ⟨_,_⟩    ≔ @product_mor _ _
+                     ; π₁       ≔ proj_l
+                     ; π₂       ≔ proj_r ⦄.
 Next Obligation. (* Pmor_cong₂ *)
   intros f₁ f₂ eq_f₁f₂ g₁ g₂ eq_g₁g₂ x y eq_xy; simpl; split.
   - now apply eq_f₁f₂.

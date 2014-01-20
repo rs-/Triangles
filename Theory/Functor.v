@@ -1,17 +1,17 @@
-(**
+(*
 
    Benedikt Ahrens and Régis Spadotti
-   
+
    Coinitial semantics for redecoration of triangular matrices
-   
+
    http://arxiv.org/abs/1401.1053
 
 *)
 
-(** 
+(*
 
   Content of this file:
-  
+
   definition of functor
 
 *)
@@ -21,6 +21,7 @@ Require Import Theory.Category.
 (*------------------------------------------------------------------------------
   -- ＦＵＮＣＴＯＲ  ＤＥＦＩＮＩＴＩＯＮ
   ----------------------------------------------------------------------------*)
+(** ** Functor definition **)
 
 Structure Functor (𝒞 𝒟 : Category) : Type := mkFunctor
 { F           :> 𝒞 → 𝒟
@@ -33,4 +34,5 @@ Arguments map       {_ _} _ {_ _}.
 
 Notation "F ⋅ f" := (map F f) (at level 35, no associativity).
 
-Notation make F map := (@mkFunctor _ _ F map _ _) (only parsing).
+Notation "'Functor.make' ⦃ 'F' ≔ F ; 'map' ≔ map ⦄" :=
+  (@mkFunctor _ _ F map _ _) (only parsing).

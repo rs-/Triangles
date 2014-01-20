@@ -1,17 +1,17 @@
-(**
+(*
 
    Benedikt Ahrens and Régis Spadotti
-   
+
    Coinitial semantics for redecoration of triangular matrices
-   
+
    http://arxiv.org/abs/1401.1053
 
 *)
 
-(** 
+(*
 
   Content of this file:
-  
+
   a cut operation is a natural transformation
 
 *)
@@ -29,6 +29,8 @@ Require Import Theory.CartesianStrongMonoidal.
 
 Generalizable All Variables.
 
+(** * Cut is a natural transformation **)
+
 Section CUT_NT.
 
   Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟} {F : Functor 𝒞 𝒟} `{!CartesianStrongMonoidal F}
@@ -39,9 +41,8 @@ Section CUT_NT.
   Notation 𝑻 := (Lift(T)).
 
   Program Definition T_Ex : Functor 𝒞 𝒟 :=
-    Functor.make
-      (λ A ∙ T (E × A))
-      (λ A B ∙ λ f ↦ T⋅cobind (T⋅extend (F⋅f ∘ T⋅counit))).
+    Functor.make ⦃ F   ≔ λ A ∙ T (E × A)
+                 ; map ≔ λ A B ∙ λ f ↦ T⋅cobind (T⋅extend (F⋅f ∘ T⋅counit)) ⦄.
   Next Obligation. (* map-cong *)
     intros f g eq_fg. now rewrite eq_fg.
   Qed.
@@ -66,7 +67,7 @@ Section CUT_NT.
   Notation "'𝑻(𝑬×─)'" := T_Ex (at level 0).
 
   Program Definition 𝑪𝒖𝒕 : NaturalTransformation 𝑻(𝑬×─) 𝑻 :=
-    NaturalTransformation.make (λ A ∙ T⋅cut).
+    NaturalTransformation.make ⦃ η ≔ λ A ∙ T⋅cut ⦄.
   Next Obligation.
     rewrite cut_cobind. unfold Extend. simpl. reflexivity.
   Qed.
