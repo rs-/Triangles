@@ -168,14 +168,17 @@ Module Tri_Terminal (Import TE : Elt).
       constr (T⋅counit t) (tau (T⋅rest t)).
 
     Lemma top_tau : ∀ A (t : T A), TRI⋅counit (tau t) = T⋅counit t.
+    Proof.
       reflexivity.
     Qed.
 
     Lemma rest_tau : ∀ A (t : T A), TRI⋅rest (tau t) = tau (T⋅rest t).
+    Proof.
       reflexivity.
     Qed.
 
     Lemma tau_cong : ∀ A (x y : T A), x ∼ y → tau x ∼ tau y.
+    Proof.
       cofix Hc; intros A x y eq_xy. constructor.
       - simpl. now rewrite eq_xy.
       - simpl. apply Hc. now rewrite eq_xy.
@@ -188,6 +191,7 @@ Module Tri_Terminal (Import TE : Elt).
     Qed.
 
     Lemma tau_counit : ∀ A (t t' : T A), t ∼ t' → T⋅counit t ∼ TRI⋅counit (tau t').
+    Proof.
       intros A t t' eq_tt'. now rewrite eq_tt'.
     Qed.
 
