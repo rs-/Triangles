@@ -40,31 +40,31 @@ Generalizable All Variables.
 Module TriMat.
 
   Structure Obj (E : 𝑺𝒆𝒕) : Type := mkObj
-  { T        :> 𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅𝑾𝒊𝒕𝒉𝑪𝒖𝒕 𝑬𝑸 E
-  ; rest     :> [T] ⇒ [T][E×─]
-  ; rest_cut : ∀ {A}, rest(A) ∘ T⋅cut ≈ T⋅cut ∘ rest(E × A) }.
+  { T         :>  𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅𝑾𝒊𝒕𝒉𝑪𝒖𝒕 𝑬𝑸 E
+  ; rest      :>  [T] ⇒ [T][E×─]
+  ; rest_cut  :   ∀ {A}, rest(A) ∘ T⋅cut ≈ T⋅cut ∘ rest(E × A) }.
 
-  Arguments mkObj    {_ _ _} _.
-  Arguments T        {_} _.
-  Arguments rest     {_} _.
-  Arguments rest_cut {_} _ {_ _ _ _}.
+  Arguments mkObj     {_ _ _} _.
+  Arguments T         {_} _.
+  Arguments rest      {_} _.
+  Arguments rest_cut  {_} _ {_ _ _ _}.
 
   Notation "'TriMat.make' ⦃ 'T' ≔ T ; 'rest' ≔ rest ⦄" :=
            (@mkObj _ T rest _) (only parsing).
 
   Structure Morphism {E} (T S : Obj E) : Type := mkMorphism
-  { τ :> T ⇒ S
-  ; τ_commutes : ⟨τ⟩［E×─］ ∘ Φ ∘ τ⁎⋅T ≈ S ∘ ⟨τ⟩ }.
+  { τ           :> T ⇒ S
+  ; τ_commutes  : ⟨τ⟩［E×─］ ∘ Φ ∘ τ⁎⋅T ≈ S ∘ ⟨τ⟩ }.
 
-  Arguments mkMorphism {_ _ _ _} _.
-  Arguments τ          {_ _ _} _.
-  Arguments τ_commutes {_ _ _} _ {_ _ _ _}.
+  Arguments mkMorphism  {_ _ _ _} _.
+  Arguments τ           {_ _ _} _.
+  Arguments τ_commutes  {_ _ _} _ {_ _ _ _}.
 
   Notation "'TriMat.make' ⦃ 'τ' ≔ τ ⦄" := (@mkMorphism _ _ _ τ _) (only parsing).
 
   Program Definition Hom {E} (T S : Obj E) : Setoid :=
-    Setoid.make ⦃ Carrier ≔ Morphism T S
-                ; Equiv ≔ (λ g f ∙ g ≈ f) ⦄.
+    Setoid.make   ⦃ Carrier  ≔ Morphism T S
+                  ; Equiv    ≔ (λ g f ∙ g ≈ f) ⦄.
   Next Obligation.
     constructor.
     - repeat intro. now rewrite H.

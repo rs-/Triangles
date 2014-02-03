@@ -40,8 +40,9 @@ Section Defs.
   Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟} (F : Functor 𝒞 𝒟) (E : 𝒞) `{!CartesianStrongMonoidal F}.
 
   Program Definition 𝑪𝒖𝒕 : Functor (𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅 F) (𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅𝑾𝒊𝒕𝒉𝑪𝒖𝒕 F E) :=
-    Functor.make ⦃ F   ≔ λ T ∙ RelativeComonadWithCut.make ⦃ RelativeComonad ≔ T ; cut ≔ λ A ∙ Lift(T) ⋅ π₂ ⦄
-                 ; map ≔ λ T S ∙ λ τ ↦ RelativeComonadWithCut.make ⦃ RelativeComonad-τ ≔ τ ⦄ ⦄.
+    Functor.make  ⦃ F    ≔ λ T ∙ RelativeComonadWithCut.make  ⦃ RelativeComonad  ≔ T
+                                                              ; cut              ≔ λ A ∙ Lift(T) ⋅ π₂ ⦄
+                  ; map  ≔ λ T S ∙ λ τ ↦ RelativeComonadWithCut.make ⦃ RelativeComonad-τ ≔ τ ⦄ ⦄.
   Next Obligation.
     now rewrite counit_cobind.
   Qed.

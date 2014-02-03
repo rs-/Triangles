@@ -40,7 +40,7 @@ Section Definitions.
 
   Import RelativeComonadWithCut.Morphism.
 
- Infix "⇒" := Hom.
+  Infix "⇒" := Hom.
   Infix "∘" := compose.
 
   Lemma left_id A B  (f : A ⇒ B) : id ∘ f ≈ f.

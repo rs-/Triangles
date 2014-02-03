@@ -43,8 +43,8 @@ Section PrecompositionWithProduct.
           {ℰ : Category} (M : Comodule T ℰ).
 
   Program Definition precomposition_with_product : Comodule T ℰ :=
-    Comodule.make ⦃ M       ≔ λ C ∙ M (E × C)
-                  ; mcobind ≔ λ A B ∙ λ f ↦ M⋅mcobind (T⋅extend(f)) ⦄.
+    Comodule.make  ⦃ M        ≔ λ C ∙ M (E × C)
+                   ; mcobind  ≔ λ A B ∙ λ f ↦ M⋅mcobind (T⋅extend(f)) ⦄.
   Next Obligation.
     intros f g eq_fg. now rewrite eq_fg.
   Qed.

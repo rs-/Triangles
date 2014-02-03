@@ -45,8 +45,8 @@ Section Pushforward_construction.
            (τ : T ⇒ S) `(M : Comodule T ℰ).
 
   Program Definition pushforward : Comodule S ℰ :=
-    Comodule.make ⦃ M       ≔ M
-                  ; mcobind ≔ λ C D ∙ λ f ↦ M⋅mcobind (f ∘ τ(C)) ⦄.
+    Comodule.make  ⦃ M        ≔ M
+                   ; mcobind  ≔ λ C D ∙ λ f ↦ M⋅mcobind (f ∘ τ(C)) ⦄.
   Next Obligation. (* mcobind_cong *)
     solve_proper.
   Qed.
@@ -84,8 +84,8 @@ End Functoriality.
 
 Program Definition Pushforward
              `{F : Functor 𝒞 𝒟} {T S : RelativeComonad F} (τ : T ⇒ S) {ℰ} : Functor (𝑹𝑪𝒐𝒎𝒐𝒅 T ℰ) (𝑹𝑪𝒐𝒎𝒐𝒅 S ℰ) :=
-  Functor.make ⦃ F   ≔ pushforward τ
-               ; map ≔ λ A B ∙ λ f ↦ pushforward_mor τ f ⦄.
+  Functor.make  ⦃ F    ≔ pushforward τ
+                ; map  ≔ λ A B ∙ λ f ↦ pushforward_mor τ f ⦄.
 Next Obligation.
   intros f g eq_fg x. simpl. now apply eq_fg.
 Qed.
@@ -104,12 +104,14 @@ Section tautological_comodule.
   Context `{F : Functor 𝒞 𝒟} (T : RelativeComonad F).
 
   Program Definition tcomod : Comodule T 𝒟 :=
-    Comodule.make ⦃ M ≔ T
-                  ; mcobind ≔ λ C D ∙ T⋅cobind ⦄.
-  Next Obligation. (* mcobind_counit *)
+    Comodule.make  ⦃ M        ≔ T
+                   ; mcobind  ≔ λ C D ∙ T⋅cobind ⦄.
+  (** mcobind-counit *)
+  Next Obligation. 
     now rewrite cobind_counit.
   Qed.
-  Next Obligation. (* mcobind_mcobind *)
+  (** mcobind-mcobind *)
+  Next Obligation. 
     now rewrite cobind_cobind.
   Qed.
 
@@ -127,7 +129,8 @@ Section induced_morphism.
 
   Program Definition induced_morphism : ‵ τ⁎T ⇒ S ′ :=
     Comodule.make ⦃ α ≔ λ C ∙ τ(C) ⦄.
-  Next Obligation. (* α_commutes *)
+  (** α-commutes **)
+  Next Obligation. 
     now rewrite τ_commutes.
   Qed.
 

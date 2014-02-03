@@ -5,6 +5,7 @@ Makefile.coq:
 	coq_makefile -f Make -o $@
 
 doc: rmhtml html/toc.html html/coqdoc.css html/Symbola.woff
+	perl -i alignment.pl html/*.html
 	sed -i'.bk' -f replace.sed html/*.html
 	perl -i -p -0 -e 's/(\n<br\/>\n)+/<br\/>\n/g' html/*.html
 	perl -i -p -0 -e 's/(<div class="code">\n*)(\n<br\/>\n)+/\1/g' html/*.html

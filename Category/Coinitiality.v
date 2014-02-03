@@ -66,52 +66,63 @@ Module Tri_Terminal (Import TE : Elt).
   Obligation Tactic := idtac.
   (* end hide *)
   Program Definition 𝑻𝒓𝒊 : RelativeComonadWithCut 𝑬𝑸 E :=
-    RelativeComonadWithCut.make ⦃ T      ≔ λ A ∙ Setoids.make ⦃ Carrier ≔ Tri A ; Equiv ≔ @bisimilar _ ⦄
-                                ; counit ≔ λ A ∙ Setoids.Morphism.make (@top A)
-                                ; cobind ≔ λ A B ∙ λ f ↦ Setoids.Morphism.make (redec f)
-                                ; cut    ≔ λ A ∙ Setoids.Morphism.make (@cut A) ⦄.
-  Next Obligation. (* Equivalence *)
+    RelativeComonadWithCut.make  ⦃ T       ≔ λ A ∙ Setoids.make  ⦃ Carrier  ≔ Tri A 
+                                                                 ; Equiv    ≔ @bisimilar _ ⦄
+                                 ; counit  ≔ λ A ∙ Setoids.Morphism.make (@top A)
+                                 ; cobind  ≔ λ A B ∙ λ f ↦ Setoids.Morphism.make (redec f)
+                                 ; cut     ≔ λ A ∙ Setoids.Morphism.make (@cut A) ⦄.
+  (** Equivalence **)
+  Next Obligation.
     eauto with typeclass_instances.
   Qed.
-  Next Obligation. (* counit-cong *)
+  (** counit-cong **)
+  Next Obligation.
     intros A x y eq_xy.
     now apply top_cong.
   Qed.
-  Next Obligation. (* redec-cong *)
+  (** redec-cong **)
+  Next Obligation.
     intros A B f x y eq_xy.
     apply redec_cong; auto.
   Qed.
-  Next Obligation. (* redec-cong₂ *)
+  (** redec-cong₂ **)
+  Next Obligation.
     intros A B f g eq_fg x y eq_xy; simpl.
     etransitivity.
     - apply redec_cong; eauto.
     - apply redec_ext. intro z. now apply eq_fg.
   Qed.
-  Next Obligation. (* cobind_counit *)
+  (** cobind_counit **)
+  Next Obligation.
     intros A x y eq_xy; simpl.
     etransitivity; eauto.
     apply comonad2.
   Qed.
-  Next Obligation. (* counit_cobind *)
+  (** counit_cobind **)
+  Next Obligation.
     intros A B f x y eq_xy.
     now rewrite eq_xy.
   Qed.
-  Next Obligation. (* cobind_cobind *)
+  (** cobind_cobind **)
+  Next Obligation.
     intros A B C f g x y eq_xy; simpl.
     symmetry. etransitivity. apply comonad3.
     - repeat intro; now apply (Setoids.cong g).
     - apply redec_cong; [| apply redec_cong; [| now symmetry]]; auto.
   Qed.
-  Next Obligation. (* cut-cong*)
+  (** cut-cong**)
+  Next Obligation.
     intros A x y eq_xy; simpl.
     now apply cut_cong.
   Qed.
-  Next Obligation. (* cut-counit *)
+  (** cut-counit **)
+  Next Obligation.
     intros A x y eq_xy; simpl.
     change (top (cut x) = snd (top y)).
     rewrite eq_xy. now apply cut_top.
   Qed.
-  Next Obligation. (* cut-cobind *)
+  (** cut-cobind **)
+  Next Obligation.
     intros A B f x y eq_xy. simpl.
     etransitivity; [ apply redec_cut |].
     apply cut_cong.
@@ -126,9 +137,11 @@ Module Tri_Terminal (Import TE : Elt).
     **)
   Program Definition 𝑹𝒆𝒔𝒕 : ‵ [𝑻𝒓𝒊] ⇒ precomposition_with_product (F := 𝑬𝑸) E (tcomod 𝑻𝒓𝒊) ′ :=
     Comodule.make ⦃ α ≔ λ A ∙ Setoids.Morphism.make (@rest A) ⦄.
-  Next Obligation. (* rest-cong *)
+  (** rest-cong **)
+  Next Obligation.
     intros A x y eq_xy. now rewrite eq_xy.
   Qed.
+  (** rest-cong2 **)
   Next Obligation.
     intros A B f x y eq_xy; simpl in *.
     apply redec_cong.
@@ -141,9 +154,10 @@ Module Tri_Terminal (Import TE : Elt).
     * 3nd step: Tri is an object in the category of Triangles
     **)
   Program Definition 𝑻𝑹𝑰 : ‵ 𝑻𝒓𝒊𝑴𝒂𝒕 E ′ :=
-    TriMat.make ⦃ T ≔ 𝑻𝒓𝒊
-                ; rest ≔ 𝑹𝒆𝒔𝒕 ⦄.
-  Next Obligation. (* α_cut *)
+    TriMat.make  ⦃ T     ≔ 𝑻𝒓𝒊
+                 ; rest  ≔ 𝑹𝒆𝒔𝒕 ⦄.
+  (** α-cut **)
+  Next Obligation.
     intros A; repeat intro. rewrite H.
     simpl. change (rest (cut y) ~~ cut (rest y)).
     now rewrite cut_rest.
@@ -157,12 +171,12 @@ Module Tri_Terminal (Import TE : Elt).
 
     Variable (Tr : 𝑻𝒓𝒊𝑴𝒂𝒕 E).
 
-    Notation T                 := (TriMat.T Tr).
-    Notation "'T⋅rest'"        := (TriMat.rest Tr _).
-    Notation "'T⋅rest[' A ]"   := (TriMat.rest Tr A) (only parsing).
-    Notation TRI               := (TriMat.T 𝑻𝑹𝑰).
-    Notation "'TRI⋅rest'"      := (TriMat.rest 𝑻𝑹𝑰 _).
-    Notation "'TRI⋅rest[' A ]" := (TriMat.rest 𝑻𝑹𝑰 A) (only parsing).
+    Notation T                  := (TriMat.T Tr).
+    Notation "'T⋅rest'"         := (TriMat.rest Tr _).
+    Notation "'T⋅rest[' A ]"    := (TriMat.rest Tr A) (only parsing).
+    Notation TRI                := (TriMat.T 𝑻𝑹𝑰).
+    Notation "'TRI⋅rest'"       := (TriMat.rest 𝑻𝑹𝑰 _).
+    Notation "'TRI⋅rest[' A ]"  := (TriMat.rest 𝑻𝑹𝑰 A) (only parsing).
 
     CoFixpoint tau {A} (t : T A) : TRI A :=
       constr (T⋅counit t) (tau (T⋅rest t)).
@@ -250,16 +264,20 @@ Module Tri_Terminal (Import TE : Elt).
   (** ◯ is a morphism of triangles **)
   Program Definition τ (T : 𝑻𝒓𝒊𝑴𝒂𝒕 E) : T ⇒ 𝑻𝑹𝑰 :=
     TriMat.make ⦃ τ ≔ RelativeComonadWithCut.make ⦃ τ ≔ λ A ∙ Tau T ⦄ ⦄.
-  Next Obligation. (* τ_counit *)
+  (** τ-counit **)
+  Next Obligation.
     repeat intro. now apply tau_counit.
   Qed.
-  Next Obligation. (* τ_cobind *)
+  (** τ-cobind **)
+  Next Obligation.
     repeat intro. now apply tau_cobind.
   Qed.
-  Next Obligation. (* τ_cut *)
+  (** τ-cut **)
+  Next Obligation.
     repeat intro. symmetry. apply tau_cut. now symmetry.
   Qed.
-  Next Obligation. (* τ_commutes *)
+  (** τ-commutes **)
+  Next Obligation.
     repeat intro. apply tau_cong. now rewrite H.
   Qed.
 
@@ -269,8 +287,8 @@ Module Tri_Terminal (Import TE : Elt).
 
   (** 𝑻𝑹𝑰 is a terminal object **)
   Program Definition Coinitiality : Terminal (𝑻𝒓𝒊𝑴𝒂𝒕 E) :=
-    Terminal.make ⦃ one ≔ 𝑻𝑹𝑰
-                  ; top ≔ τ ⦄.
+    Terminal.make  ⦃ one  ≔ 𝑻𝑹𝑰
+                   ; top  ≔ τ ⦄.
   Next Obligation.
     cut (∀ (T : 𝑻𝒓𝒊𝑴𝒂𝒕 E) (f g : T ⇒ 𝑻𝑹𝑰) (A : 𝑺𝒆𝒕) (t : TriMat.T T A) t₁ t₂,
            t₁ ∼ ⟨f⟩ A t → ⟨g⟩ A t ∼ t₂ → t₁ ∼ t₂); [repeat intro |].

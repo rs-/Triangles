@@ -328,6 +328,10 @@ ul.doclist {/*
 	color:rgb(151,0,126);
 }
 
+.id[data-type="tactic"] {
+	color:#0074D9
+}
+
 h2 {
 	padding-bottom:2px;
 	border-bottom:1px solid #ccc;width:75%

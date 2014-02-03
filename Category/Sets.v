@@ -72,11 +72,11 @@ Canonical Structure 𝑺𝒆𝒕 : Category :=
 (** ** Sets have binary product **)
 
 Program Instance 𝑺𝒆𝒕_BinaryProduct : BinaryProduct 𝑺𝒆𝒕 :=
-  BinaryProduct.make ⦃ Category ≔ 𝑺𝒆𝒕
-                     ; _×_      ≔  _⟨×⟩_
-                     ; ⟨_,_⟩    ≔ λ C f g (c : C) ∙ (f c , g c)
-                     ; π₁       ≔ fst
-                     ; π₂       ≔ snd ⦄.
+  BinaryProduct.make  ⦃ Category  ≔ 𝑺𝒆𝒕
+                      ; _×_       ≔ _⟨×⟩_
+                      ; ⟨_,_⟩     ≔ λ C f g (c : C) ∙ (f c , g c)
+                      ; π₁        ≔ fst
+                      ; π₂        ≔ snd ⦄.
 Next Obligation. (* Pmor_cong₂ *)
   intros f₁ f₂ eq_f₁f₂ g₁ g₂ eq_g₁g₂ x. now f_equal.
 Qed.

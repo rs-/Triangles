@@ -29,17 +29,17 @@ Generalizable All Variables.
 (** ** Comodule over relative comonad definition **)
 
 Structure Comodule `{F : Functor 𝒞 𝒟} (T : RelativeComonad F) (ℰ : Category) : Type := mkComodule
-{ M               :> 𝒞 → ℰ
-; mcobind         : ∀ {C D}, [ T C ⇒ F D ⟶ M C ⇒ M D ]
-; mcobind_counit  : ∀ {C}, mcobind counit[ C ] ≈ id[ M C ]
-; mcobind_mcobind : ∀ {C D E} {f : T C ⇒ F D} {g : T D ⇒ F E},
-                      mcobind(g) ∘ mcobind(f) ≈ mcobind(g ∘ T⋅cobind(f)) }.
+{ M                :>  𝒞 → ℰ
+; mcobind          :   ∀ {C D}, [ T C ⇒ F D ⟶ M C ⇒ M D ]
+; mcobind_counit   :   ∀ {C}, mcobind counit[ C ] ≈ id[ M C ]
+; mcobind_mcobind  :   ∀ {C D E} {f : T C ⇒ F D} {g : T D ⇒ F E},
+                         mcobind(g) ∘ mcobind(f) ≈ mcobind(g ∘ T⋅cobind(f)) }.
 
-Arguments mkComodule      {_ _ _ _ _ _ _} _ _.
-Arguments M               {_ _ _ _ _} _ _.
-Arguments mcobind         {_ _ _ _ _} _ {_ _}.
-Arguments mcobind_counit  {_ _ _ _ _} _ {_}.
-Arguments mcobind_mcobind {_ _ _ _ _} _ {_ _ _ _ _}.
+Arguments mkComodule       {_ _ _ _ _ _ _} _ _.
+Arguments M                {_ _ _ _ _} _ _.
+Arguments mcobind          {_ _ _ _ _} _ {_ _}.
+Arguments mcobind_counit   {_ _ _ _ _} _ {_}.
+Arguments mcobind_mcobind  {_ _ _ _ _} _ {_ _ _ _ _}.
 
 Notation "M '⋅mcobind'" := (mcobind M) (at level 0).
 
@@ -93,12 +93,12 @@ End Functoriality.
 (** ** Morphism of comodules **)
 
 Structure Morphism `{F : Functor 𝒞 𝒟} {T : RelativeComonad F} {ℰ} (M N : Comodule T ℰ) : Type := mkMorphism
-{ α          :> ∀ C, M C ⇒ N C
-; α_commutes : ∀ {C D} {f : T C ⇒ F D}, α(D) ∘ M⋅mcobind f ≈ N⋅mcobind f ∘ α(C) }.
+{ α           :> ∀ C, M C ⇒ N C
+; α_commutes  : ∀ {C D} {f : T C ⇒ F D}, α(D) ∘ M⋅mcobind f ≈ N⋅mcobind f ∘ α(C) }.
 
-Arguments mkMorphism {_ _ _ _ _ _ _ _} _.
-Arguments α          {_ _ _ _ _ _ _} _ _.
-Arguments α_commutes {_ _ _ _ _ _ _} _ {_ _ _}.
+Arguments mkMorphism  {_ _ _ _ _ _ _ _} _.
+Arguments α           {_ _ _ _ _ _ _} _ _.
+Arguments α_commutes  {_ _ _ _ _ _ _} _ {_ _ _}.
 
 Notation "'Comodule.make' ⦃ 'α' ≔ α ⦄" :=
          (@mkMorphism _ _ _ _ _ _ _ α _) (only parsing).

@@ -12,8 +12,7 @@ $ (function () {
 		var html = $ (this).html ();
 		var indent = html.match (/^\s*((?:&nbsp;)*)/)[1];
 		var indentsize = indent.length / 6;
-		$ (this).html (html.replace (new RegExp (indent + "([^&])", 'g'), '$1'))
-		        .css ('margin-left', indentsize + 'ex');
+		$ (this).html (html.replace (new RegExp (indent + "([^&])", 'g'), '$1')).css ('margin-left', indentsize + 'ex');
 	});
 	$ ('div.code').each (function () {
 		var first = $ ($ (this).children ()[0]);

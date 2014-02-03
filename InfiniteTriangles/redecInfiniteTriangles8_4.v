@@ -159,8 +159,8 @@ Module TriangleMP (Import TE : Elt).
     constr a t ~~ constr a' t' -> t ~~ t'.
   Proof.
     intros H.
-    refine (match H in (t ~~ t')  return (rest t ~~ rest t') with
-              @constrB _ t t' Hyp1 Hyp2  => _ end).
+    refine (match H in (t ~~ t') return (rest t ~~ rest t') with
+              @constrB _ t t' Hyp1 Hyp2 => _ end).
     assumption.
   Qed.
 
@@ -1730,6 +1730,7 @@ Module TriangleMP (Import TE : Elt).
        Proper (E_eq B ==> eq) g -> wcobind' (g o wcobind' f) t ~~^ wcobind' g (wcobind' f t)}.
 
   Instance TriComonad_ALT: WeakerComonad(T:= Tri) bisimilar.
+  Proof.
     apply (Build_WeakerComonad bisimilar top redec).
     intros.
     apply comonad1_ALT_weaker.

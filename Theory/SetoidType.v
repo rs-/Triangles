@@ -32,9 +32,9 @@ Generalizable All Variables.
 Module Setoid.
 
   Structure Setoid : Type := mkSetoid
-  { Carrier  :> Type
-  ; Equiv    : Carrier → Carrier → Prop
-  ; is_Equiv : Equivalence Equiv }.
+  { Carrier   :>  Type
+  ; Equiv     :   Carrier → Carrier → Prop
+  ; is_Equiv  :   Equivalence Equiv }.
 
   Existing Instance is_Equiv.
 
@@ -43,13 +43,13 @@ Module Setoid.
   Notation "'Setoid.make' ⦃ 'Carrier' ≔ c ; 'Equiv' ≔ eq ⦄" :=
     (mkSetoid c eq _) (only parsing).
 
-  Program Definition eq_setoid (T : Type) : Setoid := Setoid.make ⦃ Carrier ≔ T
-                                                                 ; Equiv ≔ eq ⦄.
+  Program Definition eq_setoid (T : Type) : Setoid := Setoid.make  ⦃ Carrier  ≔ T
+                                                                   ; Equiv    ≔ eq ⦄.
 
-  Notation "_≈_" := Equiv                    (only parsing).
-  Notation "x ≈ y :> T" := (Equiv (s := T) x y) (at level 70, y at next level, no associativity).
-  Notation "x ≈ y" := (Equiv x y)            (at level 70, no associativity).
-  Notation "x ≉ y" := (complement Equiv x y) (at level 70, no associativity).
+  Notation "_≈_"         := Equiv                    (only parsing).
+  Notation "x ≈ y :> T"  := (Equiv (s := T) x y)     (at level 70, y at next level, no associativity).
+  Notation "x ≈ y"       := (Equiv x y)              (at level 70, no associativity).
+  Notation "x ≉ y"       := (complement Equiv x y)   (at level 70, no associativity).
 
 End Setoid.
 
@@ -64,8 +64,8 @@ Module Π.
   Import Setoid.
 
   Structure Π (From To : Setoid) : Type := mkΠ
-  { map        :> From → To
-  ; map_proper : Proper (_≈_ ==> _≈_) map }.
+  { map         :>  From → To
+  ; map_proper  :   Proper (_≈_ ==> _≈_) map }.
 
   Existing Instance map_proper.
 
@@ -75,8 +75,8 @@ Module Π.
   Qed.
 
   Program Definition setoid (From To : Setoid) : Setoid :=
-    Setoid.make ⦃ Carrier ≔ Π From To
-                ; Equiv   ≔ λ f g ∙ ∀ x y, x ≈ y → f x ≈ g y ⦄.
+    Setoid.make  ⦃ Carrier  ≔ Π From To
+                 ; Equiv    ≔ λ f g ∙ ∀ x y, x ≈ y → f x ≈ g y ⦄.
   Next Obligation.
     constructor.
     - (* Reflexivity *)
@@ -112,8 +112,8 @@ Module Π₂.
   Import Setoid.
 
   Structure Π₂ (A B C : Setoid) : Type := mkΠ₂
-  { map         :> A → B → C
-  ; map_compose : Proper (_≈_ ==> _≈_ ==> _≈_) map }.
+  { map          :>  A → B → C
+  ; map_compose  :   Proper (_≈_ ==> _≈_ ==> _≈_) map }.
 
   Existing Instance map_compose.
 

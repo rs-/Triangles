@@ -34,12 +34,12 @@ Require Import Theory.Product.
 Module Setoids.
 
   Structure Obj := mkObj
-  { SCarrier  :> Type
-  ; SEquiv    : SCarrier → SCarrier → Prop
-  ; is_SEquiv : Equivalence SEquiv }.
+  { SCarrier   :>  Type
+  ; SEquiv     :   SCarrier → SCarrier → Prop
+  ; is_SEquiv  :   Equivalence SEquiv }.
 
-  Arguments mkObj  {_ _} _.
-  Arguments SEquiv {_} _ _.
+  Arguments mkObj   {_ _} _.
+  Arguments SEquiv  {_} _ _.
 
   Notation "'Setoids.make' ⦃ 'Carrier' ≔ c ; 'Equiv' ≔ eq ⦄" :=
     (@mkObj c eq _) (only parsing).
@@ -47,8 +47,8 @@ Module Setoids.
   Existing Instance is_SEquiv.
 
   Structure Morphism (A B : Obj) := mkMorphism
-  { map  :> A → B
-  ; cong : ∀ {x y}, SEquiv x y → SEquiv (map x) (map y) }.
+  { map   :>  A → B
+  ; cong  :   ∀ {x y}, SEquiv x y → SEquiv (map x) (map y) }.
 
   Instance map_Proper : ∀ A B (f : Morphism A B), Proper (SEquiv ==> SEquiv) (map A B f).
   Proof.
@@ -56,9 +56,9 @@ Module Setoids.
     now apply cong.
   Qed.
 
-  Arguments mkMorphism {_ _ _} _.
-  Arguments map        {_ _} _ _.
-  Arguments cong       {_ _} _ {_ _ _}.
+  Arguments mkMorphism  {_ _ _} _.
+  Arguments map         {_ _} _ _.
+  Arguments cong        {_ _} _ {_ _ _}.
 
   Module Morphism.
 
@@ -67,8 +67,8 @@ Module Setoids.
   End Morphism.
 
   Program Definition Hom (A B : Obj) : Setoid :=
-    Setoid.make ⦃ Carrier ≔ Morphism A B
-                ; Equiv   ≔ λ f g ∙ ∀ x y, SEquiv x y → SEquiv (f x) (g y) ⦄.
+    Setoid.make  ⦃ Carrier  ≔ Morphism A B
+                 ; Equiv    ≔ λ f g ∙ ∀ x y, SEquiv x y → SEquiv (f x) (g y) ⦄.
   Next Obligation.
     constructor.
     - intros f x y eq_xy. now apply cong.
@@ -110,6 +110,7 @@ Proof.
 Qed.
 
 Lemma compose_assoc A B C D (f : A ⇒ B) (g : B ⇒ C) (h : C ⇒ D) : h ∘ g ∘ f ≈ h ∘ (g ∘ f).
+Proof.
   intros x y eq_xy; simpl; now repeat apply cong.
 Qed.
 
@@ -127,8 +128,8 @@ Section Product_construction.
   Infix "∼" := SEquiv (at level 70).
 
   Program Definition product (A B : 𝑺𝒆𝒕𝒐𝒊𝒅) : 𝑺𝒆𝒕𝒐𝒊𝒅 :=
-    Setoids.make ⦃ Carrier ≔ A ⟨×⟩ B
-                 ; Equiv   ≔ λ S₁ S₂ ∙ fst S₁ ∼ fst S₂ ∧ snd S₁ ∼ snd S₂ ⦄.
+    Setoids.make  ⦃ Carrier  ≔ A ⟨×⟩ B
+                  ; Equiv    ≔ λ S₁ S₂ ∙ fst S₁ ∼ fst S₂ ∧ snd S₁ ∼ snd S₂ ⦄.
   Next Obligation.
     constructor; hnf.
     - intros [a  b]; split; reflexivity.
@@ -151,11 +152,11 @@ End Product_construction.
 
 
 Program Instance 𝑺𝒆𝒕𝒐𝒊𝒅_BinaryProduct : BinaryProduct 𝑺𝒆𝒕𝒐𝒊𝒅 :=
-  BinaryProduct.make ⦃ Category ≔ 𝑺𝒆𝒕𝒐𝒊𝒅
-                     ; _×_      ≔ product
-                     ; ⟨_,_⟩    ≔ @product_mor _ _
-                     ; π₁       ≔ proj_l
-                     ; π₂       ≔ proj_r ⦄.
+  BinaryProduct.make  ⦃ Category  ≔ 𝑺𝒆𝒕𝒐𝒊𝒅
+                      ; _×_       ≔ product
+                      ; ⟨_,_⟩     ≔ @product_mor _ _
+                      ; π₁        ≔ proj_l
+                      ; π₂        ≔ proj_r ⦄.
 Next Obligation. (* Pmor_cong₂ *)
   intros f₁ f₂ eq_f₁f₂ g₁ g₂ eq_g₁g₂ x y eq_xy; simpl; split.
   - now apply eq_f₁f₂.

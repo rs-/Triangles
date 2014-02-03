@@ -31,8 +31,8 @@ Require Import Theory.CartesianStrongMonoidal.
 
 (** ** Definition **)
 
-Program Definition F : 𝑺𝒆𝒕 → 𝑺𝒆𝒕𝒐𝒊𝒅 := λ T ∙ Setoids.make ⦃ Carrier ≔ T
-                                                         ; Equiv   ≔ eq ⦄.
+Program Definition F : 𝑺𝒆𝒕 → 𝑺𝒆𝒕𝒐𝒊𝒅 := λ T ∙ Setoids.make   ⦃ Carrier  ≔ T
+                                                            ; Equiv    ≔ eq ⦄.
 
 Program Definition map {A B} : [ A ⇒ B ⟶ F A ⇒ F B ] :=
   λ f ↦ Setoids.Morphism.make f.

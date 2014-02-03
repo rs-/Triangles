@@ -31,25 +31,24 @@ Generalizable All Variables.
 (** ** Definition **)
 
 Structure RelativeComonad `(F : Functor 𝒞 𝒟) : Type := mkRelativeComonad
-{ T              :> 𝒞 → 𝒟
-; counit         : ∀ {X}, T X ⇒ F X
-; cobind         : ∀ {X Y}, [ T X ⇒ F Y ⟶ T X ⇒ T Y ]
-; cobind_counit  : ∀ {X}, cobind counit ≈ id[ T X ]
-; counit_cobind  : ∀ {X Y} {f : T X ⇒ F Y}, counit ∘ cobind(f) ≈ f
-; cobind_cobind : ∀ {X Y Z} {f : T X ⇒ F Y} {g : T Y ⇒ F Z}, cobind(g) ∘ cobind(f) ≈ cobind(g ∘ cobind(f)) }.
+{ T              :>  𝒞 → 𝒟
+; counit         :   ∀ {X}, T X ⇒ F X
+; cobind         :   ∀ {X Y}, [ T X ⇒ F Y ⟶ T X ⇒ T Y ]
+; cobind_counit  :   ∀ {X}, cobind counit ≈ id[ T X ]
+; counit_cobind  :   ∀ {X Y} {f : T X ⇒ F Y}, counit ∘ cobind(f) ≈ f
+; cobind_cobind  :   ∀ {X Y Z} {f : T X ⇒ F Y} {g : T Y ⇒ F Z}, cobind(g) ∘ cobind(f) ≈ cobind(g ∘ cobind(f)) }.
 
-Arguments mkRelativeComonad {_ _ _ _ _ _} _ _ _.
-Arguments counit            {_ _ _} _ {_}.
-Arguments cobind            {_ _ _} _ {_ _}.
-Arguments cobind_counit     {_ _ _} _ {_}.
-Arguments counit_cobind     {_ _ _} _ {_ _ _}.
-Arguments cobind_cobind    {_ _ _} _ {_ _ _ _ _}.
+Arguments mkRelativeComonad  {_ _ _ _ _ _} _ _ _.
+Arguments counit             {_ _ _} _ {_}.
+Arguments cobind             {_ _ _} _ {_ _}.
+Arguments cobind_counit      {_ _ _} _ {_}.
+Arguments counit_cobind      {_ _ _} _ {_ _ _}.
+Arguments cobind_cobind      {_ _ _} _ {_ _ _ _ _}.
 
-Notation "'counit[' X ]" := (counit _ (X := X)) (only parsing).
-Notation "T '⋅counit'" := (counit T) (at level 0, only parsing).
-Notation "T '⋅counit[' X ]" := (counit T (X := X)) (at level 0, only parsing).
-
-Notation "T '⋅cobind'" := (cobind T) (at level 0, only parsing).
+Notation "'counit[' X ]"     := (counit _ (X := X)) (only parsing).
+Notation "T '⋅counit'"       := (counit T) (at level 0, only parsing).
+Notation "T '⋅counit[' X ]"  := (counit T (X := X)) (at level 0, only parsing).
+Notation "T '⋅cobind'"       := (cobind T) (at level 0, only parsing).
 
 Notation "'RelativeComonad.make' ⦃ 'T' ≔ T ; 'counit' ≔ counit ; 'cobind' ≔ cobind ⦄" :=
   (@mkRelativeComonad _ _ _ T counit cobind _ _ _) (only parsing).
@@ -102,14 +101,14 @@ End Functoriality.
 (** ** Morphism of relative comonads **)
 
 Structure Morphism `{F : Functor 𝒞 𝒟} (T S : RelativeComonad F) : Type := mkMorphism
-{ τ          :> ∀ C, T C ⇒ S C
-; τ_counit   : ∀ {C}, T⋅counit[ C ] ≈ S⋅counit[ C ] ∘ τ(C)
-; τ_commutes : ∀ {C D} {f : S C ⇒ F D}, τ(D) ∘ T⋅cobind (f ∘ τ(C)) ≈ S⋅cobind f ∘ τ(C) }.
+{ τ           :>  ∀ C, T C ⇒ S C
+; τ_counit    :   ∀ {C}, T⋅counit[ C ] ≈ S⋅counit[ C ] ∘ τ(C)
+; τ_commutes  :   ∀ {C D} {f : S C ⇒ F D}, τ(D) ∘ T⋅cobind (f ∘ τ(C)) ≈ S⋅cobind f ∘ τ(C) }.
 
-Arguments mkMorphism {_ _ _ _ _ _} _ _.
-Arguments τ          {_ _ _ _ _ _} _.
-Arguments τ_counit   {_ _ _ _ _} _ {_}.
-Arguments τ_commutes {_ _ _ _ _} _ {_ _ _}.
+Arguments mkMorphism  {_ _ _ _ _ _} _ _.
+Arguments τ           {_ _ _ _ _ _} _.
+Arguments τ_counit    {_ _ _ _ _} _ {_}.
+Arguments τ_commutes  {_ _ _ _ _} _ {_ _ _}.
 
 Notation "'RelativeComonad.make' ⦃ 'τ' ≔ τ ⦄" := (@mkMorphism _ _ _ _ _ τ _ _) (only parsing).
 
