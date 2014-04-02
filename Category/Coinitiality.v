@@ -50,6 +50,8 @@ Module Tri_Terminal (Import TE : Elt).
   (** Triangular matrices as defined by Matthes & Picard **)
   Module Import MP := TriangleMP TE.
 
+  Definition E : 𝑺𝒆𝒕 := E.
+
   (** bisimulation **)
   Local Infix "∼" := SEquiv (at level 70).
 
@@ -135,7 +137,7 @@ Module Tri_Terminal (Import TE : Elt).
   (*
     * 2nd step: MP.rest is a morphism of comodule 𝑻𝒓𝒊 ⇒ 𝑻𝒓𝒊(E × ─)
     **)
-  Program Definition 𝑹𝒆𝒔𝒕 : ‵ [𝑻𝒓𝒊] ⇒ precomposition_with_product (F := 𝑬𝑸) E (tcomod 𝑻𝒓𝒊) ′ :=
+  Program Definition 𝑹𝒆𝒔𝒕 : ‵ [𝑻𝒓𝒊] ⇒ [𝑻𝒓𝒊][E×─] ′ :=
     Comodule.make ⦃ α ≔ λ A ∙ Setoids.Morphism.make (@rest A) ⦄.
   (** rest-cong **)
   Next Obligation.
@@ -147,6 +149,21 @@ Module Tri_Terminal (Import TE : Elt).
     apply redec_cong.
     - repeat intro. f_equal; [ now rewrite H | apply (Setoids.cong f); now rewrite H ].
     - now rewrite eq_xy.
+  Qed.
+
+  Program Definition 𝑪𝒖𝒕 : ‵ [𝑻𝒓𝒊][E×─] ⇒ [𝑻𝒓𝒊] ′ :=
+    Comodule.make ⦃ α ≔ λ A ∙ Setoids.Morphism.make (@cut A) ⦄.
+  (** cut-cong **)
+  Next Obligation.
+    intros A x y eq_xy. now rewrite eq_xy.
+  Qed.
+  (** cut-cong2 **)
+  Next Obligation.
+    intros A B f x y eq_xy; simpl in *.
+    symmetry. etransitivity. apply redec_cong.
+    - repeat intro. now apply (Setoids.cong f).
+    - apply cut_cong. symmetry. apply eq_xy.
+    - apply redec_cut.
   Qed.
 
   (** ** The pair 𝑻𝑹𝑰 = (𝑻𝒓𝒊, 𝑹𝒆𝒔𝒕) is an object of the category 𝑻𝒓𝒊𝑴𝒂𝒕 **)
