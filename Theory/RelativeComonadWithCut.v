@@ -154,3 +154,22 @@ Module Morphism.
   End id_composition.
 
 End Morphism.
+
+Section CanonicalCut.
+
+  Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟}
+          {F : Functor 𝒞 𝒟} (E : 𝒞) `{!CartesianStrongMonoidal F}.
+
+
+  Program Definition xxx (R : RelativeComonad F) : RelativeComonadWithCut F E :=
+    RelativeComonadWithCut.make ⦃ RelativeComonad ≔ R ; cut ≔ λ A ∙ lift R π₂[E,A] ⦄.
+  Next Obligation.
+    rewrite counit_cobind. reflexivity.
+  Qed.
+  Next Obligation.
+  Admitted.
+
+End CanonicalCut.
+
+Notation "↑[ R ]" := (xxx _ R).
+Notation "↑[ R ; E ]" := (xxx E R).

@@ -26,3 +26,6 @@
 ./Theory/SetoidType.v
 ./Theory/NaturalTransformation.v
 ./Category/Cut_NT.v
+./Category/Stream.v
+./Category/ITrees.v
+./Category/StreamFinal.v

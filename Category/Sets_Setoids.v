@@ -71,3 +71,25 @@ Next Obligation.
   - (* iso_right *)
     intros f g eq_fg. simpl in *. destruct f. auto.
 Qed.
+
+(*------------------------------------------------------------------------------
+  -- ＦＵＮＣＴＯＲ  ＥＱ-×
+  ----------------------------------------------------------------------------*)
+(** * Functor 𝑬𝑸-× : 𝑺𝒆𝒕 × 𝑺𝒆𝒕 → 𝑺𝒆𝒕𝒐𝒊𝒅 **)
+
+(** ** Definition **)
+
+
+Program Definition 𝑬𝑸_prod : Functor (𝑺𝒆𝒕 𝘅 𝑺𝒆𝒕) 𝑺𝒆𝒕𝒐𝒊𝒅 :=
+  Functor.make ⦃ F ≔ λ A ∙ Setoids.make ⦃ Carrier ≔ fst A ⟨×⟩ snd A
+                                        ; Equiv   ≔ eq ⦄
+               ; map ≔ λ A B ∙ λ f ↦ Setoids.Morphism.make (λ x ∙ (fst f (fst x) , snd f (snd x))) ⦄.
+Next Obligation.
+  eauto with typeclass_instances.
+Qed.
+Next Obligation.
+  intros [? ?] [? ?] [? ?] [? ?] [? ?] eq. injection eq; intros.
+  simpl in *; f_equal; congruence.
+Qed.
+
+Notation "𝑬𝑸-𝘅" := 𝑬𝑸_prod.
