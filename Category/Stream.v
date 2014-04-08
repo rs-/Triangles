@@ -19,28 +19,28 @@ Generalizable All Variables.
 (** ** Object and morphism definitions **)
 Module Stream.
 
-  Structure Obj (P : 𝑺𝒆𝒕) : Type := mkObj
+  Structure Obj : Type := mkObj
   { T         :>  𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅 𝑬𝑸
-  ; tail      :> ∀ (p : P), [T] ⇒ [T] }.
+  ; tail      :> [T] ⇒ [T] }.
 
-  Arguments mkObj     {_ _ } _.
-  Arguments T         {_} _.
-  Arguments tail      {_} _ _.
+  Arguments mkObj     {_ } _.
+  Arguments T         _.
+  Arguments tail      _.
 
   Notation "'Stream.make' ⦃ 'T' ≔ T ; 'tail' ≔ tail ⦄" :=
-           (@mkObj _ T tail) (only parsing).
+           (@mkObj T tail) (only parsing).
 
-  Structure Morphism {P} (T S : Obj P) : Type := mkMorphism
+  Structure Morphism (T S : Obj) : Type := mkMorphism
   { τ           :> T ⇒ S
-  ; τ_commutes  : ∀ {p}, ⟨τ⟩ ∘ τ⁎⋅(T p) ≈ (S p) ∘ ⟨τ⟩ }.
+  ; τ_commutes  : ⟨τ⟩ ∘ τ⁎⋅T ≈ S ∘ ⟨τ⟩ }.
 
-  Arguments mkMorphism  {_ _ _ _} _.
-  Arguments τ           {_ _ _} _.
-  Arguments τ_commutes  {_ _ _} _ {_ _ _ _ _}.
+  Arguments mkMorphism  {_ _ _} _.
+  Arguments τ           {_ _} _.
+  Arguments τ_commutes  {_ _} _ {_ _ _ _}.
 
-  Notation "'Stream.make' ⦃ 'τ' ≔ τ ⦄" := (@mkMorphism _ _ _ τ _) (only parsing).
+  Notation "'Stream.make' ⦃ 'τ' ≔ τ ⦄" := (@mkMorphism _ _ τ _) (only parsing).
 
-  Program Definition Hom {E} (T S : Obj E) : Setoid :=
+  Program Definition Hom (T S : Obj) : Setoid :=
     Setoid.make   ⦃ Carrier  ≔ Morphism T S
                   ; Equiv    ≔ (λ g f ∙ g ≈ f) ⦄.
   Next Obligation.
@@ -58,10 +58,7 @@ Export Stream.
 
 Section Defs.
 
-
-  Variable (E : 𝑺𝒆𝒕).
-
-  Implicit Types (T S R U : Obj E).
+  Implicit Types (T S R U : Obj).
 
   Infix "⇒" := Hom.
 

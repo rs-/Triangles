@@ -1,6 +1,7 @@
 -R . Cat
 
 ./Category/TriMatTerminal.v
+./Category/StreamTerminal.v
 ./Category/RComod.v
 ./Category/RComonad.v
 ./Category/RComonadWithCut.v
@@ -27,5 +28,3 @@
 ./Theory/NaturalTransformation.v
 ./Category/Cut_NT.v
 ./Category/Stream.v
-./Category/ITrees.v
-./Category/StreamFinal.v
