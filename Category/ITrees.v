@@ -8,7 +8,7 @@ Require Import Category.Sets.
 Require Import Category.Sets_Setoids.
 Require Import Category.RComonad.
 Require Import InfiniteTriangles.redecInfiniteTriangles8_4.
-Require Import Category.Coinitiality.
+Require Import Category.TriMatTerminal.
 Require Import Theory.Comodule.
 Require Import Theory.PrecompositionWithProduct.
 Require Import Theory.PushforwardComodule.

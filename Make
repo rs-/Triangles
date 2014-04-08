@@ -1,6 +1,6 @@
 -R . Cat
 
-./Category/Coinitiality.v
+./Category/TriMatTerminal.v
 ./Category/RComod.v
 ./Category/RComonad.v
 ./Category/RComonadWithCut.v
