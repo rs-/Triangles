@@ -26,9 +26,7 @@ Require Import Theory.Product.
 
 (** ** Type category definition **)
 
-Definition Obj := Type.
-
-Program Definition Hom (A B : Obj) : Setoid := Setoid.make ⦃ Carrier ≔ A → B
+Program Definition Hom (A B : Type) : Setoid := Setoid.make ⦃ Carrier ≔ A → B
                                                            ; Equiv   ≔ λ f g ∙ ∀ x, f x = g x ⦄.
 Next Obligation.
   constructor; hnf; simpl; [ reflexivity | now symmetry | etransitivity ; eauto ].
@@ -64,7 +62,6 @@ Qed.
 
 Canonical Structure 𝑺𝒆𝒕 : Category :=
   mkCategory left_id right_id compose_assoc.
-
 
 (*------------------------------------------------------------------------------
   -- ＳＥＴＳ  ＨＡＶＥ  ＢＩＮＡＲＹ  ＰＲＯＤＵＣＴ
