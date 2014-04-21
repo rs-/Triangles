@@ -3,7 +3,8 @@ Require Import Category.Sets.
 Require Import Category.Sets_Setoids.
 Require Import Category.RComod.
 Require Import Category.RComonad.
-Require Import Category.Stream.
+Require Import Category.Stream.Stream.
+Require Import Category.Stream.Axioms.
 Require Import Theory.Category.
 Require Import Theory.InitialTerminal.
 Require Import Theory.Functor.
@@ -15,93 +16,10 @@ Require Import Theory.PushforwardComodule.
 
 Generalizable All Variables.
 
-
-Module Type StreamAxioms.
-
-  (** Stream and destructors **)
-  Axiom Stream : 𝑺𝒆𝒕 → 𝑺𝒆𝒕.
-  Axiom head : ∀ {A}, Stream A ⇒ A.
-  Axiom tail : ∀ {A}, Stream A ⇒ Stream A.
-
-  (** Corecursor on Stream **)
-  Axiom corec : ∀ {A T : 𝑺𝒆𝒕}, (T ⇒ A) → (T ⇒ T) → T ⇒ Stream A.
-  Axiom head_corec : ∀ {A T : 𝑺𝒆𝒕} {hd : T ⇒ A} {tl : T ⇒ T} {t}, head (corec hd tl t) = hd t.
-  Axiom tail_corec : ∀ {A T : 𝑺𝒆𝒕} {hd : T ⇒ A} {tl : T ⇒ T} {t}, tail (corec hd tl t) = corec hd tl (tl t).
-
-  (** Equivalence relation on streams **)
-  Axiom bisim : ∀ {A}, Stream A → Stream A → Prop.
-  Infix "∼" := bisim (at level 70).
-
-  Axiom bisim_head : ∀ {A} {s₁ s₂ : Stream A}, s₁ ∼ s₂ → head s₁ = head s₂.
-  Axiom bisim_tail : ∀ {A} {s₁ s₂ : Stream A}, s₁ ∼ s₂ → tail s₁ ∼ tail s₂.
-  Notation "∼-head" := bisim_head (only parsing).
-  Notation "∼-tail" := bisim_tail (only parsing).
-
-  Axiom bisim_intro : ∀ {A}
-                        (R : Stream A → Stream A → Prop)
-                        (R_head : ∀ {s₁ s₂ : Stream A}, R s₁ s₂ → head s₁ = head s₂)
-                        (R_tail : ∀ {s₁ s₂ : Stream A}, R s₁ s₂ → R (tail s₁) (tail s₂)),
-                        ∀ {s₁ s₂ : Stream A}, R s₁ s₂ → s₁ ∼ s₂.
-
-End StreamAxioms.
-
-Module StreamInstance : StreamAxioms.
-
-  CoInductive Stream_ A : Type :=
-    Cons : A → Stream_ A → Stream_ A.
-
-  Arguments Cons {_} _ _.
-
-  Notation "_∷_" := Cons.
-  Notation "x ∷ xs" := (Cons x xs) (at level 60, right associativity).
-
-  Definition Stream : 𝑺𝒆𝒕 → 𝑺𝒆𝒕 := Stream_.
-  Definition head {A} : Stream A ⇒ A := λ s ∙ let '(x ∷ _) := s in x.
-  Definition tail {A} : Stream A ⇒ Stream A := λ s ∙ let '(_ ∷ xs) := s in xs.
-
-  CoFixpoint corec {A T : 𝑺𝒆𝒕} (hd : T ⇒ A) (tl : T ⇒ T) : T ⇒ Stream A :=
-    λ t ∙ hd t ∷ corec hd tl (tl t).
-
-  Lemma head_corec : ∀ {A T : 𝑺𝒆𝒕} {hd : T ⇒ A} {tl : T ⇒ T} {t}, head (corec hd tl t) = hd t.
-  Proof.
-    reflexivity.
-  Qed.
-
-  Lemma tail_corec : ∀ {A T : 𝑺𝒆𝒕} {hd : T ⇒ A} {tl : T ⇒ T} {t}, tail (corec hd tl t) = corec hd tl (tl t).
-  Proof.
-    reflexivity.
-  Qed.
-
-  (** Equivalence relation on streams **)
-  Reserved Notation "x ∼ y" (at level 70, right associativity).
-
-  CoInductive bisim_ {A} : Stream A → Stream A → Prop :=
-  | bintro : ∀ {s₁ s₂ : Stream A}, head s₁ = head s₂ → tail s₁ ∼ tail s₂ → s₁ ∼ s₂
-  where "s₁ ∼ s₂" := (@bisim_ _ s₁ s₂).
-
-  Definition bisim {A} := @bisim_ A.
-
-  Lemma bisim_head : ∀ {A} {s₁ s₂ : Stream A}, s₁ ∼ s₂ → head s₁ = head s₂.
-  Proof.
-    intros. now destruct H.
-  Qed.
-  Lemma bisim_tail : ∀ {A} {s₁ s₂ : Stream A}, s₁ ∼ s₂ → tail s₁ ∼ tail s₂.
-  Proof.
-    intros. now destruct H.
-  Qed.
-
-  Lemma bisim_intro : ∀ {A}
-                        (R : Stream A → Stream A → Prop)
-                        (R_head : ∀ {s₁ s₂ : Stream A}, R s₁ s₂ → head s₁ = head s₂)
-                        (R_tail : ∀ {s₁ s₂ : Stream A}, R s₁ s₂ → R (tail s₁) (tail s₂)),
-                        ∀ {s₁ s₂ : Stream A}, R s₁ s₂ → s₁ ∼ s₂.
-  Proof.
-    cofix Hc; constructor; intros.
-    - now apply R_head.
-    - eapply Hc; eauto. now apply R_tail.
-  Qed.
-
-End StreamInstance.
+(*------------------------------------------------------------------------------
+  -- ＳＴＲＥＡＭ  ＩＳ  ＴＥＲＭＩＮＡＬ  ＩＮ  ＳＴＲＥＡＭ
+  ----------------------------------------------------------------------------*)
+(** * Stream is terminal in Streams **)
 
 Ltac clean_hyps := repeat match goal with H : _ |- _ => clear H end.
 
@@ -363,5 +281,3 @@ Module StreamTerminal (Import Ax : StreamAxioms).
   Qed.
 
 End StreamTerminal.
-
-Module Terminality := StreamTerminal StreamInstance.

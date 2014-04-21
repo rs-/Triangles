@@ -1,11 +1,11 @@
-Require Import InfiniteTriangles.redecInfiniteTriangles8_4.
 Require Import Category.Setoids.
 Require Import Category.Sets.
 Require Import Category.Sets_Setoids.
 Require Import Category.RComod.
 Require Import Category.RComonad.
 Require Import Category.RComonadWithCut.
-Require Import Category.TriMat.
+Require Import Category.TriMat.TriMat.
+Require Import Category.TriMat.Axioms.
 Require Import Theory.Category.
 Require Import Theory.InitialTerminal.
 Require Import Theory.Functor.
@@ -18,44 +18,18 @@ Require Import Theory.PushforwardComodule.
 
 Generalizable All Variables.
 
-
-Module Type TriMatAxioms (Import TE : Elt).
-
-  (** Stream and destructors **)
-  Axiom Tri : Type → Type.
-  Axiom top : ∀ {A}, Tri A → A.
-  Axiom rest : ∀ {A}, Tri A → Tri (E ⟨×⟩ A).
-
-  (** Corecursor on Tri **)
-  Axiom corec : ∀ {T : Type → Type}, (∀ A, T A → A) → (∀ A, T A → T (E ⟨×⟩ A)) → ∀ {A}, T A → Tri A.
-  Axiom top_corec : ∀ {A} {T : Type → Type}
-                       {hd : ∀ A, T A → A} {tl : ∀ A, T A → T (E ⟨×⟩ A)} {t : T A},
-                       top (corec hd tl t) = hd A t.
-  Axiom rest_corec : ∀ {A} {T : Type → Type}
-                       {hd : ∀ A, T A → A} {tl : ∀ A, T A → T (E ⟨×⟩ A)} {t : T A},
-                       rest (corec hd tl t) = corec hd tl (tl A t).
-
-  (** Equivalence relation on streams **)
-  Axiom bisim : ∀ {A}, Tri A → Tri A → Prop.
-  Infix "∼" := bisim (at level 70).
-
-  Axiom bisim_top : ∀ {A} {s₁ s₂ : Tri A}, s₁ ∼ s₂ → top s₁ = top s₂.
-  Axiom bisim_rest : ∀ {A} {s₁ s₂ : Tri A}, s₁ ∼ s₂ → rest s₁ ∼ rest s₂.
-  Notation "∼-top" := bisim_top (only parsing).
-  Notation "∼-rest" := bisim_rest (only parsing).
-
-  Axiom bisim_intro : ∀ (R : ∀ {X}, Tri X → Tri X → Prop)
-                        (R_top : ∀ {A} {s₁ s₂ : Tri A}, R s₁ s₂ → top s₁ = top s₂)
-                        (R_rest : ∀ {A} {s₁ s₂ : Tri A}, R s₁ s₂ → R (rest s₁) (rest s₂)),
-                        ∀ {A} {s₁ s₂ : Tri A}, R s₁ s₂ → s₁ ∼ s₂.
-
-End TriMatAxioms.
+(*------------------------------------------------------------------------------
+  -- ＴＲＩ  ＩＳ  ＴＥＲＭＩＮＡＬ  ＩＮ  ＴＲＩＭＡＴ
+  ----------------------------------------------------------------------------*)
+(** * Tri is terminal in TriMat **)
 
 Ltac clean_hyps := repeat match goal with H : _ |- _ => clear H end.
 
-Module TriMatTerminal (Import TE : Elt) (Import Ax : TriMatAxioms TE).
+Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
 
-  Notation coRec hd tl := (corec (λ _ ∙ hd) (λ _ ∙ tl)) (only parsing).
+  Local Notation E := TE.t (only parsing).
+
+  Local Notation coRec hd tl := (corec (λ _ ∙ hd) (λ _ ∙ tl)) (only parsing).
 
   Lemma bisim_refl : ∀ {A} {s : Tri A}, s ∼ s.
   Proof.
@@ -487,65 +461,3 @@ Module TriMatTerminal (Import TE : Elt) (Import Ax : TriMatAxioms TE).
   Qed.
 
 End TriMatTerminal.
-
-Module TriInstance (Import TE : Elt) <: TriMatAxioms TE.
-
-  CoInductive Tri_ A : Type :=
-    constr : A → Tri_ (E ⟨×⟩ A) → Tri_ A.
-
-  Definition Tri : Type → Type := Tri_.
-  Definition top : ∀ {A}, Tri A → A := λ _ t ∙ let '(constr x _) := t in x.
-  Definition rest : ∀ {A}, Tri A → Tri (E ⟨×⟩ A) := λ _ t ∙ let '(constr _ t') := t in t'.
-
-  (** Corecursor on Tri **)
-  Definition corec {T : Type → Type} (tp : ∀ A, T A → A) (rt : ∀ A, T A → T (E ⟨×⟩ A)) : ∀ {A}, T A → Tri A :=
-    let cofix corec {A} (t : T A) : Tri A :=
-        constr _ (tp _ t) (corec (rt _ t))
-    in @corec.
-
-  Lemma top_corec : ∀ {A} {T : Type → Type}
-                       {hd : ∀ A, T A → A} {tl : ∀ A, T A → T (E ⟨×⟩ A)} {t : T A},
-                       top (corec hd tl t) = hd A t.
-  Proof.
-    reflexivity.
-  Qed.
-  Lemma rest_corec : ∀ {A} {T : Type → Type}
-                       {hd : ∀ A, T A → A} {tl : ∀ A, T A → T (E ⟨×⟩ A)} {t : T A},
-                       rest (corec hd tl t) = corec hd tl (tl A t).
-  Proof.
-    reflexivity.
-  Qed.
-
-  (** Equivalence relation on streams **)
-  CoInductive bisim_ : ∀ {A}, Tri A → Tri A → Prop :=
-    bisim_constr : ∀ {A} {t₁ t₂ : Tri A}, top t₁ = top t₂ → bisim_ (rest t₁) (rest t₂) → bisim_ t₁ t₂.
-
-  Definition bisim : ∀ {A}, Tri A → Tri A → Prop := @bisim_.
-  Infix "∼" := bisim (at level 70).
-
-  Lemma bisim_top : ∀ {A} {s₁ s₂ : Tri A}, s₁ ∼ s₂ → top s₁ = top s₂.
-  Proof.
-    intros. now destruct H.
-  Qed.
-  Lemma bisim_rest : ∀ {A} {s₁ s₂ : Tri A}, s₁ ∼ s₂ → rest s₁ ∼ rest s₂.
-  Proof.
-    intros. now destruct H.
-  Qed.
-  Notation "∼-top" := bisim_top (only parsing).
-  Notation "∼-rest" := bisim_rest (only parsing).
-
-  Lemma bisim_intro : ∀ (R : ∀ {X}, Tri X → Tri X → Prop)
-                        (R_top : ∀ {A} {s₁ s₂ : Tri A}, R s₁ s₂ → top s₁ = top s₂)
-                        (R_rest : ∀ {A} {s₁ s₂ : Tri A}, R s₁ s₂ → R (rest s₁) (rest s₂)),
-                        ∀ {A} {s₁ s₂ : Tri A}, R s₁ s₂ → s₁ ∼ s₂.
-  Proof.
-    cofix Hc; constructor; intros.
-    - now apply R_top.
-    - eapply Hc; eauto. now apply R_rest.
-  Qed.
-
-
-End TriInstance.
-
-
-Module Terminality (TE : Elt) := TE <+ TriInstance <+ TriMatTerminal.

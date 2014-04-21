@@ -1,16 +1,13 @@
 -R . Cat
 
-./Category/TriMatTerminal.v
-./Category/StreamTerminal.v
+./Category/Cut_NT.v
 ./Category/RComod.v
 ./Category/RComonad.v
 ./Category/RComonadWithCut.v
 ./Category/RComonad_RComonadWithCut.v
 ./Category/Setoids.v
-./Category/TriMat.v
 ./Category/Sets.v
 ./Category/Sets_Setoids.v
-./InfiniteTriangles/redecInfiniteTriangles8_4.v
 ./Misc/Unicode.v
 ./Theory/CartesianStrongMonoidal.v
 ./Theory/Category.v
@@ -18,13 +15,23 @@
 ./Theory/Functor.v
 ./Theory/InitialTerminal.v
 ./Theory/Isomorphism.v
+./Theory/NaturalTransformation.v
 ./Theory/Notations.v
-./Theory/Product.v
 ./Theory/PrecompositionWithProduct.v
+./Theory/Product.v
 ./Theory/PushforwardComodule.v
 ./Theory/RelativeComonad.v
 ./Theory/RelativeComonadWithCut.v
 ./Theory/SetoidType.v
-./Theory/NaturalTransformation.v
-./Category/Cut_NT.v
-./Category/Stream.v
+
+./Category/TriMat/TriMat.v
+./Category/TriMat/Axioms.v
+./Category/TriMat/Terminality.v
+./Category/TriMat/Model.v
+
+./Category/Stream/Stream.v
+./Category/Stream/Axioms.v
+./Category/Stream/Terminality.v
+./Category/Stream/Model.v
+
+./Category/Diag.v
