@@ -23,7 +23,9 @@ Generalizable All Variables.
   ----------------------------------------------------------------------------*)
 (** * Tri is terminal in TriMat **)
 
+(* begin hide *)
 Ltac clean_hyps := repeat match goal with H : _ |- _ => clear H end.
+(* end hide *)
 
 Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
 
@@ -31,6 +33,7 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
 
   Local Notation coRec hd tl := (corec (λ _ ∙ hd) (λ _ ∙ tl)) (only parsing).
 
+  (** ** -∼- is an equivalence relation **)
   Lemma bisim_refl : ∀ {A} {s : Tri A}, s ∼ s.
   Proof.
     intros. apply bisim_intro with (R := λ _ s₁ s₂ ∙ s₁ = s₂); [clean_hyps; intros..|auto].
@@ -71,6 +74,11 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
     intros. now rewrite H.
   Qed.
 
+  (** ** Tri as a setoid **)
+  Program Definition TRI (A : Type) : Setoids.Obj :=
+    Setoids.make ⦃ Carrier ≔ Tri A ; Equiv ≔ bisim ⦄.
+
+  (** ** top & rest are setoids morphisms **)
   Lemma top_cong : ∀ {A} {s₁ s₂ : Tri A}, s₁ ∼ s₂ → top s₁ = top s₂.
   Proof.
     intros A s₁ s₂ eq_s₁s₂. now apply ∼-top.
@@ -93,9 +101,6 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
     - tauto.
   Qed.
 
-  Program Definition TRI (A : Type) : Setoids.Obj :=
-    Setoids.make ⦃ Carrier ≔ Tri A ; Equiv ≔ bisim ⦄.
-
   Program Definition 𝒕𝒐𝒑 {A} : TRI A ⇒ 𝑬𝑸 A := Setoids.Morphism.make top.
   Next Obligation.
     now apply top_cong.
@@ -106,6 +111,7 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
     now apply rest_cong.
   Qed.
 
+  (** ** Redecoration for infinite triangular matrices **)
   Definition cut {A} : Tri (E ⟨×⟩ A) → Tri A := coRec (λ x ∙ snd (top x)) rest.
 
   Lemma top_cut : ∀ {A} {t : Tri (E ⟨×⟩ A)}, top (cut t) = snd (top t).
@@ -135,7 +141,9 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
 
   Definition lift {A B : Type} (f : Tri A → B) : Tri (E ⟨×⟩ A) → E ⟨×⟩ B := λ x ∙ (fst (top x) , f (cut x)).
 
-  Lemma lift_cong : ∀ {A B} {f : Tri A → B}  {t₁ t₂ : Tri (E ⟨×⟩ A)}, (∀ {t₁ t₂}, t₁ ∼ t₂ → f t₁ = f t₂) → t₁ ∼ t₂ → lift f t₁ = lift f t₂.
+  Lemma lift_cong :
+    ∀ {A B} {f : Tri A → B}  {t₁ t₂ : Tri (E ⟨×⟩ A)},
+      (∀ {t₁ t₂}, t₁ ∼ t₂ → f t₁ = f t₂) → t₁ ∼ t₂ → lift f t₁ = lift f t₂.
   Proof.
     intros.
     unfold lift. f_equal.
@@ -149,33 +157,31 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
     apply H.
   Qed.
 
-  Definition redec' : ∀ {B : Type}, { A : Type & Tri A → B & Tri A} → Tri B.
-  Proof.
-    apply (@corec (λ B ∙ { A : Type & Tri A → B & Tri A })).
-    - intros B [A f t].
-      exact (f t).
-    - intros B [A f t].
-      exists (E ⟨×⟩ A).
-      + exact (lift f).
-      + exact (rest t).
-  Defined.
+  Definition redec {A B} (f : Tri A → B) (t : Tri A) : Tri B :=
+    @corec (λ B ∙ { A : Type & Tri A → B & Tri A})
+           (* top *)
+           (λ _ t ∙ let '(existT2 A f t) := t
+                    in f t)
+           (* rest *)
+           (λ _ t ∙ let '(existT2 A f t) := t
+                    in existT2 _ _ (E ⟨×⟩ A) (lift f) (rest t))
+           B (existT2 (λ A ∙ Tri A → B) (λ A ∙ Tri A) A f t).
 
-  Definition redec {A B : Type} (f : Tri A → B) (t : Tri A) : Tri B :=
-    @redec' B (existT2 (λ A ∙ Tri A → B) (λ A ∙ Tri A) A f t).
 
   Lemma top_redec : ∀ {A B} (f : Tri A → B) (t : Tri A), top (redec f t) = f t.
   Proof.
-    intros. unfold redec, redec'.
+    intros. unfold redec.
     now rewrite (top_corec (T := λ B ∙ {A : Type & Tri A → B & Tri A})).
   Qed.
 
   Lemma rest_redec : ∀ {A B} (f : Tri A → B) (t : Tri A), rest (redec f t) = redec (lift f) (rest t).
   Proof.
-    intros. unfold redec, redec'.
+    intros. unfold redec.
     now rewrite (rest_corec (T := λ B ∙ {A : Type & Tri A → B & Tri A})).
   Qed.
 
-  Lemma redec_cong : ∀ {A B} {f : Tri A → B} {t₁ t₂}, (∀ t₁ t₂, t₁ ∼ t₂ → f t₁ = f t₂) → t₁ ∼ t₂ → redec f t₁ ∼ redec f t₂.
+  Lemma redec_cong:
+    ∀ {A B} {f : Tri A → B} {t₁ t₂}, (∀ t₁ t₂, t₁ ∼ t₂ → f t₁ = f t₂) → t₁ ∼ t₂ → redec f t₁ ∼ redec f t₂.
   Proof.
     intros.
     apply bisim_intro
@@ -220,6 +226,7 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
     - repeat eexists.
   Qed.
 
+  (** ** Tri is a relative comonad with cut over EQ **)
   Obligation Tactic := idtac.
   Program Definition 𝑻𝒓𝒊 : ‵ 𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅𝑾𝒊𝒕𝒉𝑪𝒖𝒕 𝑬𝑸 E ′ :=
     RelativeComonadWithCut.make ⦃ T ≔ TRI
@@ -287,6 +294,7 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
     apply redec_cut.
   Qed.
 
+  (** ** Tri coalgebra **)
   Program Definition 𝑹𝒆𝒔𝒕 : ‵ [𝑻𝒓𝒊] ⇒ [𝑻𝒓𝒊][E×─] ′ :=
     Comodule.make ⦃ α ≔ λ A ∙ Setoids.Morphism.make (@rest A) ⦄.
   (** rest-cong **)
@@ -320,6 +328,7 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
     simpl. now rewrite rest_cut.
   Qed.
 
+  (** ** 𝑻𝑹𝑰 is a terminal object **)
   Section Defs.
 
     Variable (Tr : 𝑻𝒓𝒊𝑴𝒂𝒕 E).
@@ -441,7 +450,7 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
   (* end hide *)
 
   (** 𝑻𝑹𝑰 is a terminal object **)
-  Program Definition Coinitiality : Terminal (𝑻𝒓𝒊𝑴𝒂𝒕 E) :=
+  Program Definition Terminality : Terminal (𝑻𝒓𝒊𝑴𝒂𝒕 E) :=
     Terminal.make  ⦃ one  ≔ 𝑻𝑹𝑰
                    ; top  ≔ τ ⦄.
   Next Obligation.

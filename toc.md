@@ -1,4 +1,4 @@
-# Coinitial semantics for redecoration of triangular matrices
+# Terminal semantics for codata types in intensional Martin-Löf type theory
 
 This table of contents give pointers in the Coq formalisation following the sectioning of the [paper](http://arxiv.org/abs/1401.1053)
 
@@ -11,7 +11,14 @@ This table of contents give pointers in the Coq formalisation following the sect
 * [Cartesian strong monoidal functors][SMF]
   * [Functor 𝑬𝑸 is strong monoidal][SM_EQ]
 
-## Relative comonads and their morphisms
+## Codata types in intensional Martin-Löf type theory
+
+* [Streams][STRAx]
+* [Cosubstitution for streams][cosubst]
+* [Infinite triangular matrices][ITAx]
+* [Redecoration for infinite triangular matrices][redec]
+
+## Relative Comonads and their morphisms
 
 * [Relative comonad definition][RC]
 * [Functoriality of relative comonads][FRC]
@@ -28,7 +35,7 @@ This table of contents give pointers in the Coq formalisation following the sect
 * [Pushforward comodule][PCM]
 * [Morphism of comonads induces morphism of comodules][ICM]
 
-## Coalgebras for infinite triangular matrices
+## Terminality for streams and infinite triangular matrices
 
 * [Relative comonad with cut definition][RCC]
 * [Morphism of relative comonads with cut][MRCC]
@@ -36,8 +43,10 @@ This table of contents give pointers in the Coq formalisation following the sect
 * [Canonical cut operation][CCRCC]
 * [Precomposition with product][PRCC]
 * [Pushforward commutes with precomposition with product][PCRCC]
-* [Category of triangular matrices][TM]
-* [Coinitial semantics for triangular matrices with redecoration][CS]
+* [Category of streams][STR]
+* [Terminal object in Stream][STRTerm]
+* [Category TriMat of infinite triangular matrices][IT]
+* [Terminal object in TriMat][ITTerm]
 
 
 [Category]: Cat.Theory.Category.html#Category
@@ -65,3 +74,11 @@ This table of contents give pointers in the Coq formalisation following the sect
 [PCRCC]: Cat.Theory.PushforwardComodule.html#Commutes
 [TM]: Cat.Category.TriMat.html#𝑻𝒓𝒊𝑴𝒂𝒕
 [CS]: Cat.Category.Coinitiality.html#Coinitiality
+[STR]: Cat.Category.Stream.Stream.html
+[STRAx]: Cat.Category.Stream.Axioms.html
+[cosubst]: Cat.Category.Stream.Terminality.html#StreamTerminal.cosubst
+[STRTerm]: Cat.Category.Stream.Terminality.html#StreamTerminal.Terminality
+[IT]: Cat.Category.TriMat.TriMat.html
+[ITAx]: Cat.Category.TriMat.Axioms.html
+[redec]: Cat.Category.TriMat.Terminality.html#TriMatTerminal.redec
+[ITTerm]: Cat.Category.TriMat.Terminality.html#TriMatTerminal.Terminality
