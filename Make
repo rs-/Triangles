@@ -6,8 +6,8 @@
 ./Category/RComonadWithCut.v
 ./Category/RComonad_RComonadWithCut.v
 ./Category/Setoids.v
-./Category/Sets.v
-./Category/Sets_Setoids.v
+./Category/Types.v
+./Category/Types_Setoids.v
 ./Misc/Unicode.v
 ./Theory/CartesianStrongMonoidal.v
 ./Theory/Category.v

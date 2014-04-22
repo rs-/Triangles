@@ -5,9 +5,9 @@ This table of contents give pointers in the Coq formalisation following the sect
 ## Preliminaries
 
 * [Category definition][Category]
-* [Category of Sets][Set]
+* [Category of Types][Type]
 * [Category of Setoids][Setoid]
-* [Functor 𝑬𝑸 : Set -> Setoid][EQ]
+* [Functor 𝑬𝑸 : Type -> Setoid][EQ]
 * [Cartesian strong monoidal functors][SMF]
   * [Functor 𝑬𝑸 is strong monoidal][SM_EQ]
 
@@ -50,11 +50,11 @@ This table of contents give pointers in the Coq formalisation following the sect
 
 
 [Category]: Cat.Theory.Category.html#Category
-[Set]: Cat.Category.Sets.html#𝑺𝒆𝒕
-[EQ]: Cat.Category.Sets_Setoids.html#𝑬𝑸
+[Type]: Cat.Category.Types.html#𝑻𝒚𝒑𝒆
+[EQ]: Cat.Category.Types_Setoids.html#𝑬𝑸
 [Setoid]: Cat.Category.Setoids.html#𝑺𝒆𝒕𝒐𝒊𝒅
 [SMF]: Cat.Theory.CartesianStrongMonoidal.html#CartesianStrongMonoidal
-[SM_EQ]: Cat.Category.Sets_Setoids.html#𝑬𝑸_SM
+[SM_EQ]: Cat.Category.Types_Setoids.html#𝑬𝑸_SM
 [RC]: Cat.Theory.RelativeComonad.html#RelativeComonad
 [FRC]: Cat.Theory.RelativeComonad.html#Functoriality
 [MRC]: Cat.Theory.RelativeComonad.html#Morphism

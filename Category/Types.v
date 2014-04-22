@@ -20,9 +20,9 @@ Require Import Theory.Category.
 Require Import Theory.Product.
 
 (*------------------------------------------------------------------------------
-  -- ＣＡＴＥＧＯＲＹ  ＯＦ  ＳＥＴＳ
+  -- ＣＡＴＥＧＯＲＹ  ＯＦ  ＴＹＰＥＳ
   ----------------------------------------------------------------------------*)
-(** * Category of Sets **)
+(** * Category of Types **)
 
 (** ** Type category definition **)
 
@@ -60,16 +60,16 @@ Proof.
   hnf ; intuition.
 Qed.
 
-Canonical Structure 𝑺𝒆𝒕 : Category :=
+Canonical Structure 𝑻𝒚𝒑𝒆 : Category :=
   mkCategory left_id right_id compose_assoc.
 
 (*------------------------------------------------------------------------------
-  -- ＳＥＴＳ  ＨＡＶＥ  ＢＩＮＡＲＹ  ＰＲＯＤＵＣＴ
+  -- ＴＹＰＥＳ  ＨＡＶＥ  ＢＩＮＡＲＹ  ＰＲＯＤＵＣＴ
   ----------------------------------------------------------------------------*)
-(** ** Sets have binary product **)
+(** ** Types have binary product **)
 
-Program Instance 𝑺𝒆𝒕_BinaryProduct : BinaryProduct 𝑺𝒆𝒕 :=
-  BinaryProduct.make  ⦃ Category  ≔ 𝑺𝒆𝒕
+Program Instance 𝑻𝒚𝒑𝒆_BinaryProduct : BinaryProduct 𝑻𝒚𝒑𝒆 :=
+  BinaryProduct.make  ⦃ Category  ≔ 𝑻𝒚𝒑𝒆
                       ; _×_       ≔ _⟨×⟩_
                       ; ⟨_,_⟩     ≔ λ C f g (c : C) ∙ (f c , g c)
                       ; π₁        ≔ fst

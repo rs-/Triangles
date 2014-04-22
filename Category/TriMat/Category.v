@@ -16,9 +16,9 @@
 
 *)
 
-Require Import Category.Sets.
+Require Import Category.Types.
 Require Import Category.Setoids.
-Require Import Category.Sets_Setoids.
+Require Import Category.Types_Setoids.
 Require Import Category.RComod.
 Require Import Category.RComonadWithCut.
 Require Import Theory.Category.
@@ -39,7 +39,7 @@ Generalizable All Variables.
 (** ** Object and morphism definitions **)
 Module TriMat.
 
-  Structure Obj (E : 𝑺𝒆𝒕) : Type := mkObj
+  Structure Obj (E : 𝑻𝒚𝒑𝒆) : Type := mkObj
   { T         :>  𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅𝑾𝒊𝒕𝒉𝑪𝒖𝒕 𝑬𝑸 E
   ; rest      :>  [T] ⇒ [T][E×─]
   ; rest_cut  :   ∀ {A}, rest(A) ∘ T⋅cut ≈ T⋅cut ∘ rest(E × A) }.
@@ -81,7 +81,7 @@ Export TriMat.
 Section Defs.
 
 
-  Variable (E : 𝑺𝒆𝒕).
+  Variable (E : 𝑻𝒚𝒑𝒆).
 
   Implicit Types (T S R U : Obj E).
 

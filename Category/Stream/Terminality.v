@@ -1,6 +1,6 @@
 Require Import Category.Setoids.
-Require Import Category.Sets.
-Require Import Category.Sets_Setoids.
+Require Import Category.Types.
+Require Import Category.Types_Setoids.
 Require Import Category.RComod.
 Require Import Category.RComonad.
 Require Import Category.Stream.Category.
@@ -94,7 +94,7 @@ Module StreamTerminal (Import Ax : StreamAxioms).
   Qed.
 
   (** ** Cosubstitution for streams **)
-  Definition cosubst {A B : 𝑺𝒆𝒕} (f : Stream A ⇒ B) : Stream A ⇒ Stream B :=
+  Definition cosubst {A B : 𝑻𝒚𝒑𝒆} (f : Stream A ⇒ B) : Stream A ⇒ Stream B :=
     corec f tail.
 
   (** ** Stream is a relative comonad over EQ **)

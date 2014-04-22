@@ -16,7 +16,7 @@
 
 *)
 
-Require Import Category.Sets.
+Require Import Category.Types.
 Require Import Category.Setoids.
 Require Import Theory.Category.
 Require Import Theory.Functor.
@@ -27,11 +27,11 @@ Require Import Theory.CartesianStrongMonoidal.
 (*------------------------------------------------------------------------------
   -- ＦＵＮＣＴＯＲ  ＥＱ
   ----------------------------------------------------------------------------*)
-(** * Functor 𝑬𝑸 : 𝑺𝒆𝒕 → 𝑺𝒆𝒕𝒐𝒊𝒅 **)
+(** * Functor 𝑬𝑸 : 𝑻𝒚𝒑𝒆 → 𝑺𝒆𝒕𝒐𝒊𝒅 **)
 
 (** ** Definition **)
 
-Program Definition F : 𝑺𝒆𝒕 → 𝑺𝒆𝒕𝒐𝒊𝒅 := λ T ∙ Setoids.make   ⦃ Carrier  ≔ T
+Program Definition F : 𝑻𝒚𝒑𝒆 → 𝑺𝒆𝒕𝒐𝒊𝒅 := λ T ∙ Setoids.make  ⦃ Carrier  ≔ T
                                                             ; Equiv    ≔ eq ⦄.
 
 Program Definition map {A B} : [ A ⇒ B ⟶ F A ⇒ F B ] :=
@@ -41,17 +41,17 @@ Next Obligation.
   now rewrite eq_xy.
 Qed.
 
-Definition id A : id[ F A ] ≈ map id[ A ].
+Lemma id A : id[ F A ] ≈ map id[ A ].
 Proof.
   intros x y eq_xy; now rewrite eq_xy.
 Qed.
 
-Definition map_compose A B C (f : A ⇒ B) (g : B ⇒ C) : map (g ∘ f) ≈ (map g) ∘ (map f).
+Lemma map_compose A B C (f : A ⇒ B) (g : B ⇒ C) : map (g ∘ f) ≈ (map g) ∘ (map f).
 Proof.
   intros x y eq_xy. now rewrite eq_xy.
 Qed.
 
-Definition 𝑬𝑸 : Functor 𝑺𝒆𝒕 𝑺𝒆𝒕𝒐𝒊𝒅 := mkFunctor id map_compose.
+Definition 𝑬𝑸 : Functor 𝑻𝒚𝒑𝒆 𝑺𝒆𝒕𝒐𝒊𝒅 := mkFunctor id map_compose.
 
 
 (*------------------------------------------------------------------------------
@@ -75,14 +75,14 @@ Qed.
 (*------------------------------------------------------------------------------
   -- ＦＵＮＣＴＯＲ  ＥＱ-×
   ----------------------------------------------------------------------------*)
-(** * Functor 𝑬𝑸-× : 𝑺𝒆𝒕 × 𝑺𝒆𝒕 → 𝑺𝒆𝒕𝒐𝒊𝒅 **)
+(** * Functor 𝑬𝑸-× : 𝑻𝒚𝒑𝒆 × 𝑻𝒚𝒑𝒆 → 𝑺𝒆𝒕𝒐𝒊𝒅 **)
 
 (** ** Definition **)
 
 
-Program Definition 𝑬𝑸_prod : Functor (𝑺𝒆𝒕 𝘅 𝑺𝒆𝒕) 𝑺𝒆𝒕𝒐𝒊𝒅 :=
-  Functor.make ⦃ F ≔ λ A ∙ Setoids.make ⦃ Carrier ≔ fst A ⟨×⟩ snd A
-                                        ; Equiv   ≔ eq ⦄
+Program Definition 𝑬𝑸_prod : Functor (𝑻𝒚𝒑𝒆 𝘅 𝑻𝒚𝒑𝒆) 𝑺𝒆𝒕𝒐𝒊𝒅 :=
+  Functor.make ⦃ F   ≔ λ A ∙ Setoids.make ⦃ Carrier ≔ fst A ⟨×⟩ snd A
+                                          ; Equiv ≔ eq ⦄
                ; map ≔ λ A B ∙ λ f ↦ Setoids.Morphism.make (λ x ∙ (fst f (fst x) , snd f (snd x))) ⦄.
 Next Obligation.
   eauto with typeclass_instances.

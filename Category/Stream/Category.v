@@ -1,6 +1,6 @@
-Require Import Category.Sets.
+Require Import Category.Types.
 Require Import Category.Setoids.
-Require Import Category.Sets_Setoids.
+Require Import Category.Types_Setoids.
 Require Import Category.RComonad.
 Require Import Category.RComod.
 Require Import Theory.Category.
