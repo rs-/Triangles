@@ -92,7 +92,8 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
   Lemma bisim_intro_bis : ∀ {A} {t₁ t₂ : Tri A}, top t₁ = top t₂ → rest t₁ ∼ rest t₂ → t₁ ∼ t₂.
   Proof.
     intros.
-    apply bisim_intro with (R := λ A (s₁ s₂ : Tri A) ∙ top s₁ = top s₂ ∧ rest s₁ ∼ rest s₂); [ clean_hyps; intros..|].
+    apply bisim_intro with (R := λ A (s₁ s₂ : Tri A) ∙ top s₁ = top s₂ ∧ rest s₁ ∼ rest s₂);
+      [ clean_hyps; intros..|].
     - tauto.
     - split. destruct H.
       + now apply top_cong.
@@ -102,11 +103,13 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
   Qed.
 
   Program Definition 𝒕𝒐𝒑 {A} : TRI A ⇒ 𝑬𝑸 A := Setoids.Morphism.make top.
+  (** top-cong **)
   Next Obligation.
     now apply top_cong.
   Qed.
 
   Program Definition 𝒓𝒆𝒔𝒕 {A} : TRI A ⇒ TRI (E ⟨×⟩ A) := Setoids.Morphism.make rest.
+  (** rest-cong **)
   Next Obligation.
     now apply rest_cong.
   Qed.
@@ -185,7 +188,10 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
   Proof.
     intros.
     apply bisim_intro
-      with (R := λ B (s₁ s₂ : Tri B) ∙ ∃ A (x y : Tri A) f, x ∼ y ∧ (∀ t₁ t₂, t₁ ∼ t₂ → f t₁ = f t₂) ∧ s₁ = redec f x ∧ s₂ = redec f y); [clean_hyps; intros..|].
+      with (R := λ B (s₁ s₂ : Tri B) ∙
+                  ∃ A (x y : Tri A) f,
+                      x ∼ y ∧ (∀ t₁ t₂, t₁ ∼ t₂ → f t₁ = f t₂)
+                    ∧ s₁ = redec f x ∧ s₂ = redec f y); [clean_hyps; intros..|].
     - destruct H as (B & x & y & f & eq_xy & f_proper & -> & ->).
       repeat rewrite top_redec. now apply f_proper.
     - destruct H as (B & x & y & f & eq_xy & f_proper & -> & ->).
@@ -216,7 +222,10 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
   Lemma redec_cut : ∀ {A B} {f : Tri A → B} {t}, redec f (cut t) ∼ cut (redec (lift f) t).
   Proof.
     intros.
-    apply bisim_intro with (R := λ B (s₁ s₂ : Tri B) ∙ exists A (x : Tri (E ⟨×⟩ A)) f, s₁ = redec f (cut x) ∧ s₂ = cut (redec (lift f) x)); [ clean_hyps; intros..|].
+    apply bisim_intro with (R := λ B (s₁ s₂ : Tri B) ∙
+                                  exists A (x : Tri (E ⟨×⟩ A)) f,
+                                    s₁ = redec f (cut x) ∧ s₂ = cut (redec (lift f) x));
+      [ clean_hyps; intros..|].
     - destruct H as (B & x & f & -> & ->).
       rewrite top_redec. rewrite top_cut. rewrite top_redec. reflexivity.
     - destruct H as (B & x & f & -> & ->).
@@ -237,12 +246,15 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
   Next Obligation.
     intros. apply redec_cong; auto. intros. now rewrite H0.
   Qed.
+  (** redec-cong₂ **)
   Next Obligation.
     intros X Y f g eq_fg x y eq_xy. rewrite eq_xy. apply redec_ext. intro t. now apply eq_fg.
   Qed.
+  (** cobind_counit **)
   Next Obligation.
     simpl. intros.
-    apply bisim_intro with (λ A (s₁ s₂ : Tri A) ∙ ∃ x y, x ∼ y ∧ s₁ ∼ redec top x ∧ s₂ = y); [clean_hyps; intros..|].
+    apply bisim_intro with (λ A (s₁ s₂ : Tri A) ∙ ∃ x y, x ∼ y ∧ s₁ ∼ redec top x ∧ s₂ = y);
+      [clean_hyps; intros..|].
     - destruct H as (x & y & eq_xy & eq & ->).
       etransitivity. eapply top_cong. apply eq.
       rewrite top_redec. now apply top_cong.
@@ -260,12 +272,17 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
       + apply H.
       + reflexivity.
   Qed.
+  (** counit-cobind **)
   Next Obligation.
     repeat intro. rewrite H. simpl. now rewrite top_redec.
   Qed.
+  (** cobind-cobind **)
   Next Obligation.
     intros X Y Z f g x y eq_xy. rewrite <- eq_xy. clear y eq_xy. simpl.
-    apply bisim_intro with (λ Z (s₁ s₂ : Tri Z) ∙ ∃ X Y (x : Tri X) (f : Tri X → Y) (g : Tri Y → Z), (∀ t₁ t₂, t₁ ∼ t₂ → g t₁ = g t₂) ∧ s₁ = redec g (redec f x) ∧ s₂ ∼ redec (λ y ∙ g (redec f y)) x);
+    apply bisim_intro with (λ Z (s₁ s₂ : Tri Z) ∙
+                              ∃ X Y (x : Tri X) (f : Tri X → Y) (g : Tri Y → Z),
+                                  (∀ t₁ t₂, t₁ ∼ t₂ → g t₁ = g t₂)
+                                ∧ s₁ = redec g (redec f x) ∧ s₂ ∼ redec (λ y ∙ g (redec f y)) x);
     [clean_hyps; intros..|].
     - destruct H as (X & Y & x & f & g & g_prp & -> & eq).
       symmetry. etransitivity. eapply top_cong; exact eq.
@@ -283,12 +300,15 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
       + intros. now rewrite H.
       + reflexivity.
   Qed.
+  (** cut-cong **)
   Next Obligation.
     intros. now apply cut_cong.
   Qed.
+  (** cut-counit **)
   Next Obligation.
     intros A x y eq_xy. rewrite eq_xy. simpl. now rewrite top_cut.
   Qed.
+  (** cut-cobind **)
   Next Obligation.
     intros A B f x y eq_xy. rewrite eq_xy. simpl.
     apply redec_cut.
@@ -403,7 +423,10 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
     Proof.
       intros A B f x y eq_xy. rewrite <- eq_xy. clear eq_xy.
       apply bisim_intro
-        with (R := λ B (s₁ s₂ : TRI B) ∙ ∃ A (x : T A) (f : TRI A ⇒ 𝑬𝑸 B), s₁ ∼ Tau (T⋅cobind (f ∘ Tau) x) ∧ s₂ = TRI⋅cobind f (Tau x)); [clean_hyps; intros..|].
+        with (R := λ B (s₁ s₂ : TRI B) ∙
+                    ∃ A (x : T A) (f : TRI A ⇒ 𝑬𝑸 B),
+                      s₁ ∼ Tau (T⋅cobind (f ∘ Tau) x) ∧ s₂ = TRI⋅cobind f (Tau x));
+        [clean_hyps; intros..|].
       - destruct H as (B & x & f & eq & ->).
         etransitivity. eapply top_cong; exact eq.
         etransitivity. apply top_tau.
@@ -453,6 +476,7 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
   Program Definition Terminality : Terminal (𝑻𝒓𝒊𝑴𝒂𝒕 E) :=
     Terminal.make  ⦃ one  ≔ 𝑻𝑹𝑰
                    ; top  ≔ τ ⦄.
+  (** top-unique **)
   Next Obligation.
     intros T f A x y eq_xy. rewrite <- eq_xy. clear eq_xy; simpl.
     apply bisim_intro

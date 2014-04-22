@@ -69,6 +69,7 @@ Module Setoids.
   Program Definition Hom (A B : Obj) : Setoid :=
     Setoid.make  ⦃ Carrier  ≔ Morphism A B
                  ; Equiv    ≔ λ f g ∙ ∀ x y, SEquiv x y → SEquiv (f x) (g y) ⦄.
+  (** equivalence **)
   Next Obligation.
     constructor.
     - intros f x y eq_xy. now apply cong.
@@ -89,9 +90,11 @@ Program Definition id {A} : A ⇒ A := Setoids.Morphism.make (λ x ∙ x).
 
 Program Definition compose {A B C} : [ B ⇒ C ⟶ A ⇒ B ⟶ A ⇒ C ] :=
   λ g f ↦₂ Setoids.Morphism.make (λ x ∙ g (f x)).
+(** g-cong **)
 Next Obligation.
   now do 2 apply cong.
 Qed.
+(** g-cong₂ **)
 Next Obligation.
   intros f₁ f₂ eq_f₁f₂ g₁ g₂ eq_g₁g₂ x y eq_xy; simpl.
   now apply eq_f₁f₂, eq_g₁g₂.
@@ -130,6 +133,7 @@ Section Product_construction.
   Program Definition product (A B : 𝑺𝒆𝒕𝒐𝒊𝒅) : 𝑺𝒆𝒕𝒐𝒊𝒅 :=
     Setoids.make  ⦃ Carrier  ≔ A ⟨×⟩ B
                   ; Equiv    ≔ λ S₁ S₂ ∙ fst S₁ ∼ fst S₂ ∧ snd S₁ ∼ snd S₂ ⦄.
+  (** equivalence **)
   Next Obligation.
     constructor; hnf.
     - intros [a  b]; split; reflexivity.
@@ -140,6 +144,7 @@ Section Product_construction.
 
   Program Definition product_mor (A B C : 𝑺𝒆𝒕𝒐𝒊𝒅) (f : C ⇒ A) (g : C ⇒ B) : C ⇒ product A B :=
     Setoids.Morphism.make (λ c ∙ (f c , g c)).
+  (** -,- cong **)
   Next Obligation.
     split; now apply cong.
   Qed.
@@ -157,14 +162,17 @@ Program Instance 𝑺𝒆𝒕𝒐𝒊𝒅_BinaryProduct : BinaryProduct 𝑺𝒆
                       ; ⟨_,_⟩     ≔ @product_mor _ _
                       ; π₁        ≔ proj_l
                       ; π₂        ≔ proj_r ⦄.
-Next Obligation. (* Pmor_cong₂ *)
+(** Pmor-cong₂ **)
+Next Obligation.
   intros f₁ f₂ eq_f₁f₂ g₁ g₂ eq_g₁g₂ x y eq_xy; simpl; split.
   - now apply eq_f₁f₂.
   - now apply eq_g₁g₂.
 Qed.
+(** π₁-cong **)
 Next Obligation.
   now apply cong.
 Qed.
+(** π₂-cong **)
 Next Obligation.
   now apply cong.
 Qed.

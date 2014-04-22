@@ -36,6 +36,7 @@ Program Definition F : 𝑻𝒚𝒑𝒆 → 𝑺𝒆𝒕𝒐𝒊𝒅 := λ T ∙
 
 Program Definition map {A B} : [ A ⇒ B ⟶ F A ⇒ F B ] :=
   λ f ↦ Setoids.Morphism.make f.
+(** f-cong **)
 Next Obligation.
   intros f g eq_fg x y eq_xy; simpl.
   now rewrite eq_xy.
@@ -61,9 +62,11 @@ Definition 𝑬𝑸 : Functor 𝑻𝒚𝒑𝒆 𝑺𝒆𝒕𝒐𝒊𝒅 := mkFun
 
 Program Instance 𝑬𝑸_SM : CartesianStrongMonoidal 𝑬𝑸 :=
   CartesianStrongMonoidal.make ⦃ φ ≔ λ A B ∙ Setoids.Morphism.make (λ x ∙ x) ⦄.
+(** φ-cong **)
 Next Obligation.
   now f_equal.
 Qed.
+(** φ-inverse **)
 Next Obligation.
   constructor.
   - (* iso_left *)
@@ -84,9 +87,11 @@ Program Definition 𝑬𝑸_prod : Functor (𝑻𝒚𝒑𝒆 𝘅 𝑻𝒚𝒑�
   Functor.make ⦃ F   ≔ λ A ∙ Setoids.make ⦃ Carrier ≔ fst A ⟨×⟩ snd A
                                           ; Equiv ≔ eq ⦄
                ; map ≔ λ A B ∙ λ f ↦ Setoids.Morphism.make (λ x ∙ (fst f (fst x) , snd f (snd x))) ⦄.
+(** equivalence **)
 Next Obligation.
   eauto with typeclass_instances.
 Qed.
+(** map-proper **)
 Next Obligation.
   intros [? ?] [? ?] [? ?] [? ?] [? ?] eq. injection eq; intros.
   simpl in *; f_equal; congruence.

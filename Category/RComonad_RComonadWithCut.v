@@ -43,35 +43,44 @@ Section Defs.
     Functor.make  ⦃ F    ≔ λ T ∙ RelativeComonadWithCut.make  ⦃ RelativeComonad  ≔ T
                                                               ; cut              ≔ λ A ∙ Lift(T) ⋅ π₂ ⦄
                   ; map  ≔ λ T S ∙ λ τ ↦ RelativeComonadWithCut.make ⦃ RelativeComonad-τ ≔ τ ⦄ ⦄.
+  (** cut-counit **)
   Next Obligation.
     now rewrite counit_cobind.
   Qed.
+  (** cobind-cobind **)
   Next Obligation.
     do 2 rewrite cobind_cobind. apply Π.cong.
     now rewrite compose_assoc, counit_cobind,
                 <- compose_assoc, Fπ₂_φ_inv, π₂_compose.
   Qed.
+  (** cut-cobind **)
   Next Obligation.
     now rewrite (RelativeComonad.τ_counit τ), <- compose_assoc, RelativeComonad.τ_commutes.
   Qed.
+  (** map-cong **)
   Next Obligation.
     intros f g eq_fg x. auto.
   Qed.
+  (** map-id **)
   Next Obligation.
     reflexivity.
   Qed.
+  (** map-compose **)
   Next Obligation.
     reflexivity.
   Qed.
 
   Program Definition 𝑼 : Functor (𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅𝑾𝒊𝒕𝒉𝑪𝒖𝒕 F E) (𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅 F) :=
     Functor.make ⦃ F ≔ λ T ∙ T ; map ≔ λ A B ∙ λ τ ↦ τ ⦄.
+  (** map-cong **)
   Next Obligation.
     repeat intro; auto.
   Qed.
+  (** map-id **)
   Next Obligation.
     reflexivity.
   Qed.
+  (** map-compose **)
   Next Obligation.
     reflexivity.
   Qed.

@@ -28,6 +28,7 @@ Require Import Theory.Product.
 
 Program Definition Hom (A B : Type) : Setoid := Setoid.make ⦃ Carrier ≔ A → B
                                                            ; Equiv   ≔ λ f g ∙ ∀ x, f x = g x ⦄.
+(** equivalence **)
 Next Obligation.
   constructor; hnf; simpl; [ reflexivity | now symmetry | etransitivity ; eauto ].
 Qed.
@@ -38,6 +39,7 @@ Definition id {A} : A ⇒ A := λ x ∙ x.
 
 Program Definition compose {A B C} : [ B ⇒ C ⟶ A ⇒ B ⟶ A ⇒ C ] :=
   Π₂.make (λ g f x ∙ g (f x)).
+(** g-cong₂ **)
 Next Obligation.
   intros f₁ f₂ eq_f₁f₂ g₁ g₂ eq_g₁g₂ x.
   now rewrite eq_f₁f₂, eq_g₁g₂.
@@ -74,10 +76,12 @@ Program Instance 𝑻𝒚𝒑𝒆_BinaryProduct : BinaryProduct 𝑻𝒚𝒑𝒆
                       ; ⟨_,_⟩     ≔ λ C f g (c : C) ∙ (f c , g c)
                       ; π₁        ≔ fst
                       ; π₂        ≔ snd ⦄.
-Next Obligation. (* Pmor_cong₂ *)
+(** Pmor-cong₂ **)
+Next Obligation.
   intros f₁ f₂ eq_f₁f₂ g₁ g₂ eq_g₁g₂ x. now f_equal.
 Qed.
-Next Obligation. (* Pmor_universal *)
+(** Pmor-universal **)
+Next Obligation.
   rewrite <- H. rewrite <- H0.
   remember (i x); destruct (i x); now subst.
 Qed.

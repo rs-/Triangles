@@ -65,6 +65,7 @@ Module TriMat.
   Program Definition Hom {E} (T S : Obj E) : Setoid :=
     Setoid.make   ⦃ Carrier  ≔ Morphism T S
                   ; Equiv    ≔ (λ g f ∙ g ≈ f) ⦄.
+  (** equivalence **)
   Next Obligation.
     constructor.
     - repeat intro. now rewrite H.
@@ -89,6 +90,7 @@ Section Defs.
 
   Program Definition id {T} : T ⇒ T :=
     TriMat.make ⦃ τ ≔ id[T] ⦄.
+  (** τ-cong **)
   Next Obligation.
     now rewrite H.
   Qed.
@@ -96,6 +98,7 @@ Section Defs.
   Obligation Tactic := idtac.
   Program Definition compose {T S R} : [ S ⇒ R ⟶ T ⇒ S ⟶ T ⇒ R ] :=
     λ g f ↦₂ TriMat.make ⦃ τ ≔ g ∘ f ⦄.
+  (** τ-commutes **)
   Next Obligation.
     intros T S R g f.
     destruct g as [g g_commutes]. simpl in g_commutes.
@@ -109,6 +112,7 @@ Section Defs.
     apply g_commutes.
     reflexivity.
   Qed.
+  (** τ-cong **)
   Next Obligation.
     repeat intro.
     simpl.

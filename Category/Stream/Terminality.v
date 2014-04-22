@@ -84,11 +84,13 @@ Module StreamTerminal (Import Ax : StreamAxioms).
   Qed.
 
   Program Definition 𝒉𝒆𝒂𝒅 {A} : STREAM A ⇒ 𝑬𝑸 A := Setoids.Morphism.make head.
+  (** head-cong **)
   Next Obligation.
     now apply head_cong.
   Qed.
 
   Program Definition 𝒕𝒂𝒊𝒍 {A} : STREAM A ⇒ STREAM A := Setoids.Morphism.make tail.
+  (** tail-cong **)
   Next Obligation.
     now apply tail_cong.
   Qed.
@@ -103,6 +105,7 @@ Module StreamTerminal (Import Ax : StreamAxioms).
     RelativeComonad.make  ⦃ T       ≔ STREAM
                           ; counit  ≔ λ X ∙ 𝒉𝒆𝒂𝒅
                           ; cobind  ≔ λ X Y ∙ λ f ↦ Setoids.Morphism.make (cosubst f) ⦄.
+  (** cosubst-cong **)
   Next Obligation.
     intros.
     apply bisim_intro with (λ s₁ s₂ ∙ ∃ x y, x ∼ y ∧ s₁ = cosubst f x ∧ s₂ = cosubst f y)
@@ -117,6 +120,7 @@ Module StreamTerminal (Import Ax : StreamAxioms).
       + unfold cosubst at 1. rewrite tail_corec. reflexivity.
       + unfold cosubst at 1. rewrite tail_corec. reflexivity.
   Qed.
+  (** cosubst-cong₂ **)
   Next Obligation.
     intros X Y f g eq_fg x y eq_xy. simpl.
     apply bisim_intro with (λ s₁ s₂ ∙ ∃ x y, x ∼ y ∧ s₁ = cosubst f x ∧ s₂ = cosubst g y); [intros..|eauto].
@@ -131,6 +135,7 @@ Module StreamTerminal (Import Ax : StreamAxioms).
       + unfold cosubst at 1. rewrite tail_corec. reflexivity.
       + unfold cosubst at 1. rewrite tail_corec. reflexivity.
   Qed.
+  (** cobind-counit **)
   Next Obligation.
     simpl. intros.
     apply bisim_intro with (λ s₁ s₂ ∙ ∃ x y, x ∼ y ∧ s₁ = cosubst head x ∧ s₂ = y); [clean_hyps; intros..|eauto].
@@ -143,9 +148,11 @@ Module StreamTerminal (Import Ax : StreamAxioms).
       + unfold cosubst at 1. rewrite tail_corec. reflexivity.
       + reflexivity.
   Qed.
+  (** counit-cobind **)
   Next Obligation.
     repeat intro. rewrite H. simpl. unfold cosubst. now rewrite head_corec.
   Qed.
+  (** cobind-cobind **)
   Next Obligation.
     intros X Y Z f g x y eq_xy. rewrite <- eq_xy. clear y eq_xy. simpl.
     apply bisim_intro with (λ s₁ s₂ ∙ ∃ x, s₁ = cosubst g (cosubst f x) ∧ s₂ = cosubst (λ y ∙ g (cosubst f y)) x);
@@ -161,9 +168,11 @@ Module StreamTerminal (Import Ax : StreamAxioms).
   (** ** Stream coalgebra **)
   Program Definition 𝑻𝒂𝒊𝒍 : ‵ [𝑺𝒕𝒓] ⇒ [𝑺𝒕𝒓] ′ :=
     Comodule.make ⦃ α ≔ λ A ∙ Setoids.Morphism.make 𝒕𝒂𝒊𝒍 ⦄.
+  (** tail-cong **)
   Next Obligation.
     intros A x y eq_xy; now rewrite eq_xy.
   Qed.
+  (** α-commutes **)
   Next Obligation.
     intros C D f x y eq_xy. rewrite eq_xy. apply eq_bisim. simpl. unfold cosubst. now rewrite tail_corec.
   Qed.
@@ -214,6 +223,7 @@ Module StreamTerminal (Import Ax : StreamAxioms).
 
     Program Definition Tau {A} : T A ⇒ STR A :=
       Setoids.Morphism.make tau.
+    (** tau-cong **)
     Next Obligation.
       intros. now apply tau_cong.
     Qed.
@@ -273,6 +283,7 @@ Module StreamTerminal (Import Ax : StreamAxioms).
   Program Definition Terminality : Terminal 𝑺𝒕𝒓𝒆𝒂𝒎 :=
     Terminal.make  ⦃ one  ≔ 𝑺𝑻𝑹
                    ; top  ≔ τ ⦄.
+  (** top-unique **)
   Next Obligation.
     intros A f X x y eq_xy. rewrite <- eq_xy. clear y eq_xy. simpl.
     apply bisim_intro with (λ s₁ s₂ ∙ ∃ x, s₁ ∼ ⟨f⟩ _ x ∧ s₂ ∼ tau A x); [clean_hyps; intros..|].
