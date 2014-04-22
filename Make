@@ -29,7 +29,7 @@
 ./Category/TriMat/Terminality.v
 ./Category/TriMat/Model.v
 
-./Category/Stream/Stream.v
+./Category/Stream/Category.v
 ./Category/Stream/Axioms.v
 ./Category/Stream/Terminality.v
 ./Category/Stream/Model.v

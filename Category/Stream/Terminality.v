@@ -3,7 +3,7 @@ Require Import Category.Sets.
 Require Import Category.Sets_Setoids.
 Require Import Category.RComod.
 Require Import Category.RComonad.
-Require Import Category.Stream.Stream.
+Require Import Category.Stream.Category.
 Require Import Category.Stream.Axioms.
 Require Import Theory.Category.
 Require Import Theory.InitialTerminal.

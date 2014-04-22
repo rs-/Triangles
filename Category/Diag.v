@@ -1,5 +1,5 @@
 Require Import Category.RComod.
-Require Import Category.Stream.Stream.
+Require Import Category.Stream.Category.
 Require Import Category.Stream.Model.
 Require Import Category.TriMat.Axioms.
 Require Import Category.TriMat.Model.

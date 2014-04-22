@@ -74,7 +74,7 @@ This table of contents give pointers in the Coq formalisation following the sect
 [PCRCC]: Cat.Theory.PushforwardComodule.html#Commutes
 [TM]: Cat.Category.TriMat.html#𝑻𝒓𝒊𝑴𝒂𝒕
 [CS]: Cat.Category.Coinitiality.html#Coinitiality
-[STR]: Cat.Category.Stream.Stream.html
+[STR]: Cat.Category.Stream.Category.html
 [STRAx]: Cat.Category.Stream.Axioms.html
 [cosubst]: Cat.Category.Stream.Terminality.html#StreamTerminal.cosubst
 [STRTerm]: Cat.Category.Stream.Terminality.html#StreamTerminal.Terminality
