@@ -55,8 +55,7 @@ Notation "'Category.make' ⦃ 'Hom' ≔ Hom ; 'id' ≔ id ; 'compose' ≔ compos
   (@mkCategory _ Hom id compose _ _ _) (only parsing).
 
 
-(* Program Definition HomProd (𝒞 𝒟 : Category) : Setoid := *)
-(*   Setoid.make ⦃ Carrier ≔ \M *)
+(** ** Product of categories **)
 
 Local Notation π₁ := fst.
 Local Notation π₂ := snd.
