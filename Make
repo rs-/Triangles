@@ -24,7 +24,7 @@
 ./Theory/RelativeComonadWithCut.v
 ./Theory/SetoidType.v
 
-./Category/TriMat/TriMat.v
+./Category/TriMat/Category.v
 ./Category/TriMat/Axioms.v
 ./Category/TriMat/Terminality.v
 ./Category/TriMat/Model.v

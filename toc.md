@@ -78,7 +78,7 @@ This table of contents give pointers in the Coq formalisation following the sect
 [STRAx]: Cat.Category.Stream.Axioms.html
 [cosubst]: Cat.Category.Stream.Terminality.html#StreamTerminal.cosubst
 [STRTerm]: Cat.Category.Stream.Terminality.html#StreamTerminal.Terminality
-[IT]: Cat.Category.TriMat.TriMat.html
+[IT]: Cat.Category.TriMat.Category.html
 [ITAx]: Cat.Category.TriMat.Axioms.html
 [redec]: Cat.Category.TriMat.Terminality.html#TriMatTerminal.redec
 [ITTerm]: Cat.Category.TriMat.Terminality.html#TriMatTerminal.Terminality

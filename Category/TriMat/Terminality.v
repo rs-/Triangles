@@ -4,7 +4,7 @@ Require Import Category.Sets_Setoids.
 Require Import Category.RComod.
 Require Import Category.RComonad.
 Require Import Category.RComonadWithCut.
-Require Import Category.TriMat.TriMat.
+Require Import Category.TriMat.Category.
 Require Import Category.TriMat.Axioms.
 Require Import Theory.Category.
 Require Import Theory.InitialTerminal.
