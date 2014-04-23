@@ -2,7 +2,7 @@
 
    Benedikt Ahrens and Régis Spadotti
 
-   Coinitial semantics for redecoration of triangular matrices
+   Terminal semantics for codata types in intensional Martin-Löf type theory
 
    http://arxiv.org/abs/1401.1053
 
