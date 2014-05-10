@@ -38,3 +38,4 @@
 
 ./Theory/CoAlgebra.v
 ./Category/CoAlg.v
+./Theory/Lambek.v
