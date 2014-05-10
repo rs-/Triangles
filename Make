@@ -35,3 +35,6 @@
 ./Category/Stream/Model.v
 
 ./Category/Diag.v
+
+./Theory/CoAlgebra.v
+./Category/CoAlg.v
