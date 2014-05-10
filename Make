@@ -39,3 +39,5 @@
 ./Theory/CoAlgebra.v
 ./Category/CoAlg.v
 ./Theory/Lambek.v
+
+./Category/Stream_Terminal_Axioms.v
