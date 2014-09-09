@@ -107,11 +107,11 @@ Section tautological_comodule.
     Comodule.make  ⦃ M        ≔ T
                    ; mcobind  ≔ λ C D ∙ T⋅cobind ⦄.
   (** mcobind-counit *)
-  Next Obligation. 
+  Next Obligation.
     now rewrite cobind_counit.
   Qed.
   (** mcobind-mcobind *)
-  Next Obligation. 
+  Next Obligation.
     now rewrite cobind_cobind.
   Qed.
 
@@ -130,7 +130,7 @@ Section induced_morphism.
   Program Definition induced_morphism : ‵ τ⁎T ⇒ S ′ :=
     Comodule.make ⦃ α ≔ λ C ∙ τ(C) ⦄.
   (** α-commutes **)
-  Next Obligation. 
+  Next Obligation.
     now rewrite τ_commutes.
   Qed.
 

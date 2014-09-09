@@ -77,6 +77,3 @@ Section CUT_NT.
   Qed.
 
 End CUT_NT.
-
-
-

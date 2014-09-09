@@ -1,17 +1,17 @@
 (*
 
    Benedikt Ahrens and Régis Spadotti
-   
+
    Terminal semantics for codata types in intensional Martin-Löf type theory
-   
+
    http://arxiv.org/abs/1401.1053
 
 *)
 
-(* 
+(*
 
   Content of this file:
-  
+
   definition of the functor [EQ] from sets to setoids, proof that it is strong monoidal
 
 *)
