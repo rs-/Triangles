@@ -25,7 +25,7 @@ Require Import Theory.RelativeComonad.
 Require Import Theory.RelativeComonadWithCut.
 Require Import Theory.Comodule.
 Require Import Theory.Product.
-Require Import Theory.CartesianStrongMonoidal.
+Require Import Theory.ProductPreservingFunctor.
 
 Generalizable All Variables.
 
@@ -39,7 +39,7 @@ Generalizable All Variables.
 Section PrecompositionWithProduct.
 
   Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟} {F : Functor 𝒞  𝒟}
-          {E : 𝒞} `{!CartesianStrongMonoidal F} {T : RelativeComonadWithCut F E}
+          {E : 𝒞} `{!ProductPreservingFunctor F} {T : RelativeComonadWithCut F E}
           {ℰ : Category} (M : Comodule T ℰ).
 
   Program Definition precomposition_with_product : Comodule T ℰ :=
@@ -69,7 +69,7 @@ Notation "M [ E '×─' ] " := (precomposition_with_product E M) (at level 0).
 Section Morphisms.
 
   Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟} (F : Functor 𝒞  𝒟)
-          (E : 𝒞) `{!CartesianStrongMonoidal F} (T : RelativeComonadWithCut F E)
+          (E : 𝒞) `{!ProductPreservingFunctor F} (T : RelativeComonadWithCut F E)
           (ℰ : Category) (M : Comodule T ℰ) (N : Comodule T ℰ) (α : M ⇒ N).
 
   Program Definition precomposition_with_product_mor : ‵ M[E×─] ⇒ N[E×─] ′ :=

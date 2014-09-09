@@ -8,8 +8,9 @@ This table of contents give pointers in the Coq formalisation following the sect
 * [Category of Types][Type]
 * [Category of Setoids][Setoid]
 * [Functor 𝑬𝑸 : Type -> Setoid][EQ]
-* [Cartesian strong monoidal functors][SMF]
-  * [Functor 𝑬𝑸 is strong monoidal][SM_EQ]
+* [Product definition][Product]
+* [Product-preserving functor definition][SMF]
+  * [Functor 𝑬𝑸 preserves product][SM_EQ]
 
 ## Codata types in intensional Martin-Löf type theory
 
@@ -53,7 +54,8 @@ This table of contents give pointers in the Coq formalisation following the sect
 [Type]: Cat.Category.Types.html#𝑻𝒚𝒑𝒆
 [EQ]: Cat.Category.Types_Setoids.html#𝑬𝑸
 [Setoid]: Cat.Category.Setoids.html#𝑺𝒆𝒕𝒐𝒊𝒅
-[SMF]: Cat.Theory.CartesianStrongMonoidal.html#CartesianStrongMonoidal
+[Product]: Cat.Theory.Product.html
+[SMF]: Cat.Theory.ProductPreservingFunctor.html#ProductPreservingFunctor
 [SM_EQ]: Cat.Category.Types_Setoids.html#𝑬𝑸_SM
 [RC]: Cat.Theory.RelativeComonad.html#RelativeComonad
 [FRC]: Cat.Theory.RelativeComonad.html#Functoriality

@@ -25,7 +25,7 @@ Require Import Theory.NaturalTransformation.
 Require Import Theory.RelativeComonad.
 Require Import Theory.RelativeComonadWithCut.
 Require Import Theory.Product.
-Require Import Theory.CartesianStrongMonoidal.
+Require Import Theory.ProductPreservingFunctor.
 
 Generalizable All Variables.
 
@@ -33,7 +33,7 @@ Generalizable All Variables.
 
 Section CUT_NT.
 
-  Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟} {F : Functor 𝒞 𝒟} `{!CartesianStrongMonoidal F}
+  Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟} {F : Functor 𝒞 𝒟} `{!ProductPreservingFunctor F}
           {E : 𝒞} (T : RelativeComonadWithCut F E).
 
 

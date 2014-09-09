@@ -28,7 +28,7 @@ Require Import Theory.RelativeComonad.
 Require Import Theory.RelativeComonadWithCut.
 Require Import Theory.Comodule.
 Require Import Theory.Product.
-Require Import Theory.CartesianStrongMonoidal.
+Require Import Theory.ProductPreservingFunctor.
 Require Import Theory.PrecompositionWithProduct.
 
 Generalizable All Variables.
@@ -141,7 +141,7 @@ Notation "⟨ τ ⟩" := (induced_morphism τ) (at level 0).
 Section Commutes.
 
   Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟} {F : Functor 𝒞 𝒟}
-          {E : 𝒞} `{!CartesianStrongMonoidal F} {T S : RelativeComonadWithCut F E}
+          {E : 𝒞} `{!ProductPreservingFunctor F} {T S : RelativeComonadWithCut F E}
           {τ : T ⇒ S} `{M : Comodule T ℰ}.
 
   Program Definition Φ : ‵ τ⁎(M[E×─]) ⇒ (τ⁎M)[E×─] ′ :=

@@ -24,7 +24,7 @@ Require Import Theory.Functor.
 Require Import Theory.RelativeComonad.
 Require Import Theory.Comodule.
 Require Import Theory.Product.
-Require Import Theory.CartesianStrongMonoidal.
+Require Import Theory.ProductPreservingFunctor.
 
 Generalizable All Variables.
 
@@ -39,7 +39,7 @@ Generalizable All Variables.
 Section Defs.
 
   Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟}
-          (F : Functor 𝒞 𝒟) (E : 𝒞) `{!CartesianStrongMonoidal F}.
+          (F : Functor 𝒞 𝒟) (E : 𝒞) `{!ProductPreservingFunctor F}.
 
   Section ExtendConstruction.
 
@@ -93,7 +93,7 @@ Notation "'RelativeComonadWithCut.make' ⦃ 'T' ≔ T ; 'counit' ≔ counit ; 'c
 Section MDefs.
 
   Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟}
-          {F : Functor 𝒞 𝒟} {E : 𝒞} `{!CartesianStrongMonoidal F}.
+          {F : Functor 𝒞 𝒟} {E : 𝒞} `{!ProductPreservingFunctor F}.
 
   Local Notation "[ R ]" := (T R) (only parsing).
 
@@ -118,7 +118,7 @@ Module Morphism.
   Section id_composition.
 
     Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟}
-            {F : Functor 𝒞 𝒟} {E : 𝒞} `{!CartesianStrongMonoidal F}.
+            {F : Functor 𝒞 𝒟} {E : 𝒞} `{!ProductPreservingFunctor F}.
 
     Implicit Types (T S U : RelativeComonadWithCut F E).
 
@@ -158,7 +158,7 @@ End Morphism.
 Section CanonicalCut.
 
   Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟}
-          {F : Functor 𝒞 𝒟} (E : 𝒞) `{!CartesianStrongMonoidal F}.
+          {F : Functor 𝒞 𝒟} (E : 𝒞) `{!ProductPreservingFunctor F}.
 
   Program Definition ccut (R : RelativeComonad F) : RelativeComonadWithCut F E :=
     RelativeComonadWithCut.make ⦃ RelativeComonad ≔ R ; cut ≔ λ A ∙ lift R π₂[E,A] ⦄.

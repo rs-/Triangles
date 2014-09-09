@@ -22,7 +22,7 @@ Require Import Theory.Category.
 Require Import Theory.Functor.
 Require Import Theory.Product.
 Require Import Theory.Isomorphism.
-Require Import Theory.CartesianStrongMonoidal.
+Require Import Theory.ProductPreservingFunctor.
 
 (*------------------------------------------------------------------------------
   -- ＦＵＮＣＴＯＲ  ＥＱ
@@ -56,12 +56,12 @@ Definition 𝑬𝑸 : Functor 𝑻𝒚𝒑𝒆 𝑺𝒆𝒕𝒐𝒊𝒅 := mkFun
 
 
 (*------------------------------------------------------------------------------
-  -- ＥＱ  ＩＳ  ＳＴＲＯＮＧ  ＭＯＮＯＩＤＡＬ
+  -- ＥＱ  ＩＳ  ＰＲＥＳＥＶＥＳ  ＰＲＯＤＵＣＴ
   ----------------------------------------------------------------------------*)
 (** ** 𝑬𝑸 is strong monoidal **)
 
-Program Instance 𝑬𝑸_SM : CartesianStrongMonoidal 𝑬𝑸 :=
-  CartesianStrongMonoidal.make ⦃ φ ≔ λ A B ∙ Setoids.Morphism.make (λ x ∙ x) ⦄.
+Program Instance 𝑬𝑸_PF : ProductPreservingFunctor 𝑬𝑸 :=
+  ProductPreservingFunctor.make ⦃ φ ≔ λ A B ∙ Setoids.Morphism.make (λ x ∙ x) ⦄.
 (** φ-cong **)
 Next Obligation.
   now f_equal.

@@ -24,30 +24,30 @@ Require Import Theory.Product.
 Generalizable All Variables.
 
 (*------------------------------------------------------------------------------
-  -- ＣＡＲＴＥＳＩＡＮ  ＳＴＲＯＮＧ  ＭＯＮＯＩＤＡＬ  ＦＵＮＣＴＯＲ  ＤＥＦＩＮＩＴＩＯＮ
+  -- ＰＲＯＤＵＣＴ-ＰＲＥＳＥＲＶＩＮＧ  ＦＵＮＣＴＯＲ  ＤＥＦＩＮＩＴＩＯＮ
   ----------------------------------------------------------------------------*)
-(** * Cartesian strong monoidal functor **)
+(** * Product-preserving functor **)
 
 (** ** Definition **)
 
-Section StrongMonoidal.
+Section ProductPreservingFunctor.
 
   Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟} (F : Functor 𝒞 𝒟).
 
   Definition φ (A B : 𝒞) : F (A × B) ⇒ F A × F B := ⟨ F ⋅ π₁ , F ⋅ π₂ ⟩.
 
-  Class CartesianStrongMonoidal := mkCartesianStrongMonoidal
+  Class ProductPreservingFunctor := mkProductPreservingFunctor
   { φ_inv        : ∀ {A B}, F A × F B ⇒ F (A × B)
   ; φ_is_inverse :> ∀ {A B}, IsInverse (φ A B) φ_inv }.
 
 
-End StrongMonoidal.
+End ProductPreservingFunctor.
 
-Arguments mkCartesianStrongMonoidal {_ _ _ _ _ _} _.
+Arguments mkProductPreservingFunctor {_ _ _ _ _ _} _.
 Arguments φ {_ _ _ _ _ _ _}.
 
-Notation "'CartesianStrongMonoidal.make' ⦃ 'φ' ≔ φ ⦄" :=
-  (@mkCartesianStrongMonoidal _ _ _ _ _ φ _) (only parsing).
+Notation "'ProductPreservingFunctor.make' ⦃ 'φ' ≔ φ ⦄" :=
+  (@mkProductPreservingFunctor _ _ _ _ _ φ _) (only parsing).
 
 
 (** ** Equations **)
@@ -56,7 +56,7 @@ Notation "'CartesianStrongMonoidal.make' ⦃ 'φ' ≔ φ ⦄" :=
 Section equations.
 (* end hide *)
 
-  Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟} {F : Functor 𝒞 𝒟} `{!CartesianStrongMonoidal F}.
+  Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟} {F : Functor 𝒞 𝒟} `{!ProductPreservingFunctor F}.
 
   Lemma Fπ₁_φ_inv : ∀ {A B}, F ⋅ π₁ ∘ φ⁻¹ ≈ π₁[F A, F B].
   Proof.

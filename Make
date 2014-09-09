@@ -9,7 +9,7 @@
 ./Category/Types.v
 ./Category/Types_Setoids.v
 ./Misc/Unicode.v
-./Theory/CartesianStrongMonoidal.v
+./Theory/ProductPreservingFunctor.v
 ./Theory/Category.v
 ./Theory/Comodule.v
 ./Theory/Functor.v
