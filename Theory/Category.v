@@ -16,6 +16,8 @@
 
 *)
 
+Set Universe Polymorphism.
+
 Require Export Misc.Unicode.
 Require Export Theory.Notations.
 Require Export Theory.SetoidType.
