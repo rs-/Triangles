@@ -61,7 +61,7 @@ Module StreamInstance : StreamAxioms.
   Proof.
     cofix Hc; constructor; intros.
     - now apply R_head.
-    - eapply Hc; eauto. now apply R_tail.
+    - eapply Hc; eauto.
   Qed.
 
 End StreamInstance.

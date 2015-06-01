@@ -16,8 +16,8 @@ Module TriInstance (Import TE : Typ) <: TriMatAxioms TE.
     constr : A → Tri_ (E ⟨×⟩ A) → Tri_ A.
 
   Definition Tri : Type → Type := Tri_.
-  Definition top : ∀ {A}, Tri A → A := λ _ t ∙ let '(constr x _) := t in x.
-  Definition rest : ∀ {A}, Tri A → Tri (E ⟨×⟩ A) := λ _ t ∙ let '(constr _ t') := t in t'.
+  Definition top : ∀ {A}, Tri A → A := λ _ t ∙ let '(constr _ x _) := t in x.
+  Definition rest : ∀ {A}, Tri A → Tri (E ⟨×⟩ A) := λ _ t ∙ let '(constr _ _ t') := t in t'.
 
   (** Corecursor on Tri **)
   Definition corec {T : Type → Type} (tp : ∀ A, T A → A) (rt : ∀ A, T A → T (E ⟨×⟩ A)) : ∀ {A}, T A → Tri A :=
@@ -63,7 +63,7 @@ Module TriInstance (Import TE : Typ) <: TriMatAxioms TE.
   Proof.
     cofix Hc; constructor; intros.
     - now apply R_top.
-    - eapply Hc; eauto. now apply R_rest.
+    - eapply Hc; eauto.
   Qed.
 
 

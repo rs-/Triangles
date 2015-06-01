@@ -163,10 +163,10 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
   Definition redec {A B} (f : Tri A → B) (t : Tri A) : Tri B :=
     @corec (λ B ∙ { A : Type & Tri A → B & Tri A})
            (* top *)
-           (λ _ t ∙ let '(existT2 A f t) := t
+           (λ _ t ∙ let '(existT2 _ _ A f t) := t
                     in f t)
            (* rest *)
-           (λ _ t ∙ let '(existT2 A f t) := t
+           (λ _ t ∙ let '(existT2 _ _ A f t) := t
                     in existT2 _ _ (E ⟨×⟩ A) (lift f) (rest t))
            B (existT2 (λ A ∙ Tri A → B) (λ A ∙ Tri A) A f t).
 
