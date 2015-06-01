@@ -54,6 +54,18 @@ Notation "T '-id[' X ]"  := (id (c := T) (A := X)) (at level 0, only parsing).
 Notation "'Category.make' ⦃ 'Hom' ≔ Hom ; 'id' ≔ id ; 'compose' ≔ compose ⦄" :=
   (@mkCategory _ Hom id compose _ _ _) (only parsing).
 
+(** ** Opposite category **)
+
+Program Definition op_cat (𝒞 : Category) : Category :=
+  Category.make ⦃ Hom ≔ λ (A B : 𝒞) ∙ B ⇒ A
+                ; id  ≔ λ _ ∙ id
+                ; compose ≔ λ _ _ _ ∙ λ g f ↦₂ f ∘ g ⦄.
+Next Obligation. solve_proper. Qed.
+Next Obligation. now rewrite right_id. Qed.
+Next Obligation. now rewrite left_id. Qed.
+Next Obligation. now rewrite compose_assoc. Qed.
+
+Notation "𝒞 '^op'" := (op_cat 𝒞) (at level 3, no associativity, format "𝒞 '^op'").
 
 (** ** Product of categories **)
 
