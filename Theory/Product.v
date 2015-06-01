@@ -17,6 +17,8 @@
 
 *)
 
+Set Universe Polymorphism.
+
 Require Import Theory.Category.
 
 Generalizable All Variables.

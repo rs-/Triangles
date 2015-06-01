@@ -16,6 +16,8 @@
 
 *)
 
+Set Universe Polymorphism.
+
 Require Import Theory.Category.
 Require Import Theory.Product.
 

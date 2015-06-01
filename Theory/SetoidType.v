@@ -17,6 +17,8 @@
 
 *)
 
+Set Universe Polymorphism.
+
 Require Import Misc.Unicode.
 Require Import Morphisms.
 Require Export SetoidClass.

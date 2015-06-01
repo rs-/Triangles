@@ -16,6 +16,8 @@
 
 *)
 
+Set Universe Polymorphism.
+
 Require Import Category.Types.
 Require Import Category.Setoids.
 Require Import Theory.Category.
