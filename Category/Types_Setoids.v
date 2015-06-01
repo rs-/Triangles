@@ -31,16 +31,14 @@ Require Import Theory.ProductPreservingFunctor.
 
 (** ** Definition **)
 
-Program Definition F : 𝑻𝒚𝒑𝒆 → 𝑺𝒆𝒕𝒐𝒊𝒅 := λ T ∙ Setoids.make  ⦃ Carrier  ≔ T
-                                                            ; Equiv    ≔ eq ⦄.
+Program Definition F : 𝑻𝒚𝒑𝒆 → 𝑺𝒆𝒕𝒐𝒊𝒅 := λ T ∙ Setoid.make  ⦃ Carrier  ≔ T
+                                                        ; Equiv    ≔ eq ⦄.
 
 Program Definition map {A B} : [ A ⇒ B ⟶ F A ⇒ F B ] :=
-  λ f ↦ Setoids.Morphism.make f.
+  λ f ↦ Π.make f.
 (** f-cong **)
-Next Obligation.
-  intros f g eq_fg x y eq_xy; simpl.
-  now rewrite eq_xy.
-Qed.
+Next Obligation. solve_proper. Qed.
+Next Obligation. repeat intro. simpl. now rewrite H0. Qed.
 
 Lemma id A : id[ F A ] ≈ map id[ A ].
 Proof.
@@ -61,10 +59,10 @@ Definition 𝑬𝑸 : Functor 𝑻𝒚𝒑𝒆 𝑺𝒆𝒕𝒐𝒊𝒅 := mkFun
 (** ** 𝑬𝑸 is strong monoidal **)
 
 Program Instance 𝑬𝑸_PF : ProductPreservingFunctor 𝑬𝑸 :=
-  ProductPreservingFunctor.make ⦃ φ ≔ λ A B ∙ Setoids.Morphism.make (λ x ∙ x) ⦄.
+  ProductPreservingFunctor.make ⦃ φ ≔ λ A B ∙ Π.make (λ x ∙ x) ⦄.
 (** φ-cong **)
 Next Obligation.
-  now f_equal.
+  repeat intro. destruct x, y; f_equal; intuition.
 Qed.
 (** φ-inverse **)
 Next Obligation.
@@ -84,12 +82,15 @@ Qed.
 
 
 Program Definition 𝑬𝑸_prod : Functor (𝑻𝒚𝒑𝒆 𝘅 𝑻𝒚𝒑𝒆) 𝑺𝒆𝒕𝒐𝒊𝒅 :=
-  Functor.make ⦃ F   ≔ λ A ∙ Setoids.make ⦃ Carrier ≔ fst A ⟨×⟩ snd A
+  Functor.make ⦃ F   ≔ λ A ∙ Setoid.make ⦃ Carrier ≔ fst A ⟨×⟩ snd A
                                           ; Equiv ≔ eq ⦄
-               ; map ≔ λ A B ∙ λ f ↦ Setoids.Morphism.make (λ x ∙ (fst f (fst x) , snd f (snd x))) ⦄.
+               ; map ≔ λ A B ∙ λ f ↦ Π.make (λ x ∙ (fst f (fst x) , snd f (snd x))) ⦄.
 (** equivalence **)
 Next Obligation.
-  eauto with typeclass_instances.
+  apply _.
+Qed.
+Next Obligation.
+  solve_proper.
 Qed.
 (** map-proper **)
 Next Obligation.

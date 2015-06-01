@@ -74,6 +74,8 @@ Module Π.
     intros x y eq_xy; now rewrite eq_xy.
   Qed.
 
+  Set Printing Universes.
+
   Program Definition setoid (From To : Setoid) : Setoid :=
     Setoid.make  ⦃ Carrier  ≔ Π From To
                  ; Equiv    ≔ λ f g ∙ ∀ x y, x ≈ y → f x ≈ g y ⦄.

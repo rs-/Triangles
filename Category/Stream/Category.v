@@ -1,13 +1,16 @@
-Require Import Category.Types.
-Require Import Category.Setoids.
-Require Import Category.Types_Setoids.
-Require Import Category.RComonad.
-Require Import Category.RComod.
+Set Printing Universes.
+
+
 Require Import Theory.Category.
 Require Import Theory.Functor.
 Require Import Theory.RelativeComonad.
 Require Import Theory.PushforwardComodule.
 Require Import Theory.Comodule.
+Require Import Category.Types.
+Require Import Category.Setoids.
+Require Import Category.Types_Setoids.
+Require Import Category.RComonad.
+Require Import Category.RComod.
 
 Generalizable All Variables.
 

@@ -2,6 +2,8 @@
 (*    Coq Unicode Notations                                                   *)
 (*----------------------------------------------------------------------------*)
 
+Set Universe Polymorphism.
+
 (* Logic *)
 Notation "∀  x .. y , P" := (forall x, .. (forall y, P) ..)
   (at level 200, x binder, y binder, right associativity) : type_scope.
