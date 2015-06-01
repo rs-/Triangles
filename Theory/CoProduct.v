@@ -12,8 +12,8 @@
 
   Content of this file:
 
-  - definition of universal property of product
-  - some lemmas about interplay of product morphism with composition
+  - definition of universal property of coproduct
+  - some lemmas about interplay of coproduct morphism with composition
 
 *)
 
