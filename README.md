@@ -1,7 +1,7 @@
 
 ## REQUIREMENTS
 
-This library compiles with Coq8.4pl4 [1].
+This library compiles with Coq8.4pl6 [1].
 
 
 ## INSTALLATION
