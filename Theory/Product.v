@@ -21,6 +21,9 @@ Require Import Theory.Category.
 
 Generalizable All Variables.
 
+Set Universe Polymorphism.
+
+
 (*------------------------------------------------------------------------------
   -- ＰＲＯＤＵＣＴ  ＯＦ  ＯＢＪＥＣＴＳ
   ----------------------------------------------------------------------------*)
@@ -74,8 +77,7 @@ Program Definition prod_on_arrow
         `{BinaryProduct 𝒞} {A A' B B'} : [ A ⇒ A' ⟶ B ⇒ B' ⟶ A × B ⇒ A' × B' ] :=
   λ f g ↦₂ ⟨ f ∘ π₁ , g ∘ π₂ ⟩.
 Next Obligation.
-  intros f₁ f₂ eq_f₁f₂ g₁ g₂ eq_g₁g₂.
-  now rewrite eq_f₁f₂, eq_g₁g₂.
+  cong₂; cong₂; intuition.
 Qed.
 
 Infix "-×-" := prod_on_arrow (at level 35).
@@ -84,16 +86,18 @@ Lemma product_postcompose `{BinaryProduct 𝒞} {A B C C' : 𝒞} {f : B ⇒ C} 
    ⟨ f , g ⟩ ∘ p ≈ ⟨ f ∘ p , g ∘ p ⟩    :> A ⇒ C × C'.
 Proof.
   apply Pmor_universal.
-  - rewrite <- compose_assoc. now rewrite π₁_compose.
-  - rewrite <- compose_assoc. now rewrite π₂_compose.
+  - etrans; [ rew compose_assoc|]. cong_l; apply π₁_compose.
+  - etrans; [ rew compose_assoc|]. cong_l; apply π₂_compose.
 Qed.
 
 Lemma product_precompose `{BinaryProduct 𝒞} {A B C D E : 𝒞}
       {f : B ⇒ D} {g : C ⇒ E} {h : A ⇒ B} {k : A ⇒ C} : f-×-g ∘ ⟨ h , k ⟩ ≈ ⟨ f ∘ h , g ∘ k ⟩    :> A ⇒ D × E.
 Proof.
   apply Pmor_universal.
-  - rewrite <- compose_assoc. simpl. rewrite π₁_compose. rewrite compose_assoc. now rewrite π₁_compose.
-  - rewrite <- compose_assoc. simpl. rewrite π₂_compose. rewrite compose_assoc. now rewrite π₂_compose.
+  - etrans; [ rew compose_assoc |]. etrans. cong_l. apply π₁_compose. etrans. rew compose_assoc.
+    cong_r. apply π₁_compose.
+  - etrans; [ rew compose_assoc |]. etrans. cong_l. apply π₂_compose. etrans. rew compose_assoc.
+    cong_r. apply π₂_compose.
 Qed.
 
 Notation "∘-×" := product_postcompose (only parsing).

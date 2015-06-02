@@ -22,6 +22,9 @@ Require Export Theory.SetoidType.
 
 Generalizable All Variables.
 
+Set Universe Polymorphism.
+Set Printing Universes.
+
 (*------------------------------------------------------------------------------
   -- ＣＡＴＥＧＯＲＹ  ＤＥＦＩＮＩＴＩＯＮ
   ----------------------------------------------------------------------------*)
@@ -60,10 +63,10 @@ Program Definition op_cat (𝒞 : Category) : Category :=
   Category.make ⦃ Hom ≔ λ (A B : 𝒞) ∙ B ⇒ A
                 ; id  ≔ λ _ ∙ id
                 ; compose ≔ λ _ _ _ ∙ λ g f ↦₂ f ∘ g ⦄.
-Next Obligation. solve_proper. Qed.
-Next Obligation. now rewrite right_id. Qed.
-Next Obligation. now rewrite left_id. Qed.
-Next Obligation. now rewrite compose_assoc. Qed.
+Next Obligation. now cong₂. Qed.
+Next Obligation. now apply right_id. Qed.
+Next Obligation. now apply left_id. Qed.
+Next Obligation. sym; apply compose_assoc. Qed.
 
 Notation "𝒞 '^op'" := (op_cat 𝒞) (at level 3, no associativity, format "𝒞 '^op'").
 
@@ -79,21 +82,21 @@ Program Definition prod_cat (𝒞 𝒟 : Category) : Category :=
                 ; compose ≔ λ A B C ∙ λ g f ↦₂ (π₁ g ∘ π₁ f , π₂ g ∘ π₂ f) ⦄.
 Next Obligation.
   constructor.
-  - intros [f₁ f₂]; split; reflexivity.
-  - intros [f₁ f₂] [g₁ g₂] [eq_f₁g₁ eq_f₂g₂]; split; now symmetry.
-  - intros [f₁ f₂] [g₁ g₂] [h₁ h₂] [? ?] [? ?]; split; etransitivity; eauto.
+  - intros [f₁ f₂]; split; refl.
+  - intros [f₁ f₂] [g₁ g₂] [eq_f₁g₁ eq_f₂g₂]; split; now sym.
+  - intros [f₁ f₂] [g₁ g₂] [h₁ h₂] [? ?] [? ?]; split; etrans; eauto.
 Qed.
 Next Obligation.
-  intros [? ?] [? ?] [? ?] [? ?] [? ?] [? ?]; split; now apply cong.
+  split; cong₂; intuition.
 Qed.
 Next Obligation.
-  split; now rewrite left_id.
+  split; now apply left_id.
 Qed.
 Next Obligation.
-  split; now rewrite right_id.
+  split; now apply right_id.
 Qed.
 Next Obligation.
-  split; now rewrite compose_assoc.
+  split; now apply compose_assoc.
 Qed.
 
 Notation "A '𝘅' B" := (prod_cat A B) (at level 20, left associativity).

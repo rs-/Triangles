@@ -23,6 +23,8 @@ Require Import Theory.RelativeComonad.
 
 Generalizable All Variables.
 
+Set Universe Polymorphism.
+
 (*------------------------------------------------------------------------------
   -- ＣＯＭＯＤＵＬＥ  ＯＶＥＲ  ＲＥＬＡＴＩＶＥ  ＣＯＭＯＮＡＤ  ＤＥＦＩＮＩＴＩＯＮ
   ----------------------------------------------------------------------------*)
@@ -60,24 +62,26 @@ Section Functoriality.
   Program Definition mlift {A B} : [ A ⇒ B ⟶ M A ⇒ M B ] :=
     λ f ↦ M⋅mcobind (F⋅f ∘ counit[ A ]).
   Next Obligation.
-    intros x y eq_xy. now rewrite eq_xy.
+    cong. cong_l. now cong.
   Qed.
 
   Lemma mlift_id A : id[ M A ] ≈ mlift id[ A ].
   Proof.
-    simpl. rewrite <- identity, left_id, mcobind_counit.
-    reflexivity.
+    simpl.
+    etrans. sym. apply mcobind_counit.
+    cong. sym. etrans. cong_l. sym. apply identity.
+    apply left_id.
   Qed.
 
   Lemma mlift_compose A B C (f : A ⇒ B) (g : B ⇒ C) : mlift (g ∘ f) ≈ (mlift g) ∘ (mlift f).
   Proof.
     simpl.
-    rewrite mcobind_mcobind,
-            compose_assoc,
-            counit_cobind,
-            <- compose_assoc,
-            <- map_compose.
-    reflexivity.
+    sym. etrans. apply mcobind_mcobind.
+    cong. sym. etrans. cong_l. apply map_compose.
+    etrans. apply compose_assoc.
+    sym. etrans. apply compose_assoc.
+    cong_r. etrans. apply counit_cobind.
+    refl.
   Qed.
 
   Definition MLift : Functor 𝒞 ℰ := mkFunctor mlift_id mlift_compose.
@@ -115,9 +119,9 @@ Module Morphism.
                   ; Equiv   ≔ λ f g ∙ ∀ x, f x ≈ g x ⦄.
     Next Obligation.
       constructor.
-      - intros f x; reflexivity.
-      - intros f g eq_fg x. symmetry. apply eq_fg.
-      - intros f g h eq_fg eq_gh; etransitivity; eauto.
+      - intros f x; refl.
+      - intros f g eq_fg x. now sym.
+      - intros f g h eq_fg eq_gh x; etrans; eauto.
     Qed.
 
     Local Infix "⇒" := Hom.
@@ -125,19 +129,21 @@ Module Morphism.
     Program Definition id {M : Comodule T ℰ} : M ⇒ M :=
       Comodule.make ⦃ α ≔ λ C ∙ id[ M C ] ⦄.
     Next Obligation.
-      now rewrite left_id, right_id.
+      etrans. apply left_id. rew right_id.
     Qed.
 
     Program Definition compose {M N P : Comodule T ℰ} : [ N ⇒ P ⟶ M ⇒ N ⟶ M ⇒ P ] :=
       λ g f ↦₂ Comodule.make ⦃ α ≔ λ C ∙ g(C) ∘ f(C) ⦄.
     Next Obligation.
-      rewrite <- compose_assoc; rewrite <- α_commutes.
-      rewrite compose_assoc; rewrite α_commutes; rewrite compose_assoc.
-      reflexivity.
+      etrans; [| apply compose_assoc].
+      etrans; [| cong_l; apply α_commutes].
+      etrans. rew compose_assoc.
+      etrans. cong_r. apply α_commutes.
+      etrans; [ rew compose_assoc|].
+      refl.
     Qed.
     Next Obligation.
-      intros f₁ f₂ eq_f₁f₂ g₁ g₂ eq_g₁g₂ x. simpl.
-      apply Π₂.cong; [ apply eq_f₁f₂ | apply eq_g₁g₂ ].
+      cong₂; intuition.
     Qed.
 
   End id_composition.

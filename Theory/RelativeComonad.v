@@ -23,6 +23,8 @@ Require Import Theory.Functor.
 
 Generalizable All Variables.
 
+Set Universe Polymorphism.
+
 (*------------------------------------------------------------------------------
   -- ＲＥＬＡＴＩＶＥ  ＣＯＭＯＮＡＤ  ＤＥＦＩＮＩＴＩＯＮ
   ----------------------------------------------------------------------------*)
@@ -67,25 +69,26 @@ Section Functoriality.
   Program Definition lift {A B} : [ A ⇒ B ⟶ T A ⇒ T B ] :=
     λ f ↦ T⋅cobind (F⋅f ∘ T⋅counit).
   Next Obligation.
-    intros f g eq_fg. now rewrite eq_fg.
+    cong. cong_l. now cong.
   Qed.
 
   Lemma lift_id : ∀ A, id[ T A ] ≈ lift id[ A ].
   Proof.
     intros A; simpl; unfold lift.
-    rewrite <- identity, left_id, cobind_counit.
-    reflexivity.
+    etrans. sym. apply cobind_counit.
+    cong. sym. etrans. cong_l. sym. apply identity.
+    apply left_id.
   Qed.
 
   Lemma lift_compose : ∀ A B C (f : A ⇒ B) (g : B ⇒ C), lift (g ∘ f) ≈ (lift g) ∘ (lift f).
   Proof.
     intros A B C g f; simpl; unfold lift.
-    rewrite cobind_cobind,
-            compose_assoc,
-            counit_cobind,
-            <- compose_assoc,
-            <- map_compose.
-    reflexivity.
+    sym. etrans. apply cobind_cobind.
+    cong. sym. etrans. cong_l. apply map_compose.
+    etrans. apply compose_assoc.
+    sym. etrans. apply compose_assoc.
+    cong_r. etrans. apply counit_cobind.
+    refl.
   Qed.
 
   Definition Lift : Functor 𝒞 𝒟 := mkFunctor lift_id lift_compose.
@@ -125,36 +128,42 @@ Module Morphism.
       Setoid.make ⦃ Carrier ≔ Morphism T S ; Equiv ≔ λ f g ∙ ∀ x, f x ≈ g x ⦄.
     Next Obligation.
       constructor.
-      - intros f x; reflexivity.
-      - intros f g eq_fg x. symmetry. apply eq_fg.
-      - intros f g h eq_fg eq_gh; etransitivity; eauto.
+      - intros f x; refl.
+      - intros f g eq_fg x. now sym.
+      - intros f g h eq_fg eq_gh x; etrans; eauto.
     Qed.
 
     Local Infix "⇒" := Hom.
 
+    Unset Printing Universes.
+
     Program Definition id {S} : S ⇒ S :=
       RelativeComonad.make ⦃ τ ≔ λ C ∙ id[ S C ] ⦄.
     Next Obligation.
-      now rewrite right_id.
+      sym; apply right_id.
     Qed.
     Next Obligation.
-      rewrite left_id; now do 2 rewrite right_id.
+      etrans. apply left_id.
+      etrans. cong. apply right_id.
+      sym. apply right_id.
     Qed.
 
     Program Definition compose {S T U} : [ T ⇒ U ⟶ S ⇒ T ⟶ S ⇒ U ] :=
       λ g f ↦₂ RelativeComonad.make ⦃ τ ≔ λ C ∙ g(C) ∘ f(C) ⦄.
     Next Obligation.
-      rewrite <- compose_assoc; now do 2 rewrite <- τ_counit.
+      etrans; [| apply compose_assoc].
+      sym. etrans; [cong_l|]; rew @τ_counit.
     Qed.
     Next Obligation.
-      setoid_rewrite <- compose_assoc at 2.
-      rewrite <- τ_commutes. rewrite compose_assoc.
-      setoid_rewrite <- compose_assoc at 2. rewrite τ_commutes.
-      rewrite <- compose_assoc. reflexivity.
+      etrans; [| apply compose_assoc].
+      etrans; [| cong_l; apply τ_commutes].
+      etrans; [ apply compose_assoc |].
+      etrans; [| rew compose_assoc].
+      cong_r. etrans. cong_r. cong. rew compose_assoc.
+      etrans. apply τ_commutes. refl.
     Qed.
     Next Obligation.
-      intros f₁ f₂ eq_f₁f₂ g₁ g₂ eq_g₁g₂ x. simpl.
-      apply Π₂.cong; [ apply eq_f₁f₂ | apply eq_g₁g₂ ].
+      cong₂; intuition.
     Qed.
 
   End id_composition.
