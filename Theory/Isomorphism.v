@@ -21,6 +21,8 @@ Require Import Theory.Category.
 
 Generalizable All Variables.
 
+Set Universe Polymorphism.
+
 (*------------------------------------------------------------------------------
   -- ＩＳＯＭＯＲＰＨＩＳＭ  ＤＥＦＩＮＩＴＩＯＮＳ
   ----------------------------------------------------------------------------*)
@@ -69,32 +71,36 @@ Section Iso_Equivalence.
     Iso.make ⦃ from ≔ id
              ; to   ≔ id ⦄.
   Next Obligation. (* iso_left *)
-    now rewrite left_id.
+    now apply left_id.
   Qed.
   Next Obligation. (* iso_right *)
-    now rewrite right_id.
+    now apply right_id.
   Qed.
 
   Program Definition sym {A B : 𝒞} (iso_AB : A ≅ B) : B ≅ A :=
     Iso.make ⦃ from ≔ iso_AB⁻¹
              ; to   ≔ iso_AB ⦄.
   Next Obligation. (* iso_left *)
-    now rewrite iso_right.
+    now apply iso_right.
   Qed.
   Next Obligation. (* iso_left *)
-    now rewrite iso_left.
+    now apply iso_left.
   Qed.
 
   Program Definition trans {A B C : 𝒞} (iso_AB : A ≅ B) (iso_BC : B ≅ C) : A ≅ C :=
     Iso.make ⦃ from ≔ iso_BC ∘ iso_AB
              ; to   ≔ iso_AB ⁻¹ ∘ iso_BC ⁻¹ ⦄.
   Next Obligation. (* iso_left *)
-    rewrite compose_assoc; setoid_rewrite <- compose_assoc at 2.
-    now rewrite iso_left, left_id, iso_left.
+    etrans. rew compose_assoc.
+    etrans. cong_r. etrans. rew compose_assoc.
+    cong_l. apply iso_left.
+    etrans. cong_r. apply left_id. apply iso_left.
   Qed.
   Next Obligation. (* iso_right *)
-    rewrite compose_assoc; setoid_rewrite <- compose_assoc at 2.
-    now rewrite iso_right, left_id, iso_right.
+    etrans. rew compose_assoc.
+    etrans. cong_r. etrans. rew compose_assoc.
+    cong_l. apply iso_right.
+    etrans. cong_r. apply left_id. apply iso_right.
   Qed.
 
 End Iso_Equivalence.

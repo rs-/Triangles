@@ -23,6 +23,8 @@ Require Import Theory.Product.
 
 Generalizable All Variables.
 
+Set Universe Polymorphism.
+
 (*------------------------------------------------------------------------------
   -- ＰＲＯＤＵＣＴ-ＰＲＥＳＥＲＶＩＮＧ  ＦＵＮＣＴＯＲ  ＤＥＦＩＮＩＴＩＯＮ
   ----------------------------------------------------------------------------*)
@@ -61,19 +63,19 @@ Section equations.
   Lemma Fπ₁_φ_inv : ∀ {A B}, F ⋅ π₁ ∘ φ⁻¹ ≈ π₁[F A, F B].
   Proof.
     intros A B.
-    etransitivity;
-      [ apply Π₂.cong; [ instantiate (1 := π₁ ∘ φ); unfold φ; now rewrite π₁_compose
-                       | reflexivity ] |].
-    now rewrite compose_assoc, iso_left, right_id.
+    etrans;
+      [ cong₂; [ instantiate (1 := π₁ ∘ φ); unfold φ; sym; rew @π₁_compose
+                       | refl ] |].
+    etrans. rew compose_assoc. etrans. cong_r. rew iso_left. rew right_id.
   Qed.
 
   Lemma Fπ₂_φ_inv : ∀ {A B}, F ⋅ π₂ ∘ φ⁻¹ ≈ π₂[F A, F B].
   Proof.
     intros A B.
-    etransitivity;
-      [ apply Π₂.cong; [ instantiate (1 := π₂ ∘ φ); unfold φ; now rewrite π₂_compose
+    etrans;
+      [ apply cong₂; [ instantiate (1 := π₂ ∘ φ); unfold φ; sym; rew @π₂_compose
                        | reflexivity ] |].
-    now rewrite compose_assoc, iso_left, right_id.
+    etrans. rew compose_assoc. etrans. cong_r. rew iso_left. rew right_id.
   Qed.
 
 (* begin hide *)

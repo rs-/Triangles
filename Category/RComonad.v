@@ -22,6 +22,8 @@ Require Import Theory.RelativeComonad.
 
 Generalizable All Variables.
 
+Set Universe Polymorphism.
+
 (*------------------------------------------------------------------------------
   -- ＣＡＴＥＧＯＲＹ  ＯＦ  ＲＥＬＡＴＩＶＥ  ＣＯＭＯＮＡＤＳ
   ----------------------------------------------------------------------------*)
@@ -42,17 +44,17 @@ Section Definitions.
 
   Lemma left_id A B  (f : A ⇒ B) : id ∘ f ≈ f.
   Proof.
-    intro x; simpl. rewrite left_id. reflexivity.
+    intro x; simpl. apply left_id.
   Qed.
 
   Lemma right_id A B (f : A ⇒ B) : f ∘ id ≈ f.
   Proof.
-    intro x; simpl. now rewrite right_id.
+    intro x; simpl. apply right_id.
   Qed.
 
   Lemma compose_assoc A B C D (f : A ⇒ B) (g : B ⇒ C) (h : C ⇒ D) : h ∘ g ∘ f ≈ h ∘ (g ∘ f).
   Proof.
-    intro x; simpl. now rewrite compose_assoc.
+    intro x; simpl. apply compose_assoc.
   Qed.
 
   Canonical Structure 𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅 : Category :=

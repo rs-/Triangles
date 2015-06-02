@@ -24,6 +24,8 @@ Require Import Theory.Product.
 Require Import Theory.Isomorphism.
 Require Import Theory.ProductPreservingFunctor.
 
+Set Universe Polymorphism.
+
 (*------------------------------------------------------------------------------
   -- ＦＵＮＣＴＯＲ  ＥＱ
   ----------------------------------------------------------------------------*)
@@ -31,25 +33,32 @@ Require Import Theory.ProductPreservingFunctor.
 
 (** ** Definition **)
 
-Program Definition F : 𝑻𝒚𝒑𝒆 → 𝑺𝒆𝒕𝒐𝒊𝒅 := λ T ∙ Setoids.make  ⦃ Carrier  ≔ T
-                                                            ; Equiv    ≔ eq ⦄.
+Program Definition F : 𝑻𝒚𝒑𝒆 → 𝑺𝒆𝒕𝒐𝒊𝒅 := λ T ∙ Setoid.make  ⦃ Carrier  ≔ T
+                                                            ; Equiv    ≔ peq ⦄.
+Next Obligation.
+  constructor; hnf; intros.
+  - apply peq_refl.
+  - destruct H; apply peq_refl.
+  - destruct H. assumption.
+Qed.
+Existing Instance F_obligation_1.
+
 
 Program Definition map {A B} : [ A ⇒ B ⟶ F A ⇒ F B ] :=
-  λ f ↦ Setoids.Morphism.make f.
+  λ f ↦ Π.make f.
 (** f-cong **)
 Next Obligation.
-  intros f g eq_fg x y eq_xy; simpl.
-  now rewrite eq_xy.
+  destruct H; apply peq_refl.
 Qed.
 
 Lemma id A : id[ F A ] ≈ map id[ A ].
 Proof.
-  intros x y eq_xy; now rewrite eq_xy.
+  intros x; apply peq_refl.
 Qed.
 
 Lemma map_compose A B C (f : A ⇒ B) (g : B ⇒ C) : map (g ∘ f) ≈ (map g) ∘ (map f).
 Proof.
-  intros x y eq_xy. now rewrite eq_xy.
+  intros x; apply peq_refl.
 Qed.
 
 Definition 𝑬𝑸 : Functor 𝑻𝒚𝒑𝒆 𝑺𝒆𝒕𝒐𝒊𝒅 := mkFunctor id map_compose.
@@ -61,18 +70,18 @@ Definition 𝑬𝑸 : Functor 𝑻𝒚𝒑𝒆 𝑺𝒆𝒕𝒐𝒊𝒅 := mkFun
 (** ** 𝑬𝑸 is strong monoidal **)
 
 Program Instance 𝑬𝑸_PF : ProductPreservingFunctor 𝑬𝑸 :=
-  ProductPreservingFunctor.make ⦃ φ ≔ λ A B ∙ Setoids.Morphism.make (λ x ∙ x) ⦄.
+  ProductPreservingFunctor.make ⦃ φ ≔ λ A B ∙ Π.make (λ x ∙ x) ⦄.
 (** φ-cong **)
 Next Obligation.
-  now f_equal.
+  destruct x, y; simpl in *. destruct H, H0. apply peq_refl.
 Qed.
 (** φ-inverse **)
 Next Obligation.
   constructor.
   - (* iso_left *)
-    intros f g eq_fg. exact eq_fg.
+    intros (?&?); simpl; split; apply peq_refl.
   - (* iso_right *)
-    intros f g eq_fg. simpl in *. destruct f. auto.
+    intros (?&?); simpl; split; apply peq_refl.
 Qed.
 
 (*------------------------------------------------------------------------------
@@ -84,17 +93,22 @@ Qed.
 
 
 Program Definition 𝑬𝑸_prod : Functor (𝑻𝒚𝒑𝒆 𝘅 𝑻𝒚𝒑𝒆) 𝑺𝒆𝒕𝒐𝒊𝒅 :=
-  Functor.make ⦃ F   ≔ λ A ∙ Setoids.make ⦃ Carrier ≔ fst A ⟨×⟩ snd A
-                                          ; Equiv ≔ eq ⦄
-               ; map ≔ λ A B ∙ λ f ↦ Setoids.Morphism.make (λ x ∙ (fst f (fst x) , snd f (snd x))) ⦄.
+  Functor.make ⦃ F   ≔ λ A ∙ Setoid.make ⦃ Carrier ≔ fst A ⟨×⟩ snd A
+                                          ; Equiv ≔ peq ⦄
+               ; map ≔ λ A B ∙ λ f ↦ Π.make (λ x ∙ (fst f (fst x) , snd f (snd x))) ⦄.
 (** equivalence **)
 Next Obligation.
-  eauto with typeclass_instances.
+  destruct H. simpl. apply peq_refl.
 Qed.
 (** map-proper **)
 Next Obligation.
-  intros [? ?] [? ?] [? ?] [? ?] [? ?] eq. injection eq; intros.
-  simpl in *; f_equal; congruence.
+  destruct x0; simpl in *. destruct (H f), (H0 s). apply peq_refl.
+Qed.
+Next Obligation.
+  destruct x; apply peq_refl.
+Qed.
+Next Obligation.
+  destruct x; apply peq_refl.
 Qed.
 
 Notation "𝑬𝑸-𝘅" := 𝑬𝑸_prod.

@@ -17,7 +17,7 @@
 
 *)
 
-Require Import Category.RComonad.
+(* Require Import Category.RComonad. *)
 Require Import Theory.Category.
 Require Import Theory.Isomorphism.
 Require Import Theory.Functor.
@@ -27,6 +27,8 @@ Require Import Theory.Product.
 Require Import Theory.ProductPreservingFunctor.
 
 Generalizable All Variables.
+
+Set Universe Polymorphism.
 
 (*------------------------------------------------------------------------------
   -- ＲＥＬＡＴＩＶＥ  ＣＯＭＯＮＡＤ  ＤＥＦＩＮＩＴＩＯＮ  ＷＩＴＨ  ＣＵＴ
@@ -49,7 +51,7 @@ Section Defs.
     Program Definition Extend {A B} : [ T A ⇒ F B ⟶ T (E × A) ⇒ F (E × B) ] :=
       λ f ↦ φ⁻¹ ∘ ⟨ F ⋅ π₁ ∘ T⋅counit , f ∘ cut A ⟩.
     Next Obligation.
-      intros f g eq_fg. now rewrite eq_fg.
+      cong_r. cong_r. now cong_l.
     Qed.
 
   End ExtendConstruction.
@@ -98,7 +100,7 @@ Section MDefs.
   Local Notation "[ R ]" := (T R) (only parsing).
 
   Structure Morphism (T S : RelativeComonadWithCut F E) : Type := mkMorphism
-  { τ      :>  [T] ⇒ [S]
+  { τ      :>  RelativeComonad.Morphism.Hom T S
   ; τ_cut  :   ∀ {A}, S⋅cut ∘ τ(E × A) ≈ τ(A) ∘ T⋅cut }.
 
 End MDefs.
@@ -127,21 +129,22 @@ Module Morphism.
                    ; Equiv    ≔ _≈_ ⦄.
     Next Obligation.
       constructor.
-      - intros f x; reflexivity.
-      - intros f g eq_fg x. symmetry. apply eq_fg.
-      - intros f g h eq_fg eq_gh; etransitivity; eauto.
+      - intros f x; refl.
+      - intros f g eq_fg x. now sym.
+      - intros f g h eq_fg eq_gh x; etrans; eauto.
     Qed.
 
     Local Infix "⇒" := Hom.
 
     Program Definition id {S} : S ⇒ S :=
-      RelativeComonadWithCut.make ⦃ RelativeComonad-τ ≔ id ⦄.
+      RelativeComonadWithCut.make ⦃ RelativeComonad-τ ≔ RelativeComonad.Morphism.id ⦄.
     Next Obligation.
-      now rewrite left_id, right_id.
+      etrans. rew left_id. cong_r.
+      rew right_id.
     Qed.
 
     Program Definition compose {S T U} : [ T ⇒ U ⟶ S ⇒ T ⟶ S ⇒ U ] :=
-      λ g f ↦₂ RelativeComonadWithCut.make ⦃ RelativeComonad-τ ≔ g ∘ f ⦄.
+      λ g f ↦₂ RelativeComonadWithCut.make ⦃ RelativeComonad-τ ≔ RelativeComonad.Morphism.compose g f ⦄.
     Next Obligation.
       rewrite compose_assoc. rewrite <- τ_cut. repeat rewrite <- compose_assoc.
       now rewrite τ_cut.

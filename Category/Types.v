@@ -19,6 +19,8 @@
 Require Import Theory.Category.
 Require Import Theory.Product.
 
+Set Universe Polymorphism.
+
 (*------------------------------------------------------------------------------
   -- ＣＡＴＥＧＯＲＹ  ＯＦ  ＴＹＰＥＳ
   ----------------------------------------------------------------------------*)
@@ -27,10 +29,13 @@ Require Import Theory.Product.
 (** ** Type category definition **)
 
 Program Definition Hom (A B : Type) : Setoid := Setoid.make ⦃ Carrier ≔ A → B
-                                                           ; Equiv   ≔ λ f g ∙ ∀ x, f x = g x ⦄.
+                                                           ; Equiv   ≔ λ f g ∙ ∀ x, peq (f x) (g x) ⦄.
 (** equivalence **)
 Next Obligation.
-  constructor; hnf; simpl; [ reflexivity | now symmetry | etransitivity ; eauto ].
+  constructor; hnf; simpl; intros.
+  - apply peq_refl.
+  - destruct (H x0). apply peq_refl.
+  - destruct (H0 x0). intuition.
 Qed.
 
 Local Infix "⇒" := Hom.
@@ -41,8 +46,7 @@ Program Definition compose {A B C} : [ B ⇒ C ⟶ A ⇒ B ⟶ A ⇒ C ] :=
   Π₂.make (λ g f x ∙ g (f x)).
 (** g-cong₂ **)
 Next Obligation.
-  intros f₁ f₂ eq_f₁f₂ g₁ g₂ eq_g₁g₂ x.
-  now rewrite eq_f₁f₂, eq_g₁g₂.
+  destruct (H0 x0). intuition.
 Qed.
 
 Local Infix "∘" := compose.
@@ -78,10 +82,15 @@ Program Instance 𝑻𝒚𝒑𝒆_BinaryProduct : BinaryProduct 𝑻𝒚𝒑𝒆
                       ; π₂        ≔ snd ⦄.
 (** Pmor-cong₂ **)
 Next Obligation.
-  intros f₁ f₂ eq_f₁f₂ g₁ g₂ eq_g₁g₂ x. now f_equal.
+  destruct (H0 x0). destruct (H x0). apply peq_refl.
 Qed.
 (** Pmor-universal **)
 Next Obligation.
-  rewrite <- H. rewrite <- H0.
-  remember (i x); destruct (i x); now subst.
+  apply peq_refl.
+Qed.
+Next Obligation.
+  apply peq_refl.
+Qed.
+Next Obligation.
+  destruct (H x), (H0 x), (i x). apply peq_refl.
 Qed.

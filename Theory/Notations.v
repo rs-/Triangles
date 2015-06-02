@@ -2,6 +2,20 @@
   -- ＮＯＴＡＴＩＯＮＳ
   ----------------------------------------------------------------------------*)
 
+Set Universe Polymorphism.
+
+Inductive prod A B : Type :=
+  pair : A -> B -> prod A B.
+Arguments pair {_ _} _ _.
+
+Definition fst {A B} (p : prod A B) :=
+  let '(pair a _) := p in a.
+
+Definition snd {A B} (p : prod A B) :=
+  let '(pair _ b) := p in b.
+
+Notation "( a , b )" := (pair a b) : type_scope.
+
 
 (* -- Ｃｏｒｅ  ｎｏｔａｔｉｏｎｓ                                         -- *)
 Notation "⊤" := True.

@@ -22,6 +22,8 @@ Require Import Theory.Product.
 
 Generalizable All Variables.
 
+Set Universe Polymorphism.
+
 (*------------------------------------------------------------------------------
   -- ＣＯＰＲＯＤＵＣＴ  ＯＦ  ＯＢＪＥＣＴＳ
   ----------------------------------------------------------------------------*)
@@ -97,7 +99,7 @@ Notation "'BinaryCoproduct.make' ⦃ 'Category' ≔ 𝒞 ; '_+_' ≔ cpr ; '[_,_
 Program Definition coprod_on_arrow
         `{BinaryCoproduct 𝒞} {A A' B B'} : [ A ⇒ A' ⟶ B ⇒ B' ⟶ A ⊎ B ⇒ A' ⊎ B' ] :=
   λ f g ↦₂ [ ι₁ ∘ f , ι₂ ∘ g ].
-Next Obligation. solve_proper. Qed.
+Next Obligation. cong₂; cong₂; intuition. Qed.
 
 Infix "-⊎-" := coprod_on_arrow (at level 35).
 
@@ -118,10 +120,12 @@ Notation "⊎-∘" := coproduct_precompose  (only parsing).
 
 Lemma coproduct_eta `{BinaryCoproduct 𝒞} {A B : 𝒞} : [ ι₁ , ι₂ ] ≈ id :> A ⊎ B ⇒ A ⊎ B.
 Proof.
-  symmetry; apply Cpmor_universal; now rewrite Category.left_id.
+  sym; apply Cpmor_universal; apply Category.left_id.
 Qed.
 
 Lemma coproduct_arrow_id `{BinaryCoproduct 𝒞} {A B : 𝒞} : id -⊎- id ≈ id :> A ⊎ B ⇒ A ⊎ B.
 Proof.
-  simpl. symmetry; apply Cpmor_universal; rewrite Category.left_id, Category.right_id; reflexivity.
+  simpl. sym; apply Cpmor_universal.
+  - etrans. apply left_id. rew right_id.
+  - etrans. apply left_id. rew right_id.
 Qed.
