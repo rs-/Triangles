@@ -23,6 +23,7 @@ Require Import Theory.RelativeComonad.
 Generalizable All Variables.
 
 Set Universe Polymorphism.
+Set Printing Universes.
 
 (*------------------------------------------------------------------------------
   -- ＣＡＴＥＧＯＲＹ  ＯＦ  ＲＥＬＡＴＩＶＥ  ＣＯＭＯＮＡＤＳ
@@ -44,7 +45,7 @@ Section Definitions.
 
   Lemma left_id A B  (f : A ⇒ B) : id ∘ f ≈ f.
   Proof.
-    intro x; simpl. apply left_id.
+    intro x; simpl; apply left_id.
   Qed.
 
   Lemma right_id A B (f : A ⇒ B) : f ∘ id ≈ f.
@@ -61,3 +62,4 @@ Section Definitions.
     mkCategory left_id right_id compose_assoc.
 
 End Definitions.
+

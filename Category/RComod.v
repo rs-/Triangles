@@ -33,6 +33,8 @@ Set Universe Polymorphism.
 
 (** ** Category definition **)
 
+Set Printing Universes.
+
 Section Definitions.
 
   Context `{F : Functor 𝒞 𝒟} (T : RelativeComonad F) (ℰ : Category).
@@ -63,6 +65,8 @@ Section Definitions.
     mkCategory left_id right_id compose_assoc.
 
 End Definitions.
+
+Set Printing Universes.
 
 (** * Some constructions on comodules **)
 (* Section Precomposition. *)

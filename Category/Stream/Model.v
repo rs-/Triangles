@@ -3,6 +3,8 @@ Require Import Theory.Notations.
 Require Import Category.Stream.Axioms.
 Require Import Category.Stream.Terminality.
 
+Set Universe Polymorphism.
+
 (*------------------------------------------------------------------------------
   -- ＳＴＲＥＡＭ  ＭＯＤＥＬ  ＡＳ  Ａ  ＣＯＩＮＤＵＣＴＩＶＥ  ＴＹＰＥ
   ----------------------------------------------------------------------------*)

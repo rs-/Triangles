@@ -109,6 +109,8 @@ Notation "'Comodule.make' ⦃ 'α' ≔ α ⦄" :=
 
 Module Morphism.
 
+  Set Printing Universes.
+
   (* -- Ｉｄｅｎｔｉｔｙ  /  Ｃｏｍｐｏｓｉｔｉｏｎ                      -- *)
   Section id_composition.
 

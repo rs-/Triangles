@@ -146,12 +146,12 @@ Module Morphism.
     Program Definition compose {S T U} : [ T ⇒ U ⟶ S ⇒ T ⟶ S ⇒ U ] :=
       λ g f ↦₂ RelativeComonadWithCut.make ⦃ RelativeComonad-τ ≔ RelativeComonad.Morphism.compose g f ⦄.
     Next Obligation.
-      rewrite compose_assoc. rewrite <- τ_cut. repeat rewrite <- compose_assoc.
-      now rewrite τ_cut.
+      etrans. rew compose_assoc. etrans. cong_l. rew @τ_cut.
+      etrans; [| rew compose_assoc]. etrans. rew compose_assoc.
+      cong_r. rew @τ_cut.
     Qed.
     Next Obligation.
-      intros f₁ f₂ eq_f₁f₂ g₁ g₂ eq_g₁g₂ x.
-      apply Π₂.cong; [ apply eq_f₁f₂ | apply eq_g₁g₂ ].
+      cong₂; intuition.
     Qed.
 
   End id_composition.
@@ -166,12 +166,17 @@ Section CanonicalCut.
   Program Definition ccut (R : RelativeComonad F) : RelativeComonadWithCut F E :=
     RelativeComonadWithCut.make ⦃ RelativeComonad ≔ R ; cut ≔ λ A ∙ lift R π₂[E,A] ⦄.
   Next Obligation.
-    rewrite counit_cobind. reflexivity.
+    apply counit_cobind.
   Qed.
   Next Obligation.
-    do 2 rewrite cobind_cobind. apply Π.cong.
-    rewrite compose_assoc. rewrite counit_cobind.
-    rewrite <- compose_assoc. rewrite Fπ₂_φ_inv. rewrite π₂_compose. reflexivity.
+    etrans. apply cobind_cobind.
+    sym. etrans. apply cobind_cobind. sym.
+    cong. etrans; [| rew compose_assoc].
+    etrans; [| cong_r; sym; apply @counit_cobind].
+    etrans; [| rew compose_assoc].
+    etrans; [| cong_l; rew @Fπ₂_φ_inv ].
+    etrans; [| sym; apply @π₂_compose ].
+    refl.
   Qed.
 
 End CanonicalCut.

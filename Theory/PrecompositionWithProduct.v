@@ -17,7 +17,7 @@
 
 *)
 
-Require Import Category.RComod.
+(* Require Import Category.RComod. *)
 Require Import Theory.Category.
 Require Import Theory.Functor.
 Require Import Theory.Isomorphism.
@@ -28,6 +28,8 @@ Require Import Theory.Product.
 Require Import Theory.ProductPreservingFunctor.
 
 Generalizable All Variables.
+
+Set Universe Polymorphism.
 
 (*------------------------------------------------------------------------------
   -- ＰＲＥＣＯＭＰＯＳＩＴＩＯＮ  ＷＩＴＨ  ＰＲＯＤＵＣＴ
@@ -46,17 +48,28 @@ Section PrecompositionWithProduct.
     Comodule.make  ⦃ M        ≔ λ C ∙ M (E × C)
                    ; mcobind  ≔ λ A B ∙ λ f ↦ M⋅mcobind (T⋅extend(f)) ⦄.
   Next Obligation.
-    intros f g eq_fg. now rewrite eq_fg.
+    cong. cong_r. cong_r. now cong_l.
   Qed.
   Next Obligation.
-    rewrite cut_counit. rewrite <- ∘-×. rewrite <- compose_assoc. rewrite iso_right.
-    rewrite left_id. rewrite mcobind_counit. reflexivity.
+    etrans. cong. cong_r. cong_r. apply cut_counit.
+    etrans. cong. cong_r. sym. apply ∘-×.
+    etrans. cong. rew compose_assoc.
+    etrans. cong. cong_l. apply iso_right.
+    etrans. cong. rew left_id. apply mcobind_counit.
   Qed.
   Next Obligation.
-    rewrite mcobind_mcobind. apply Π.cong. repeat rewrite compose_assoc.
-    rewrite ∘-×. rewrite cut_cobind. unfold Extend. simpl.
-    repeat rewrite compose_assoc. rewrite counit_cobind.
-    repeat rewrite <- compose_assoc. rewrite Fπ₁_φ_inv. rewrite π₁_compose. reflexivity.
+    etrans. apply mcobind_mcobind.
+    cong.
+    etrans. apply compose_assoc.
+    etrans. cong_r. apply ∘-×.
+    sym. etrans. cong_r. cong_r. etrans. apply compose_assoc.
+    cong_r. apply cut_cobind. sym.
+    unfold Extend. simpl.
+    etrans. cong_r. cong_l. etrans. apply compose_assoc. cong_r.
+    apply counit_cobind. etrans. cong_r. cong_l. rew compose_assoc.
+    etrans. cong_r. cong_l. cong_l. apply Fπ₁_φ_inv.
+    etrans. cong_r. cong_l. apply π₁_compose.
+    sym; etrans. cong_r. cong_r. rew compose_assoc. refl.
   Qed.
 
 End PrecompositionWithProduct.
@@ -70,12 +83,12 @@ Section Morphisms.
 
   Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟} (F : Functor 𝒞  𝒟)
           (E : 𝒞) `{!ProductPreservingFunctor F} (T : RelativeComonadWithCut F E)
-          (ℰ : Category) (M : Comodule T ℰ) (N : Comodule T ℰ) (α : M ⇒ N).
+          (ℰ : Category) (M : Comodule T ℰ) (N : Comodule T ℰ) (α : Comodule.Morphism.Hom M N).
 
-  Program Definition precomposition_with_product_mor : ‵ M[E×─] ⇒ N[E×─] ′ :=
+  Program Definition precomposition_with_product_mor : ‵ Comodule.Morphism.Hom M[E×─] N[E×─] ′ :=
     Comodule.make ⦃ α ≔ λ A ∙ α (E × A) ⦄.
   Next Obligation.
-    now rewrite α_commutes.
+    apply α_commutes.
   Qed.
 
 End Morphisms.

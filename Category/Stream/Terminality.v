@@ -16,6 +16,8 @@ Require Import Theory.PushforwardComodule.
 
 Generalizable All Variables.
 
+(* Unset Universe Polymorphism. *)
+
 (*------------------------------------------------------------------------------
   -- ＳＴＲＥＡＭ  ＩＳ  ＴＥＲＭＩＮＡＬ  ＩＮ  ＳＴＲＥＡＭ
   ----------------------------------------------------------------------------*)
@@ -24,6 +26,8 @@ Generalizable All Variables.
 (* begin hide *)
 Ltac clean_hyps := repeat match goal with H : _ |- _ => clear H end.
 (* end hide *)
+
+Ltac reflexivity ::= apply reflexivity || refl.
 
 Module StreamTerminal (Import Ax : StreamAxioms).
 
@@ -69,8 +73,8 @@ Module StreamTerminal (Import Ax : StreamAxioms).
   Qed.
 
   (** ** Stream as a setoid **)
-  Program Definition STREAM (A : Type) : Setoids.Obj :=
-    Setoids.make ⦃ Carrier ≔ Stream A ; Equiv ≔ bisim ⦄.
+  Program Definition STREAM (A : Type) : Setoid :=
+    Setoid.make ⦃ Carrier ≔ Stream A ; Equiv ≔ bisim ⦄.
 
   (** ** head & tail are setoids morphisms **)
   Lemma head_cong : ∀ {A} {s₁ s₂ : Stream A}, s₁ ∼ s₂ → head s₁ = head s₂.
@@ -83,20 +87,20 @@ Module StreamTerminal (Import Ax : StreamAxioms).
     intros A s₁ s₂ eq_s₁s₂. now apply bisim_tail.
   Qed.
 
-  Program Definition 𝒉𝒆𝒂𝒅 {A} : STREAM A ⇒ 𝑬𝑸 A := Setoids.Morphism.make head.
+  Program Definition 𝒉𝒆𝒂𝒅 {A} : STREAM A ⇒ 𝑬𝑸 A := Π.make head.
   (** head-cong **)
   Next Obligation.
-    now apply head_cong.
+    now destruct (head_cong H).
   Qed.
 
-  Program Definition 𝒕𝒂𝒊𝒍 {A} : STREAM A ⇒ STREAM A := Setoids.Morphism.make tail.
-  (** tail-cong **)
-  Next Obligation.
-    now apply tail_cong.
-  Qed.
+  Definition 𝒕𝒂𝒊𝒍 {A} : Π (STREAM A) (STREAM A).
+  Proof.
+    refine (Π.make _); [ apply tail|].
+    intros; now apply tail_cong.
+  Defined.
 
   (** ** Cosubstitution for streams **)
-  Definition cosubst {A B : 𝑻𝒚𝒑𝒆} (f : Stream A ⇒ B) : Stream A ⇒ Stream B :=
+  Definition cosubst {A B : 𝑻𝒚𝒑𝒆} (f : Stream A → B) : Stream A → Stream B :=
     corec f tail.
 
   (** ** Stream is a relative comonad over EQ **)
@@ -104,7 +108,7 @@ Module StreamTerminal (Import Ax : StreamAxioms).
   Program Definition 𝑺𝒕𝒓 : ‵ 𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅 𝑬𝑸 ′ :=
     RelativeComonad.make  ⦃ T       ≔ STREAM
                           ; counit  ≔ λ X ∙ 𝒉𝒆𝒂𝒅
-                          ; cobind  ≔ λ X Y ∙ λ f ↦ Setoids.Morphism.make (cosubst f) ⦄.
+                          ; cobind  ≔ λ X Y ∙ λ f ↦ Π.make (cosubst f) ⦄.
   (** cosubst-cong **)
   Next Obligation.
     intros.
@@ -112,7 +116,7 @@ Module StreamTerminal (Import Ax : StreamAxioms).
     ; [clean_hyps; intros..|eauto].
     - destruct H as (x & y & eq_xy & -> & ->).
       unfold cosubst. repeat rewrite head_corec.
-      now rewrite eq_xy.
+      destruct f. simpl. destruct (map_cong0 _ _ eq_xy). reflexivity.
     - destruct H as (x & y & eq_xy & -> & ->).
       exists (tail x). exists (tail y).
       split; [|split].
@@ -122,7 +126,7 @@ Module StreamTerminal (Import Ax : StreamAxioms).
   Qed.
   (** cosubst-cong₂ **)
   Next Obligation.
-    intros X Y f g eq_fg x y eq_xy. simpl.
+    intros X Y f g eq_fg x. simpl.
     apply bisim_intro with (λ s₁ s₂ ∙ ∃ x y, x ∼ y ∧ s₁ = cosubst f x ∧ s₂ = cosubst g y); [intros..|eauto].
     - destruct H as (x' & y' & eq_xy' & -> & ->).
       unfold cosubst; repeat rewrite head_corec.

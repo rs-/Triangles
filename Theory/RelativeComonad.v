@@ -103,6 +103,8 @@ End Functoriality.
   ----------------------------------------------------------------------------*)
 (** ** Morphism of relative comonads **)
 
+Set Printing Universes.
+
 Structure Morphism `{F : Functor 𝒞 𝒟} (T S : RelativeComonad F) : Type := mkMorphism
 { τ           :>  ∀ C, T C ⇒ S C
 ; τ_counit    :   ∀ {C}, T⋅counit[ C ] ≈ S⋅counit[ C ] ∘ τ(C)
@@ -122,9 +124,9 @@ Module Morphism.
 
     Context `{F : Functor 𝒞 𝒟}.
 
-    Implicit Types (T S U : RelativeComonad F).
+    (* Implicit Types (T S U : RelativeComonad F). *)
 
-    Program Definition Hom T S : Setoid :=
+    Program Definition Hom (T : RelativeComonad@{u v w i} F) (S : RelativeComonad@{u v w j} F) : Setoid :=
       Setoid.make ⦃ Carrier ≔ Morphism T S ; Equiv ≔ λ f g ∙ ∀ x, f x ≈ g x ⦄.
     Next Obligation.
       constructor.

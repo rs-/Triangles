@@ -18,9 +18,9 @@
 
 *)
 
-Require Import Category.RComonad.
+(* Require Import Category.RComonad. *)
 Require Import Category.RComod.
-Require Import Category.RComonadWithCut.
+(* Require Import Category.RComonadWithCut. *)
 Require Import Theory.Category.
 Require Import Theory.Isomorphism.
 Require Import Theory.Functor.
@@ -33,6 +33,8 @@ Require Import Theory.PrecompositionWithProduct.
 
 Generalizable All Variables.
 
+Set Universe Polymorphism.
+
 (*------------------------------------------------------------------------------
   -- ＰＵＳＨＦＯＲＷＡＲＤ  ＣＯＭＯＤＵＬＥ
   ----------------------------------------------------------------------------*)
@@ -42,22 +44,21 @@ Generalizable All Variables.
 Section Pushforward_construction.
 
   Context `{F : Functor 𝒞 𝒟} {T S : RelativeComonad F}
-           (τ : T ⇒ S) `(M : Comodule T ℰ).
+           (τ : RelativeComonad.Morphism.Hom T S) `(M : Comodule T ℰ).
 
   Program Definition pushforward : Comodule S ℰ :=
     Comodule.make  ⦃ M        ≔ M
                    ; mcobind  ≔ λ C D ∙ λ f ↦ M⋅mcobind (f ∘ τ(C)) ⦄.
   Next Obligation. (* mcobind_cong *)
-    solve_proper.
+    cong. now cong_l.
   Qed.
   Next Obligation. (* mcobind_counit *)
-    rewrite <- τ_counit. now rewrite mcobind_counit.
+    etrans. cong. sym. apply τ_counit.
+    apply mcobind_counit.
   Qed.
   Next Obligation. (* mcobind_mcobind *)
-    now rewrite compose_assoc,
-                <- τ_commutes,
-                mcobind_mcobind,
-                <- compose_assoc.
+    etrans; [| cong; etrans; [| rew compose_assoc]; cong_r; rew @τ_commutes ].
+    etrans. apply mcobind_mcobind. cong. apply compose_assoc.
   Qed.
 
 End Pushforward_construction.
@@ -70,33 +71,29 @@ End Pushforward_construction.
 Section Functoriality.
 
   Context `{F : Functor 𝒞 𝒟} {T S : RelativeComonad F} {ℰ : Category} {M N : Comodule S ℰ}
-          (τ : S ⇒ T) (α : M ⇒ N).
+          (τ : RelativeComonad.Morphism.Hom S T) (α : Comodule.Morphism.Hom M N).
 
   Infix "⁎" := pushforward (at level 0).
 
-  Program Definition pushforward_mor : ‵ τ⁎M ⇒ τ⁎N ′ :=
+  Program Definition pushforward_mor : ‵ Comodule.Morphism.Hom τ⁎M τ⁎N ′ :=
     Comodule.make ⦃ α ≔ α ⦄.
   Next Obligation. (* α_commutes *)
-    now rewrite α_commutes.
+    apply α_commutes.
   Qed.
 
 End Functoriality.
 
-Program Definition Pushforward
-             `{F : Functor 𝒞 𝒟} {T S : RelativeComonad F} (τ : T ⇒ S) {ℰ} : Functor (𝑹𝑪𝒐𝒎𝒐𝒅 T ℰ) (𝑹𝑪𝒐𝒎𝒐𝒅 S ℰ) :=
-  Functor.make  ⦃ F    ≔ pushforward τ
-                ; map  ≔ λ A B ∙ λ f ↦ pushforward_mor τ f ⦄.
-Next Obligation.
-  intros f g eq_fg x. simpl. now apply eq_fg.
-Qed.
-Next Obligation.
-  reflexivity.
-Qed.
-Next Obligation.
-  reflexivity.
-Qed.
+Definition Pushforward
+        `{F : Functor 𝒞 𝒟} {T S : RelativeComonad F}
+        (τ : RelativeComonad.Morphism.Hom T S) {ℰ} : Functor (𝑹𝑪𝒐𝒎𝒐𝒅 T ℰ) (𝑹𝑪𝒐𝒎𝒐𝒅 S ℰ).
+  refine (Functor.make  ⦃ F    ≔ pushforward τ
+                ; map  ≔ λ A B ∙ λ f ↦ pushforward_mor τ f ⦄).
+  intros; intros ?; apply H.
+  repeat intro; refl.
+  repeat intro; refl.
+Defined.
 
-Notation "τ ⁎" := (Pushforward τ) (at level 0).
+Notation "τ ⁎" := (pushforward τ) (at level 0).
 
 (** ** Tautological comodule **)
 Section tautological_comodule.
@@ -108,11 +105,11 @@ Section tautological_comodule.
                    ; mcobind  ≔ λ C D ∙ T⋅cobind ⦄.
   (** mcobind-counit *)
   Next Obligation.
-    now rewrite cobind_counit.
+    apply cobind_counit.
   Qed.
   (** mcobind-mcobind *)
   Next Obligation.
-    now rewrite cobind_cobind.
+    apply cobind_cobind.
   Qed.
 
 End tautological_comodule.
@@ -125,14 +122,14 @@ Notation "[ T ]" := (tcomod T) (only parsing).
 Section induced_morphism.
 
   Context `{F : Functor 𝒞 𝒟} {T S : RelativeComonad F}
-          (τ : T ⇒ S).
+          (τ : RelativeComonad.Morphism.Hom T S).
 
-  Program Definition induced_morphism : ‵ τ⁎T ⇒ S ′ :=
-    Comodule.make ⦃ α ≔ λ C ∙ τ(C) ⦄.
-  (** α-commutes **)
-  Next Obligation.
-    now rewrite τ_commutes.
-  Qed.
+  Definition induced_morphism : Comodule.Morphism.Hom (τ⁎T) S.
+  Proof.
+    refine (@Comodule.mkMorphism _ _ _ _ _ _ _ _ _).
+    - intros C. apply τ.
+    - intros. apply τ_commutes.
+  Defined.
 
 End induced_morphism.
 
@@ -142,20 +139,17 @@ Section Commutes.
 
   Context `{BinaryProduct 𝒞} `{BinaryProduct 𝒟} {F : Functor 𝒞 𝒟}
           {E : 𝒞} `{!ProductPreservingFunctor F} {T S : RelativeComonadWithCut F E}
-          {τ : T ⇒ S} `{M : Comodule T ℰ}.
+          {τ : RelativeComonadWithCut.Morphism.Hom T S} `{M : Comodule T ℰ}.
 
-  Program Definition Φ : ‵ τ⁎(M[E×─]) ⇒ (τ⁎M)[E×─] ′ :=
+  Program Definition Φ : ‵ Comodule.Morphism.Hom (τ⁎(M[E×─])) ((τ⁎M)[E×─]) ′ :=
     Comodule.make ⦃ α ≔ λ X ∙ id[M (E × X)] ⦄.
   Next Obligation.
-    rewrite left_id, right_id.
-    apply Π.cong.
-    repeat rewrite compose_assoc.
-    apply Π₂.cong; [ reflexivity |].
-    rewrite ∘-×; apply Π₂.cong.
-    rewrite compose_assoc; apply Π₂.cong; [ reflexivity |].
-    apply τ_counit.
-    rewrite compose_assoc. apply Π₂.cong; [ reflexivity |].
-    symmetry. apply τ_cut.
+    etrans. apply left_id. etrans; [| sym; apply right_id].
+    cong. etrans; [|rew compose_assoc].
+    cong_r. etrans; [| sym; apply ∘-×]. cong₂.
+    etrans; [| rew compose_assoc]. cong₂; [refl|]. apply τ_counit.
+    etrans; [| rew compose_assoc]. etrans. apply compose_assoc. cong₂; [ refl|].
+    rew @τ_cut.
   Qed.
 
 End Commutes.

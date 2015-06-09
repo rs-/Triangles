@@ -20,6 +20,8 @@ Require Import Theory.Category.
 
 Generalizable All Variables.
 
+Set Universe Polymorphism.
+
 (** ** Initial object definition **)
 
 (*------------------------------------------------------------------------------

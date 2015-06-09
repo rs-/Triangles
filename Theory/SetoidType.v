@@ -18,7 +18,7 @@
 *)
 
 Require Import Misc.Unicode.
-Require Import CMorphisms.
+Require Export CMorphisms.
 
 Generalizable All Variables.
 
