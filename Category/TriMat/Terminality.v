@@ -27,6 +27,19 @@ Generalizable All Variables.
 Ltac clean_hyps := repeat match goal with H : _ |- _ => clear H end.
 (* end hide *)
 
+Lemma yyy {A : Type} {x y : A} : eq x y → peq x y.
+Proof. intros. now destruct H. Qed.
+
+Ltac reflexivity ::= apply reflexivity || refl.
+Ltac equivify := match goal with
+                  | [ |- ?x = ?y ] => apply xxx; change (x ≈ y)
+                  | [ |- ?R ?x ?y ] => change (x ≈ y)
+                  end.
+Ltac etrans ::= match goal with
+                  | [ |- ?x = ?y ] => apply xxx; change (x ≈ y)
+                  | _ => idtac
+                end; eapply trans.
+
 Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
 
   Local Notation E := TE.t (only parsing).
@@ -75,8 +88,8 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
   Qed.
 
   (** ** Tri as a setoid **)
-  Program Definition TRI (A : Type) : Setoids.Obj :=
-    Setoids.make ⦃ Carrier ≔ Tri A ; Equiv ≔ bisim ⦄.
+  Program Definition TRI (A : Type) : Setoid :=
+    Setoid.make ⦃ Carrier ≔ Tri A ; Equiv ≔ bisim ⦄.
 
   (** ** top & rest are setoids morphisms **)
   Lemma top_cong : ∀ {A} {s₁ s₂ : Tri A}, s₁ ∼ s₂ → top s₁ = top s₂.
@@ -102,13 +115,13 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
     - tauto.
   Qed.
 
-  Program Definition 𝒕𝒐𝒑 {A} : TRI A ⇒ 𝑬𝑸 A := Setoids.Morphism.make top.
+  Program Definition 𝒕𝒐𝒑 {A} : TRI A ⇒ 𝑬𝑸 A := Π.make top.
   (** top-cong **)
   Next Obligation.
-    now apply top_cong.
+    apply yyy. now apply top_cong.
   Qed.
 
-  Program Definition 𝒓𝒆𝒔𝒕 {A} : TRI A ⇒ TRI (E ⟨×⟩ A) := Setoids.Morphism.make rest.
+  Program Definition 𝒓𝒆𝒔𝒕 {A} : [ TRI A ⟶ TRI (E ⟨×⟩ A) ] := Π.make rest.
   (** rest-cong **)
   Next Obligation.
     now apply rest_cong.
@@ -154,10 +167,9 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
     - apply H. now apply cut_cong.
   Qed.
 
-  Lemma lift_ext : ∀ {A B} {f g : Tri A ⇒ B}, f ≈ g → ∀ {t}, lift f t = lift g t.
+  Lemma lift_ext : ∀ {A B} {f g : Tri A → B}, (∀ x, f x = g x) → ∀ {t}, lift f t = lift g t.
   Proof.
-    intros. unfold lift. f_equal.
-    apply H.
+    intros. unfold lift. f_equal. apply H.
   Qed.
 
   Definition redec {A B} (f : Tri A → B) (t : Tri A) : Tri B :=
@@ -203,17 +215,17 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
     - repeat eexists; eauto.
   Qed.
 
-  Lemma redec_ext : ∀ {A B} {f g : Tri A ⇒ B} {t}, f ≈ g → redec f t ∼ redec g t.
+  Lemma redec_ext : ∀ {A B} {f g : Tri A → B} {t}, (∀ x, f x = g x) → redec f t ∼ redec g t.
   Proof.
     intros.
     apply bisim_intro
-      with (R := λ B (s₁ s₂ : Tri B) ∙ ∃ A x (f g : Tri A ⇒ B), f ≈ g ∧ s₁ = redec f x ∧ s₂ = redec g x);
+      with (R := λ B (s₁ s₂ : Tri B) ∙ ∃ A x (f g : Tri A → B), (∀ x, f x = g x) ∧ s₁ = redec f x ∧ s₂ = redec g x);
       [clean_hyps; intros..|].
     - destruct H as (B & x & f & g & eq_fg & -> & ->).
-      repeat rewrite top_redec. now apply eq_fg.
+      repeat rewrite top_redec. apply eq_fg.
     - destruct H as (B & x & f & g & eq_fg & -> & ->).
       eexists. exists (rest x). exists (lift f). exists (lift g). repeat split.
-      + intro. now apply lift_ext.
+      + intro. apply lift_ext. apply eq_fg.
       + now rewrite rest_redec.
       + now rewrite rest_redec.
     - do 2 eexists. exists f. exists g. repeat eexists; eauto.
@@ -240,15 +252,15 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
   Program Definition 𝑻𝒓𝒊 : ‵ 𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅𝑾𝒊𝒕𝒉𝑪𝒖𝒕 𝑬𝑸 E ′ :=
     RelativeComonadWithCut.make ⦃ T ≔ TRI
                                 ; counit ≔ λ X ∙ 𝒕𝒐𝒑
-                                ; cobind ≔ λ X Y ∙ λ f ↦ Setoids.Morphism.make (redec f)
-                                ; cut ≔ λ A ∙ Setoids.Morphism.make cut ⦄.
+                                ; cobind ≔ λ X Y ∙ λ f ↦ Π.make (redec f)
+                                ; cut ≔ λ A ∙ Π.make cut ⦄.
   (** redec-cong **)
   Next Obligation.
-    intros. apply redec_cong; auto. intros. now rewrite H0.
+    intros. apply redec_cong; auto. intros. equivify. now cong.
   Qed.
   (** redec-cong₂ **)
   Next Obligation.
-    intros X Y f g eq_fg x y eq_xy. rewrite eq_xy. apply redec_ext. intro t. now apply eq_fg.
+    intros X Y f g eq_fg x. apply redec_ext. intro t. equivify. now apply eq_fg.
   Qed.
   (** cobind_counit **)
   Next Obligation.
@@ -261,24 +273,21 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
     - destruct H as (x & y & eq_xy & eq & ->).
       exists (rest x). exists (rest y). repeat split.
       + now apply ∼-rest.
-      + etransitivity. eapply rest_cong. apply eq.
+      + eapply transitivity. eapply rest_cong. apply eq.
         rewrite rest_redec. apply redec_ext.
-        intro . unfold lift. rewrite top_cut. revert x0.
-        evar (top' : ∀ {A}, Tri A ⇒ A).
-        instantiate (1 := @top) in (Value of top').
-        change (⟨ π₁ ∘ top' _ , (π₂ (A := E) (B := A) (p := E × A)) ∘ top' _ ⟩ ≈ top' _).
-        symmetry. apply Pmor_universal; reflexivity.
-    - exists x. exists y. repeat split.
-      + apply H.
+        intro . unfold lift. rewrite top_cut.
+        intros. set (top x0). now destruct y0.
+    - exists x. exists x. repeat split.
+      + apply reflexivity.
       + reflexivity.
   Qed.
   (** counit-cobind **)
   Next Obligation.
-    repeat intro. rewrite H. simpl. now rewrite top_redec.
+    repeat intro. simpl. now rewrite top_redec.
   Qed.
   (** cobind-cobind **)
   Next Obligation.
-    intros X Y Z f g x y eq_xy. rewrite <- eq_xy. clear y eq_xy. simpl.
+    intros X Y Z f g x. simpl.
     apply bisim_intro with (λ Z (s₁ s₂ : Tri Z) ∙
                               ∃ X Y (x : Tri X) (f : Tri X → Y) (g : Tri Y → Z),
                                   (∀ t₁ t₂, t₁ ∼ t₂ → g t₁ = g t₂)
@@ -291,13 +300,13 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
       do 2 eexists. exists (rest x). exists (lift f). exists (lift g). repeat split.
       + intros. apply lift_cong; auto.
       + now repeat rewrite rest_redec.
-      + etransitivity. eapply rest_cong; exact eq.
+      + eapply transitivity. eapply rest_cong; exact eq.
         repeat rewrite rest_redec. apply redec_ext.
         intro t. unfold lift. f_equal.
         * rewrite top_redec. reflexivity.
         * apply g_prp. apply redec_cut.
     - do 2 eexists. exists x. exists f. exists g. repeat split.
-      + intros. now rewrite H.
+      + intros. equivify. now cong.
       + reflexivity.
   Qed.
   (** cut-cong **)
@@ -306,37 +315,37 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
   Qed.
   (** cut-counit **)
   Next Obligation.
-    intros A x y eq_xy. rewrite eq_xy. simpl. now rewrite top_cut.
+    intros A x. simpl. apply yyy. rewrite top_cut. reflexivity.
   Qed.
   (** cut-cobind **)
   Next Obligation.
-    intros A B f x y eq_xy. rewrite eq_xy. simpl.
+    intros A B f x. simpl.
     apply redec_cut.
   Qed.
 
   (** ** Tri coalgebra **)
-  Program Definition 𝑹𝒆𝒔𝒕 : ‵ [𝑻𝒓𝒊] ⇒ [𝑻𝒓𝒊][E×─] ′ :=
-    Comodule.make ⦃ α ≔ λ A ∙ Setoids.Morphism.make (@rest A) ⦄.
+  Program Definition 𝑹𝒆𝒔𝒕 : Comodule.Morphism ([𝑻𝒓𝒊]) ([𝑻𝒓𝒊][E×─]) :=
+    Comodule.make ⦃ α ≔ λ A ∙ Π.make (@rest A) ⦄.
   (** rest-cong **)
   Next Obligation.
     intros A x y eq_xy. now apply rest_cong.
   Qed.
   (** rest-cong2 **)
   Next Obligation.
-    intros A B f x y eq_xy. rewrite eq_xy.
+    intros A B f x.
     simpl. rewrite rest_redec. reflexivity.
   Qed.
 
-  Program Definition 𝑪𝒖𝒕 : ‵ [𝑻𝒓𝒊][E×─] ⇒ [𝑻𝒓𝒊] ′ :=
-    Comodule.make ⦃ α ≔ λ A ∙ Setoids.Morphism.make (@cut A) ⦄.
+  Program Definition 𝑪𝒖𝒕 : Comodule.Morphism ([𝑻𝒓𝒊][E×─]) ([𝑻𝒓𝒊]) :=
+    Comodule.make ⦃ α ≔ λ A ∙ Π.make (@cut A) ⦄.
   (** cut-cong **)
   Next Obligation.
     intros A x y eq_xy. now apply cut_cong.
   Qed.
   (** cut-cong2 **)
   Next Obligation.
-    intros A B f x y eq_xy. rewrite eq_xy.
-    symmetry. simpl. apply redec_cut.
+    intros A B f x.
+    apply symmetry. simpl. apply redec_cut.
   Qed.
 
   Program Definition 𝑻𝑹𝑰 : ‵ 𝑻𝒓𝒊𝑴𝒂𝒕 E ′ :=
@@ -344,8 +353,8 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
                  ; rest  ≔ 𝑹𝒆𝒔𝒕 ⦄.
   (** α-cut **)
   Next Obligation.
-    intros A; repeat intro. rewrite H.
-    simpl. now rewrite rest_cut.
+    intros A; repeat intro. simpl.
+    now rewrite rest_cut.
   Qed.
 
   (** ** 𝑻𝑹𝑰 is a terminal object **)
@@ -372,7 +381,7 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
       intros. unfold tau. simpl. now rewrite @rest_corec.
     Qed.
 
-    Infix "∼" := SEquiv.
+    Infix "∼" := Equiv.
 
     Lemma tau_cong : ∀ A (x y : T A), x ∼ y → tau x ∼ tau y.
     Proof.
@@ -380,24 +389,24 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
       apply bisim_intro with (R := λ B (s₁ s₂ : TRI B) ∙ ∃ (x y : T B), x ∼ y ∧ s₁ = tau x ∧ s₂ = tau y);
         [clean_hyps; intros..|].
       - destruct H as (x & y & eq_xy & -> & ->).
-        repeat rewrite top_tau. now rewrite eq_xy.
+        repeat rewrite top_tau. equivify. now cong.
       - destruct H as (x & y & eq_xy & -> & ->).
         exists (T⋅rest x). exists (T⋅rest y). repeat split.
-        + now rewrite eq_xy.
+        + now cong.
         + now rewrite rest_tau.
         + now rewrite rest_tau.
       - repeat eexists. apply H.
     Qed.
 
     Program Definition Tau {A} : T A ⇒ TRI A :=
-      Setoids.Morphism.make tau.
+      Π.make tau.
     Next Obligation.
       intros. now apply tau_cong.
     Qed.
 
     Lemma tau_counit : ∀ A (t t' : T A), t ∼ t' → T⋅counit t ∼ TRI⋅counit (tau t').
     Proof.
-      intros A t t' eq_tt'. simpl. rewrite top_tau. now rewrite eq_tt'.
+      intros A t t' eq_tt'. simpl. rewrite top_tau. equivify. now cong.
     Qed.
 
     Lemma tau_cut : ∀ A (x y : T (E × A)), x ∼ y → tau (T⋅cut x) ∼ TRI⋅cut (tau y).
@@ -408,12 +417,13 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
         [clean_hyps; intros..|].
       - destruct H as (x & y & eq_xy & eq & ->).
         etransitivity. eapply top_cong; exact eq.
-        rewrite top_tau. etransitivity. apply (cut_counit T _ x). reflexivity.
-        simpl. rewrite top_cut. rewrite top_tau. f_equal. now rewrite eq_xy.
+        rewrite top_tau. equivify. etrans. apply (cut_counit T x).
+        apply yyy.
+        simpl. rewrite top_cut. rewrite top_tau. apply f_equal. equivify. now cong.
       - destruct H as (x & y & eq_xy & eq & ->).
         exists (T⋅rest x). exists (T⋅rest y). repeat split.
-        + now rewrite eq_xy.
-        + etransitivity. eapply rest_cong; exact eq.
+        + now cong.
+        + eapply transitivity. eapply rest_cong; exact eq.
           rewrite rest_tau. apply tau_cong. now apply (TriMat.rest_cut Tr).
         + simpl. rewrite rest_cut. rewrite rest_tau. reflexivity.
       - repeat eexists. apply H. reflexivity.
@@ -421,7 +431,8 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
 
     Lemma tau_cobind : ∀ A B (f : TRI A ⇒ 𝑬𝑸 B) x y, x ∼ y → Tau (T⋅cobind (f ∘ Tau) x) ∼ TRI⋅cobind f (Tau y).
     Proof.
-      intros A B f x y eq_xy. rewrite <- eq_xy. clear eq_xy.
+      intros A B f x y eq_xy. etrans. cong. cong. apply eq_xy.
+      clear x eq_xy. rename y into x.
       apply bisim_intro
         with (R := λ B (s₁ s₂ : TRI B) ∙
                     ∃ A (x : T A) (f : TRI A ⇒ 𝑬𝑸 B),
@@ -430,16 +441,16 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
       - destruct H as (B & x & f & eq & ->).
         etransitivity. eapply top_cong; exact eq.
         etransitivity. apply top_tau.
-        etransitivity. apply (counit_cobind T). reflexivity.
+        equivify. etrans. eapply (counit_cobind T). apply yyy.
         simpl. now rewrite top_redec.
       - destruct H as (B & x & f & eq & ->).
         eexists. exists (T⋅rest x). exists (TRI⋅extend f). repeat split.
-        + etransitivity. eapply rest_cong; exact eq.
+        + eapply transitivity. eapply rest_cong; exact eq.
           simpl. rewrite rest_tau. apply tau_cong.
-          etransitivity. apply (α_commutes (TriMat.rest Tr)). reflexivity.
-          apply (Π.cong _ _ (T⋅cobind)). intros u v eq_uv. simpl. f_equal.
-          f_equal. rewrite top_tau. now rewrite eq_uv.
-          apply (Setoids.cong f). now apply tau_cut. reflexivity.
+          eapply transitivity. apply (α_commutes (TriMat.rest Tr)).
+          apply (Π.map_cong _ _ (T⋅cobind)). intros u. simpl. apply yyy. f_equal.
+          f_equal. rewrite top_tau. reflexivity.
+          equivify. cong. now apply tau_cut.
         + simpl. rewrite rest_redec, rest_tau. reflexivity.
       - repeat eexists. reflexivity.
     Qed.
@@ -461,11 +472,11 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
   Qed.
   (** τ-cut **)
   Next Obligation.
-    repeat intro. symmetry. apply tau_cut. now symmetry.
+    repeat intro. apply symmetry. apply tau_cut. now apply symmetry.
   Qed.
   (** τ-commutes **)
   Next Obligation.
-    repeat intro. rewrite H. simpl. now rewrite rest_tau.
+    repeat intro. simpl. now rewrite rest_tau.
   Qed.
 
   (* begin hide *)
@@ -478,17 +489,18 @@ Module TriMatTerminal (Import TE : Typ) (Import Ax : TriMatAxioms TE).
                    ; top  ≔ τ ⦄.
   (** top-unique **)
   Next Obligation.
-    intros T f A x y eq_xy. rewrite <- eq_xy. clear eq_xy; simpl.
+    intros T f A x. simpl.
     apply bisim_intro
       with (R := λ A (s₁ s₂ : TRI A) ∙ ∃ x (f : T ⇒ 𝑻𝑹𝑰), s₁ ∼ ⟨f⟩ A x ∧ s₂ = tau T x);
       [clean_hyps; intros..|].
     - destruct H as (x & f & eq & ->).
       etransitivity. eapply top_cong; exact eq.
-      rewrite top_tau. simpl. etransitivity. symmetry. apply (τ_counit ⟨f⟩). reflexivity. reflexivity.
+      rewrite top_tau. simpl. apply xxx. eapply transitivity. eapply symmetry.
+      apply (τ_counit ⟨f⟩). apply reflexivity.
     - destruct H as (x & f & eq & ->).
       exists (TriMat.rest T _ x). exists f. split.
-      + etransitivity. eapply rest_cong; exact eq.
-        symmetry. eapply (TriMat.τ_commutes f). reflexivity.
+      + eapply transitivity. eapply rest_cong; exact eq.
+        apply symmetry. eapply (TriMat.τ_commutes f).
       + rewrite rest_tau. reflexivity.
     - repeat eexists. reflexivity.
   Qed.

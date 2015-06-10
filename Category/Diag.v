@@ -12,6 +12,6 @@ Module Diag (Import TE : Typ).
   Module Import Tri := TriMat.Model.Terminality TE.
   Module Str := Stream.Model.Terminality.
 
-  Definition 𝒅𝒊𝒂𝒈 := Str.τ Stream.make ⦃ T ≔ 𝑻𝒓𝒊 ; tail ≔ 𝑪𝒖𝒕 ∘ 𝑹𝒆𝒔𝒕 ⦄.
+  Definition 𝒅𝒊𝒂𝒈 := Str.τ Stream.make ⦃ T ≔ 𝑻𝒓𝒊 ; tail ≔ Comodule.Morphism.compose 𝑪𝒖𝒕 𝑹𝒆𝒔𝒕 ⦄.
 
 End Diag.

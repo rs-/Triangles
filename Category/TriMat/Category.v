@@ -54,13 +54,14 @@ Module TriMat.
 
   Structure Morphism {E} (T S : Obj E) : Type := mkMorphism
   { τ           :> RelativeComonadWithCut.Morphism T S
-    ; τ_commutes  : Comodule.Morphism.compose (Comodule.Morphism.compose (⟨τ⟩[E×─]) Φ) (pushforward_mor τ T) ≈
-                    Comodule.Morphism.compose ([S]) ⟨τ⟩ }.
-        ⟨τ⟩［E×─］ ∘ Φ ∘ τ⁎⋅T ≈ S ∘ ⟨τ⟩ }.
+    ; τ_commutes  : Comodule.Morphism.compose
+                      (Comodule.Morphism.compose (precomposition_with_product_mor _ ⟨τ⟩)  Φ)
+                      (pushforward_mor τ T)
+                    ≈ Comodule.Morphism.compose S ⟨τ⟩ }.
 
   Arguments mkMorphism  {_ _ _ _} _.
   Arguments τ           {_ _ _} _.
-  Arguments τ_commutes  {_ _ _} _ {_ _ _ _}.
+  Arguments τ_commutes  {_ _ _} _ {_ _}.
 
   Notation "'TriMat.make' ⦃ 'τ' ≔ τ ⦄" := (@mkMorphism _ _ _ τ _) (only parsing).
 
@@ -70,9 +71,9 @@ Module TriMat.
   (** equivalence **)
   Next Obligation.
     constructor.
-    - repeat intro. now rewrite H.
-    - repeat intro. symmetry; now rewrite H.
-    - repeat intro; etransitivity; eauto. now apply H0.
+    - repeat intro. now cong.
+    - repeat intro. sym. apply H.
+    - repeat intro; etrans; eauto.
   Qed.
 
 End TriMat.
@@ -83,7 +84,6 @@ Export TriMat.
 
 Section Defs.
 
-
   Variable (E : 𝑻𝒚𝒑𝒆).
 
   Implicit Types (T S R U : Obj E).
@@ -91,58 +91,46 @@ Section Defs.
   Infix "⇒" := Hom.
 
   Program Definition id {T} : T ⇒ T :=
-    TriMat.make ⦃ τ ≔ id[T] ⦄.
+    TriMat.make ⦃ τ ≔ RelativeComonadWithCut.Morphism.id ⦄.
   (** τ-cong **)
   Next Obligation.
-    now rewrite H.
+    now cong.
   Qed.
 
   Obligation Tactic := idtac.
   Program Definition compose {T S R} : [ S ⇒ R ⟶ T ⇒ S ⟶ T ⇒ R ] :=
-    λ g f ↦₂ TriMat.make ⦃ τ ≔ g ∘ f ⦄.
+    λ g f ↦₂ TriMat.make ⦃ τ ≔ RelativeComonadWithCut.Morphism.compose (τ g) (τ f) ⦄.
   (** τ-commutes **)
   Next Obligation.
     intros T S R g f.
     destruct g as [g g_commutes]. simpl in g_commutes.
     destruct f as [f f_commutes]. simpl in f_commutes. simpl.
-    intros.
-    rewrite H.
-    etransitivity.
-    eapply Setoids.cong.
-    apply f_commutes.
-    reflexivity.
-    apply g_commutes.
-    reflexivity.
+    intros. etrans. cong. apply f_commutes. apply g_commutes.
   Qed.
   (** τ-cong **)
   Next Obligation.
-    repeat intro.
-    simpl.
-    etransitivity. eapply Setoids.cong.
-    eapply Setoids.cong. apply H1.
-    etransitivity. eapply Setoids.cong.
-    apply H0. reflexivity.
-    apply H.
-    reflexivity.
+    repeat intro. simpl.
+    Set Printing Implicit.
+    etrans. cong. apply H0.
+    etrans. apply H. refl.
   Qed.
 
   Infix "∘" := compose.
 
   Lemma left_id : ∀ T S (f : T ⇒ S), id ∘ f ≈ f.
   Proof.
-    intros. simpl. intros. rewrite H.
-    reflexivity.
+    repeat intro. simpl. refl.
   Qed.
 
   Lemma right_id : ∀ T S (f : T ⇒ S), f ∘ id ≈ f.
   Proof.
-    repeat intro. simpl. now rewrite H.
+    repeat intro. simpl. refl.
   Qed.
 
   Lemma compose_assoc T R S U (f : T ⇒ R) (g : R ⇒ S) (h : S ⇒ U) : h ∘ g ∘ f ≈ h ∘ (g ∘ f).
   Proof.
     repeat intro.
-    simpl. now rewrite H.
+    simpl. refl.
   Qed.
 
   Canonical Structure 𝑻𝒓𝒊𝑴𝒂𝒕 : Category :=

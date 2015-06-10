@@ -29,13 +29,13 @@ Module TriInstance (Import TE : Typ) <: TriMatAxioms TE.
                        {hd : ∀ A, T A → A} {tl : ∀ A, T A → T (E ⟨×⟩ A)} {t : T A},
                        top (corec hd tl t) = hd A t.
   Proof.
-    reflexivity.
+    intros; reflexivity.
   Qed.
   Lemma rest_corec : ∀ {A} {T : Type → Type}
                        {hd : ∀ A, T A → A} {tl : ∀ A, T A → T (E ⟨×⟩ A)} {t : T A},
                        rest (corec hd tl t) = corec hd tl (tl A t).
   Proof.
-    reflexivity.
+    intros; reflexivity.
   Qed.
 
   (** Equivalence relation on streams **)

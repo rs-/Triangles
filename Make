@@ -1,10 +1,10 @@
 -R . Cat
 
-./Category/Cut_NT.v
+#./Category/Cut_NT.v
 ./Category/RComod.v
 ./Category/RComonad.v
 ./Category/RComonadWithCut.v
-./Category/RComonad_RComonadWithCut.v
+#./Category/RComonad_RComonadWithCut.v
 ./Category/Setoids.v
 ./Category/Types.v
 ./Category/Types_Setoids.v
