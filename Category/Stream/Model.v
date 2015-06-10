@@ -3,8 +3,6 @@ Require Import Theory.Notations.
 Require Import Category.Stream.Axioms.
 Require Import Category.Stream.Terminality.
 
-Set Universe Polymorphism.
-
 (*------------------------------------------------------------------------------
   -- ＳＴＲＥＡＭ  ＭＯＤＥＬ  ＡＳ  Ａ  ＣＯＩＮＤＵＣＴＩＶＥ  ＴＹＰＥ
   ----------------------------------------------------------------------------*)
@@ -29,12 +27,12 @@ Module StreamInstance : StreamAxioms.
 
   Lemma head_corec : ∀ {A T} {hd : T → A} {tl : T → T} {t}, head (corec hd tl t) = hd t.
   Proof.
-    reflexivity.
+    repeat intro; reflexivity.
   Qed.
 
   Lemma tail_corec : ∀ {A T} {hd : T → A} {tl : T → T} {t}, tail (corec hd tl t) = corec hd tl (tl t).
   Proof.
-    reflexivity.
+    repeat intro. reflexivity.
   Qed.
 
   (** Equivalence relation on streams **)

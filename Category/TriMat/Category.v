@@ -40,21 +40,23 @@ Generalizable All Variables.
 Module TriMat.
 
   Structure Obj (E : 𝑻𝒚𝒑𝒆) : Type := mkObj
-  { T         :>  𝑹𝑪𝒐𝒎𝒐𝒏𝒂𝒅𝑾𝒊𝒕𝒉𝑪𝒖𝒕 𝑬𝑸 E
-  ; rest      :>  [T] ⇒ [T][E×─]
+  { T         :>  RelativeComonadWithCut 𝑬𝑸 E
+  ; rest      :>  Comodule.Morphism ([T]) ([T][E×─])
   ; rest_cut  :   ∀ {A}, rest(A) ∘ T⋅cut ≈ T⋅cut ∘ rest(E × A) }.
 
   Arguments mkObj     {_ _ _} _.
   Arguments T         {_} _.
   Arguments rest      {_} _.
-  Arguments rest_cut  {_} _ {_ _ _ _}.
+  Arguments rest_cut  {_} _ {_ _}.
 
   Notation "'TriMat.make' ⦃ 'T' ≔ T ; 'rest' ≔ rest ⦄" :=
            (@mkObj _ T rest _) (only parsing).
 
   Structure Morphism {E} (T S : Obj E) : Type := mkMorphism
-  { τ           :> T ⇒ S
-  ; τ_commutes  : ⟨τ⟩［E×─］ ∘ Φ ∘ τ⁎⋅T ≈ S ∘ ⟨τ⟩ }.
+  { τ           :> RelativeComonadWithCut.Morphism T S
+    ; τ_commutes  : Comodule.Morphism.compose (Comodule.Morphism.compose (⟨τ⟩[E×─]) Φ) (pushforward_mor τ T) ≈
+                    Comodule.Morphism.compose ([S]) ⟨τ⟩ }.
+        ⟨τ⟩［E×─］ ∘ Φ ∘ τ⁎⋅T ≈ S ∘ ⟨τ⟩ }.
 
   Arguments mkMorphism  {_ _ _ _} _.
   Arguments τ           {_ _ _} _.

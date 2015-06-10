@@ -32,6 +32,9 @@ Inductive peq {A} (x : A) : A → Prop :=
   peq_refl : peq x x.
 Arguments peq_refl {_ _}, {_} _.
 
+Coercion xxx {A : Type} {x y : A} : peq x y → x = y.
+Proof. intros. now destruct H. Qed.
+
 
 (*------------------------------------------------------------------------------
   -- ＳＥＴＯＩＤ  ＤＥＦＩＮＩＴＩＯＮ

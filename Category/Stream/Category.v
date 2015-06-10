@@ -11,9 +11,6 @@ Require Import Theory.Comodule.
 
 Generalizable All Variables.
 
-(* Set Universe Polymorphism. *)
-(* Set Printing Universes. *)
-
 (*------------------------------------------------------------------------------
   -- ＣＡＴＥＧＯＲＹ  ＯＦ  ＳＴＲＥＡＭＳ
   ----------------------------------------------------------------------------*)
