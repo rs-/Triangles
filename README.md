@@ -33,6 +33,6 @@ requires the markdown tool
 $ make doc
 ```
 
-[1] http://coq.inria.fr/distrib/V8.4pl4/
+[1] http://coq.inria.fr/distrib/V8.4pl6/
 
 [2] http://coq.inria.fr/distrib/V8.5beta2/
